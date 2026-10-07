@@ -1,0 +1,37 @@
+# Entornos y secretos — nunca commitear el .env real
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+
+# Alembic
+*.pyc
+
+# Node / frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+dist/
+build/
+
+# TypeScript / Vite
+*.tsbuildinfo
+frontend/*.tsbuildinfo
+
+# OS / editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json

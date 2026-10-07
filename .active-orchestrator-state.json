@@ -1,0 +1,334 @@
+{
+  "discovery": {
+    "casos_de_uso": [
+      "Paciente reserva/reprograma/cancela online 24/7 desde link público",
+      "Paciente confirma y deja seña por Mercado Pago",
+      "Odontólogo ve agenda día/semana con duración variable, bloqueos, sobreturnos y anti-solape",
+      "Recepción confirma por WhatsApp y reasigna huecos desde lista de espera",
+      "Odontólogo registra ficha + odontograma FDI + presupuesto y liquida por obra social con factura ARCA",
+      "Dueño ve reportes de ocupación, ausencias e ingresos + recall de controles"
+    ],
+    "competitors": [
+      {
+        "name": "DentalSoft",
+        "notes_file": "discovery/sources/dentalsoft.md"
+      },
+      {
+        "name": "Dentiqa",
+        "notes_file": "discovery/sources/dentiqa.md"
+      },
+      {
+        "name": "Bilog",
+        "notes_file": "discovery/sources/bilog.md"
+      },
+      {
+        "name": "Reservo",
+        "notes_file": "discovery/sources/reservo.md"
+      },
+      {
+        "name": "DentalCore",
+        "notes_file": "discovery/sources/dentalcore.md"
+      },
+      {
+        "name": "Benty",
+        "notes_file": "discovery/sources/benty.md"
+      },
+      {
+        "name": "Docturno",
+        "notes_file": "discovery/sources/docturno.md"
+      },
+      {
+        "name": "Dentatools",
+        "notes_file": "discovery/sources/dentatools.md"
+      },
+      {
+        "name": "FLAP",
+        "notes_file": "discovery/sources/flap.md"
+      },
+      {
+        "name": "Odontoly",
+        "notes_file": "discovery/sources/odontoly.md"
+      },
+      {
+        "name": "ClinIA (OdontoClinIA)",
+        "notes_file": "discovery/sources/clinia-odontoclinia.md"
+      },
+      {
+        "name": "Dentalink",
+        "notes_file": "discovery/sources/dentalink.md"
+      },
+      {
+        "name": "AgendaPro",
+        "notes_file": "discovery/sources/agendapro.md"
+      },
+      {
+        "name": "Doctoralia",
+        "notes_file": "discovery/sources/doctoralia.md"
+      },
+      {
+        "name": "Adiasoft",
+        "notes_file": "discovery/sources/adiasoft.md"
+      },
+      {
+        "name": "Encuadrado",
+        "notes_file": "discovery/sources/encuadrado.md"
+      },
+      {
+        "name": "SimplyBook.me",
+        "notes_file": "discovery/sources/simplybook-me.md"
+      },
+      {
+        "name": "Fresha",
+        "notes_file": "discovery/sources/fresha.md"
+      }
+    ],
+    "created_by": "discovery-research",
+    "funcionalidades_necesarias": [
+      "Agenda multi-profesional día/semana, duración variable, bloqueos, sobreturnos, anti-solape",
+      "Turnero online 24/7 con link público; confirmación/cancelación/reprogramación por el paciente",
+      "Recordatorios y confirmaciones por WhatsApp con actualización de agenda",
+      "Ficha del paciente + odontograma FDI básico + presupuestos",
+      "Seña con Mercado Pago atada al estado del turno; caja diaria y reportes básicos",
+      "Roles profesional/recepción y exportación CSV desde el día uno"
+    ],
+    "funcionalidades_opcionales": [
+      "Periodontograma, ortodoncia modular, laboratorio, imágenes/RX",
+      "Bot IA WhatsApp 24/7, recepcionista por voz, campañas de marketing",
+      "Multi-sede, auditoría completa, API pública, app móvil, portal del paciente, firma digital"
+    ],
+    "integraciones": [
+      "WhatsApp API oficial de Meta",
+      "Mercado Pago (señas y cobros)",
+      "ARCA factura electrónica",
+      "Obras sociales / prepagas argentinas",
+      "Google Calendar (post-MVP)"
+    ],
+    "preguntas_abiertas": [
+      "¿Precio objetivo en ARS y modalidad de cobro del MVP?",
+      "¿Seña obligatoria u opcional por defecto?",
+      "¿Qué obras sociales priorizar en la v1?",
+      "¿Solo independiente o consultorio de hasta 3 profesionales desde el día 1?",
+      "¿WhatsApp manual/semiautomático o API oficial desde la v1?"
+    ],
+    "problema": "Los consultorios odontológicos argentinos (1–3 profesionales) coordinan turnos por WhatsApp manual/papel: sufren ausentismo, huecos perdidos, señas desacopladas y doble carga administrativa. Ningún sistema local une turnos + Mercado Pago + ARCA + obras sociales en un solo flujo.",
+    "reglas_de_negocio": [
+      "La seña condiciona el estado del turno (reservado vs. confirmado)",
+      "Sobreturno explícito, nunca solape silencioso; sin turnos superpuestos por profesional",
+      "Hueco liberado se ofrece a lista de espera antes de quedar libre",
+      "Liquidación de obra social atada a la prestación del turno por cobertura"
+    ],
+    "restricciones": [
+      "Precios públicos en ARS y alcance honesto (declarar qué NO hace)",
+      "Adecuación declarada a normativa argentina de datos de salud (leyes 25.326 y 26.529)",
+      "Exportación de datos abierta desde el día uno (anti-lock-in)",
+      "Segmento inicial: independiente y consultorio chico; sin cadenas ni multi-sede en MVP"
+    ],
+    "riesgos": [
+      "Supuesto sin probar: adopción de confirmación/seña online vs. WhatsApp informal",
+      "Costo técnico real de integraciones ARCA + Mercado Pago (1/18 y 3–4/18 las tienen)",
+      "Prometer IA clínica sin validación (claims competidores no auditados)",
+      "Opacidad de precios (11/18 no publican): disposición a pagar en ARS sin validar",
+      "Seguridad: 80% del mercado sin nada técnico publicado"
+    ],
+    "sources": [
+      "https://dentalsoft.com.ar/",
+      "https://benty.com.ar/",
+      "https://bilog.com.ar/",
+      "https://dentalcore.app/",
+      "https://dentiqa.app/",
+      "https://reservo.cl/",
+      "https://profesionales.docturno.com/",
+      "https://dentatools.co/ar/",
+      "https://flap.com.ar/odontologos",
+      "https://odontoly.com/",
+      "https://www.clinia.com.ar/odontologia",
+      "https://www.softwaredentalink.com/",
+      "https://agendapro.com/ar",
+      "https://www.doctoraliar.com/",
+      "https://www.adiasoft.com/ar/sistema-para-clinicas-dentales",
+      "https://www.encuadrado.com/",
+      "https://simplybook.me/es/",
+      "https://www.fresha.com/es"
+    ],
+    "sources_fetched_at": "2026-09-30",
+    "usuarios": [
+      "Paciente que reserva/confirma/cancela online",
+      "Odontólogo independiente / dueño de consultorio (1–3 profesionales)",
+      "Recepción/asistente (consultorios con personal)",
+      "Secundario post-MVP: clínicas multi-profesional y multi-sede"
+    ]
+  },
+  "owner": "active-orchestrator",
+  "roadmap": {
+    "created_by": "roadmap-generator",
+    "source": "CHANGES.md",
+    "changes": [
+      "C-01",
+      "C-02",
+      "C-03",
+      "C-04",
+      "C-05",
+      "C-06",
+      "C-07",
+      "C-08",
+      "C-09",
+      "C-10",
+      "C-11",
+      "C-12"
+    ]
+  },
+  "skills": {
+    "created_by": "find-skill",
+    "recommended": [
+      {
+        "skill": "fastapi",
+        "repo": "fastapi/fastapi",
+        "installs": "~8K on skills.sh; 101k+ repo stars",
+        "why": "Official FastAPI+Pydantic conventions for the booking/agenda REST API."
+      },
+      {
+        "skill": "sqlmodel",
+        "repo": "fastapi/sqlmodel (tiangolo org)",
+        "installs": "~18.3K",
+        "why": "SQLModel+FastAPI data-modeling/session patterns adjacent to the SQLAlchemy models."
+      },
+      {
+        "skill": "vercel-react-best-practices",
+        "repo": "vercel-labs/agent-skills",
+        "installs": "758.2K",
+        "why": "React+TS performance/correctness patterns for the agenda day/week views and public booking frontend (Vite)."
+      },
+      {
+        "skill": "frontend-design",
+        "repo": "anthropics/skills",
+        "installs": "938.3K",
+        "why": "UX patterns for the public 24/7 booking link and multi-professional agenda views."
+      },
+      {
+        "skill": "web-design-guidelines",
+        "repo": "vercel-labs/agent-skills",
+        "installs": "683.9K",
+        "why": "Web design guidelines backing the booking/agenda UX quality bar."
+      },
+      {
+        "skill": "vercel-composition-patterns",
+        "repo": "vercel-labs/agent-skills",
+        "installs": "366.1K",
+        "why": "React composition patterns for reusable agenda/slot/waitlist components."
+      },
+      {
+        "skill": "supabase-postgres-best-practices",
+        "repo": "supabase/agent-skills",
+        "installs": "423.9K",
+        "why": "PostgreSQL schema, migration and query best practices for appointments and clinical records."
+      },
+      {
+        "skill": "code-review",
+        "repo": "mattpocock/skills",
+        "installs": "641.8K",
+        "why": "Review discipline across FastAPI + React PRs."
+      },
+      {
+        "skill": "diagnosing-bugs",
+        "repo": "mattpocock/skills",
+        "installs": "689.4K",
+        "why": "Structured bug diagnosis for backend/frontend, incl. anti-overlap scheduling logic."
+      },
+      {
+        "skill": "systematic-debugging",
+        "repo": "obra/superpowers",
+        "installs": "276.8K",
+        "why": "Systematic debugging workflow for scheduling, reminder and payment-state edge cases."
+      },
+      {
+        "skill": "playwright",
+        "repo": "openai/skills",
+        "installs": "6.3K; repo 25.6K stars",
+        "why": "E2E browser automation for the public booking flow; complements Vitest unit tests."
+      }
+    ],
+    "installed": [
+      "fastapi",
+      "sqlmodel",
+      "vercel-react-best-practices",
+      "frontend-design",
+      "diagnosing-bugs",
+      "playwright"
+    ],
+    "notes": "RECOMMEND ONLY: nothing installed, no `npx skills add` run. Below quality bar, not recommended now: pytest-skill (lambdatest/agent-skills, 308 installs, 364 stars) and playwright-devops (microsoft/playwright, 536 installs). No verified 1K+ skills found for Vitest, Docker Compose, JWT auth, Redis/RQ, Mercado Pago, ARCA or WhatsApp; cover with general capabilities."
+  },
+  "registry": {
+    "created_by": "skill-registry",
+    "location": ".atl/skill-registry.md",
+    "skills": [
+      "fastapi",
+      "sqlmodel",
+      "vercel-react-best-practices",
+      "frontend-design",
+      "diagnosing-bugs",
+      "playwright"
+    ],
+    "conventions": [],
+    "engram": "not available"
+  },
+  "step": "done",
+  "version": 4,
+  "kb": {
+    "created_by": "kb-creator",
+    "source": "interactive",
+    "discovery": {
+      "problem": "Los consultorios odontológicos argentinos (1–3 profesionales) coordinan turnos por WhatsApp manual/papel: ausentismo, huecos perdidos, señas desacopladas y doble carga administrativa.",
+      "system_type": "web_app",
+      "domain": "odontologia",
+      "scale": "team",
+      "stack": [
+        "Python",
+        "FastAPI",
+        "SQLAlchemy",
+        "PostgreSQL",
+        "Redis",
+        "RQ",
+        "React",
+        "TypeScript",
+        "Vite",
+        "Docker Compose"
+      ],
+      "needs_infra": true
+    },
+    "files": [
+      "knowledge-base/01_vision_y_objetivos.md",
+      "knowledge-base/02_descripcion_general.md",
+      "knowledge-base/03_actores_y_roles.md",
+      "knowledge-base/04_modelo_de_datos.md",
+      "knowledge-base/05_reglas_de_negocio.md",
+      "knowledge-base/06_funcionalidades.md",
+      "knowledge-base/07_flujos_principales.md",
+      "knowledge-base/08_arquitectura_propuesta.md",
+      "knowledge-base/09_decisiones_y_supuestos.md",
+      "knowledge-base/10_preguntas_abiertas.md",
+      "knowledge-base/11_post_mvp_e_integraciones.md",
+      "knowledge-base/README.md"
+    ]
+  },
+  "agents": {
+    "created_by": "agent-instruction",
+    "files": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ],
+    "reglas_applied": [
+      "R1",
+      "R2",
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "R8",
+      "R9",
+      "U1",
+      "U2",
+      "U3"
+    ]
+  }
+}
