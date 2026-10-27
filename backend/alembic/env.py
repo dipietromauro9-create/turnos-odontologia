@@ -11,6 +11,7 @@ from sqlalchemy import engine_from_config, pool
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
+import app.db.models  # noqa: E402,F401  (completa Base.metadata para autogenerate)
 from app.db.base import Base  # noqa: E402
 
 config = context.config

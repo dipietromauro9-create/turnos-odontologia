@@ -11,10 +11,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy.orm import Session
 
+from app.core import settings as settings_module
 from app.core.errors import register_handlers
 from app.core.logging import configure_logging
-from app.core.settings import get_settings
-from app.db.base import get_engine, ping_database
+from app.db.session import TenantContextMiddleware, get_engine, get_session, ping_database
 
 
 class HealthResponse(BaseModel):
@@ -27,10 +27,8 @@ class HealthResponse(BaseModel):
 
 
 def session_dep() -> Iterator[Session]:
-    """Dependencia de sesión a nivel módulo (alias reutilizable, estilo Annotated)."""
-    from app.db.base import get_session
-
-    yield from get_session(get_settings().database_url)
+    """Dependencia de sesión tenant-scoped (falla si no hay tenant resuelto)."""
+    yield from get_session()
 
 
 SessionDep = Annotated[Session, Depends(session_dep)]
@@ -38,7 +36,7 @@ SessionDep = Annotated[Session, Depends(session_dep)]
 
 def create_app() -> FastAPI:
     configure_logging()
-    settings = get_settings()
+    settings = settings_module.get_settings()
 
     @asynccontextmanager
     async def lifespan(_app: FastAPI):  # type: ignore[no-untyped-def]
@@ -54,10 +52,11 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    app.add_middleware(TenantContextMiddleware)
 
     @app.get("/health")
-    def health(session: SessionDep) -> HealthResponse:
-        ok = ping_database(session)
+    def health() -> HealthResponse:
+        ok = ping_database()
         return HealthResponse(status="ok", database="up" if ok else "down")
 
     return app

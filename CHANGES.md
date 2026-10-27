@@ -114,7 +114,7 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
   - `knowledge-base/08_arquitectura_propuesta.md` §Variables de entorno
 
 ### [C-02] `core-models-tenancy`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-10-27)
 - **Scope**: Núcleo multi-tenant + usuarios + base de patrones
   - Modelos: `Tenant` (slug inmutable unique), `Usuario` (email citext único por tenant, `rol` enum recepcion/profesional, `es_dueno` bool, constraint `es_dueno=true` solo si `rol=profesional`), `TenantMixin` (`tenant_id` FK + índices compuestos) y `AuditMixin` (timestamps)
   - Middleware de tenant: resuelve tenant (v1: `TENANT_DEFAULT_SLUG`), inyecta `tenant_id` en `get_session`; imposible olvidar el filtro (DD-02)

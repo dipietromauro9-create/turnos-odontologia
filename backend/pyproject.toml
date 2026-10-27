@@ -16,6 +16,7 @@ dependencies = [
   "rq-scheduler>=0.13",
   "python-multipart>=0.0.9",
   "httpx>=0.27",
+  "argon2-cffi>=23.1",
 ]
 
 [project.optional-dependencies]
@@ -35,6 +36,9 @@ packages = ["app"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "strict"
+markers = [
+  "integration: requiere Postgres real (citext/CHECK/índices no existen en SQLite)",
+]
 
 [tool.ruff]
 target-version = "py312"
