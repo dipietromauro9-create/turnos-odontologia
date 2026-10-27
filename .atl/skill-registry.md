@@ -8,12 +8,12 @@ See `_shared/skill-resolver.md` for the full resolution protocol.
 
 | Trigger | Skill | Path |
 |---------|-------|------|
-| Working with FastAPI APIs, Pydantic models, dependencies, streaming responses incl. Server-Sent Events (SSE), serving frontend apps | fastapi | /home/mauro/.agents/skills/fastapi/SKILL.md |
-| Writing or reviewing Python code with SQLModel: models, sessions, queries, FastAPI integration, relationships, link models, creates, updates, deletes | sqlmodel | /home/mauro/.agents/skills/sqlmodel/SKILL.md |
-| Writing, reviewing or refactoring React components / pages, data fetching, bundle optimization, performance improvements | vercel-react-best-practices | /home/mauro/.agents/skills/vercel-react-best-practices/SKILL.md |
-| Building new UI or reshaping existing UI: aesthetic direction, typography, distinctive visual design | frontend-design | /home/mauro/.agents/skills/frontend-design/SKILL.md |
-| User says "diagnose"/"debug this", or reports something broken / throwing / failing / slow | diagnosing-bugs | /home/mauro/.agents/skills/diagnosing-bugs/SKILL.md |
-| Automating a real browser from the terminal: navigation, form filling, snapshots, screenshots, data extraction, UI-flow debugging | playwright | /home/mauro/.agents/skills/playwright/SKILL.md |
+| Working with FastAPI APIs, Pydantic models, dependencies, streaming responses incl. Server-Sent Events (SSE), serving frontend apps | fastapi | .opencode/skills/fastapi/SKILL.md |
+| Writing or reviewing Python code with SQLModel: models, sessions, queries, FastAPI integration, relationships, link models, creates, updates, deletes | sqlmodel | .opencode/skills/sqlmodel/SKILL.md |
+| Writing, reviewing or refactoring React components / pages, data fetching, bundle optimization, performance improvements | vercel-react-best-practices | .opencode/skills/vercel-react-best-practices/SKILL.md |
+| Building new UI or reshaping existing UI: aesthetic direction, typography, distinctive visual design | frontend-design | .opencode/skills/frontend-design/SKILL.md |
+| User says "diagnose"/"debug this", or reports something broken / throwing / failing / slow | diagnosing-bugs | .opencode/skills/diagnosing-bugs/SKILL.md |
+| Automating a real browser from the terminal: navigation, form filling, snapshots, screenshots, data extraction, UI-flow debugging | playwright | .opencode/skills/playwright/SKILL.md |
 
 ## Compact Rules
 
