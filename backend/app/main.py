@@ -15,6 +15,8 @@ from app.core import settings as settings_module
 from app.core.errors import register_handlers
 from app.core.logging import configure_logging
 from app.db.session import TenantContextMiddleware, get_engine, get_session, ping_database
+from app.domain.auth.middleware import AuthMiddleware
+from app.domain.auth.router import router as auth_router
 
 
 class HealthResponse(BaseModel):
@@ -52,7 +54,9 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    app.add_middleware(AuthMiddleware)
     app.add_middleware(TenantContextMiddleware)
+    app.include_router(auth_router)
 
     @app.get("/health")
     def health() -> HealthResponse:

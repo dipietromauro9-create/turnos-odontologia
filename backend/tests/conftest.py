@@ -14,6 +14,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 import pytest
+import redis as redis_lib
 from alembic.config import Config
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine, make_url
@@ -176,6 +177,32 @@ APP_ENV: dict[str, str] = {
     "FRONTEND_ORIGIN": "http://localhost:5173",
     "RECORDATORIO_VENTANA_HS": "24,48",
 }
+
+
+@pytest.fixture(scope="session")
+def redis_url() -> str:
+    return os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+
+
+def _limpiar_claves_auth(client: redis_lib.Redis) -> None:
+    claves = list(client.scan_iter("auth:*"))
+    if claves:
+        client.delete(*claves)
+
+
+@pytest.fixture()
+def redis_client(redis_url: str) -> Iterator[redis_lib.Redis]:
+    """Redis real para tests de integración; se omiten si no está disponible."""
+    client = redis_lib.Redis.from_url(redis_url, decode_responses=True)
+    try:
+        client.ping()
+    except redis_lib.RedisError as exc:  # pragma: no cover - entorno sin Redis
+        client.close()
+        pytest.skip(f"Redis no disponible para tests de integración: {exc}")
+    _limpiar_claves_auth(client)
+    yield client
+    _limpiar_claves_auth(client)
+    client.close()
 
 
 @pytest.fixture()

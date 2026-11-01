@@ -135,7 +135,7 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
 ## FASE 1 — Acceso
 
 ### [C-03] `auth-rbac`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-01 — 26/26 tasks; specs `core/auth` y `core/rbac` sincronizadas a main)
 - **Scope**: Autenticación JWT + RBAC de 3 roles con dueño como flag
   - `POST /auth/login` (Argon2id, lockout tras 10 intentos fallidos, rate limit 5/60s por IP+email), `POST /auth/refresh` (rotación con blacklist), `POST /auth/logout`, `GET /auth/me`
   - JWT: access 15 min + refresh 7 días en cookie HttpOnly (secure, samesite=lax); claims `sub, tenant_id, roles, email, jti, type, iat, exp`

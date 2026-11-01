@@ -26,7 +26,12 @@ class DomainError(Exception):
     """Fallo de negocio conocido → siempre 4xx con código RN-XX-NN, nunca 500."""
 
     def __init__(
-        self, code: str, message: str, status_code: int = 400, details: dict[str, Any] | None = None
+        self,
+        code: str,
+        message: str,
+        status_code: int = 400,
+        details: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
     ) -> None:
         if not _CODE_RE.match(code):
             msg = f"code debe tener formato RN-XX-NN, recibido: {code}"
@@ -39,11 +44,16 @@ class DomainError(Exception):
         self.message = message
         self.status_code = status_code
         self.details = details
+        self.headers = headers
 
 
 async def domain_error_handler(_request: Request, exc: DomainError) -> JSONResponse:
     envelope = ErrorEnvelope(code=exc.code, message=exc.message, details=exc.details)
-    return JSONResponse(status_code=exc.status_code, content=envelope.model_dump(exclude_none=True))
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=envelope.model_dump(exclude_none=True),
+        headers=exc.headers,
+    )
 
 
 def register_handlers(app: FastAPI) -> None:
