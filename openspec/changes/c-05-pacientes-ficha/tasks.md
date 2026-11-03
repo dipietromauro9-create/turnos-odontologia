@@ -1,0 +1,84 @@
+# Tareas
+
+Ciclo estricto por grupo: **RED** (test que falla por la razón correcta) → **GREEN** (implementación mínima que lo pone en verde) → **TRIANGULATE** (≥2 casos borde nuevos) → **REFACTOR** (sin cambiar comportamiento). Los escenarios de `specs/core/pacientes/spec.md` son los criterios de aceptación.
+
+**Prerrequisitos ya archivados (no se reimplementan):** `TenantMixin`/`AuditMixin` y `TenantSession` de C-02; `AuthMiddleware`, `CurrentUserDep`, `require_role`, `es_dueno` y `require_acceso_profesional` de C-03; harness `backend/tests/conftest.py` (`app_env`, `db_url`, `clean_db`, marcador `integration`) y `backend/tests/factories.py`.
+
+**Alcance de C-05:** modelo `Paciente` + migración `0004_paciente` + endpoints `GET/POST/PATCH /pacientes` + búsqueda + contrato de reutilización para C-09 + seed de 2 pacientes demo. Sin ruta HTTP de borrado y sin dependencias Python nuevas.
+
+## 1. Modelo `Paciente` y migración `0004_paciente`
+
+- [x] 1.1 **RED** — Escribir `backend/tests/test_pacientes_model.py` (marcado `integration`) que afirme: `Paciente` usa `TenantMixin` y `AuditMixin`; `tenant_id` es NOT NULL con FK a `tenant`; `documento`, `fecha_nac` y `observaciones` son nullables; no existen columnas `deleted_at`/`eliminado_en`/`activo`; existen los índices `(tenant_id, telefono)`, trigram sobre `lower(nombre)` y `(tenant_id, creado_por_usuario_id)`. Correr `uv run pytest tests/test_pacientes_model.py -q` y confirmar que falla porque el modelo y la migración no existen
+- [x] 1.2 **GREEN** — Implementar `backend/app/db/models/paciente.py` (`Paciente`, `creado_por_usuario_id` FK nullable a `usuario.id` con `ON DELETE SET NULL`, `nombre`/`telefono` NOT NULL, CHECKs de longitud), exportarlo en `backend/app/db/models/__init__.py` y crear `backend/alembic/versions/0004_paciente.py` (`down_revision = "0003_c04_profesional_prestacion"`, `CREATE EXTENSION IF NOT EXISTS pg_trgm`, `CREATE EXTENSION IF NOT EXISTS btree_gin`, tabla, FKs e índices). Verificar que `uv run pytest tests/test_pacientes_model.py -q` pasa y que `uv run alembic upgrade head` aplica la revisión
+- [x] 1.3 **TRIANGULATE** — Agregar al mismo archivo ≥2 casos: el `downgrade` de `0004_paciente` elimina tabla e índices y un `upgrade` posterior vuelve a crearlos; el FK `creado_por_usuario_id` pasa a NULL al borrar el usuario creador; el índice trigram aparece en `pg_indexes` con `gin_trgm_ops`. Verificar con `uv run pytest tests/test_pacientes_model.py -q` y `uv run alembic check`
+- [x] 1.4 **REFACTOR** — Extraer nombres de índices/constraints a constantes legibles, ordenar imports y correr `uv run ruff check app tests && uv run ruff format --check app tests`; confirmar que `uv run alembic check` sigue sin diferencias y que `uv run alembic heads` muestra un único head
+
+## 2. Normalización de teléfono y schemas Pydantic
+
+- [x] 2.1 **RED** — Escribir `backend/tests/test_pacientes_schemas.py`: `PacienteCreate`/`PacienteUpdate`/`PacienteOut` rechazan campos extra (R1); `normalizar_telefono("+54 9 11 4555-0001") == "5491145550001"`; teléfonos con menos de 6 o más de 15 dígitos se rechazan; `fecha_nac` futura o anterior a 1900 se rechaza; `PacienteUpdate` acepta un body vacío y todos sus campos son opcionales. Correr `uv run pytest tests/test_pacientes_schemas.py -q` y confirmar el fallo
+- [x] 2.2 **GREEN** — Implementar `backend/app/domain/pacientes/schemas.py` (`PacienteCreate`, `PacienteUpdate`, `PacienteResumen`, `PacienteIdentidadMinima`, `PacienteOut` con `AwareDatetime`, `AdvertenciaDuplicado`, `PacienteCreadoOut`) y `normalizar_telefono` en `backend/app/domain/pacientes/service.py`; verificar que `uv run pytest tests/test_pacientes_schemas.py -q` pasa
+- [x] 2.3 **TRIANGULATE** — Agregar ≥2 casos: `"11 4555-0001"` y `"(011) 4555-0001"` normalizan a dígitos; un teléfono compuesto solo por símbolos se rechaza; `PacienteOut` serializa `creado_en`/`actualizado_en` con zona horaria y nunca incluye `creado_por_usuario_id`; un campo desconocido en `PacienteCreate` devuelve error de validación. Verificar con `uv run pytest tests/test_pacientes_schemas.py -q`
+- [x] 2.4 **REFACTOR** — Unificar validadores de nombre/teléfono/fecha en helpers privados, correr `uv run ruff check app tests && uv run ruff format --check app tests` y confirmar que los tests siguen verdes
+
+## 3. Alta de paciente con advertencia de duplicado
+
+- [x] 3.1 **RED** — Escribir `backend/tests/test_pacientes_create.py` (marcado `integration`): un alta sin coincidencias persiste el paciente con `tenant_id` de la sesión, `creado_por_usuario_id` del usuario y `advertencia = None`; un alta con el mismo teléfono normalizado responde con advertencia `RN-PA-01`, persiste el nuevo paciente y lista la coincidencia. Correr `uv run pytest tests/test_pacientes_create.py -q` y confirmar el fallo
+- [x] 3.2 **GREEN** — Implementar `crear_paciente(session, datos, usuario)` y `_buscar_duplicados(session, nombre, telefono, alcance, usuario_id)` en `service.py`, devolviendo un `ResultadoCreacion(paciente, advertencia)`; verificar que `uv run pytest tests/test_pacientes_create.py -q` pasa
+- [x] 3.3 **TRIANGULATE** — Agregar ≥2 casos: mismo nombre normalizado con otro teléfono también advierte; un duplicado en otro tenant no advierte; la advertencia de un profesional sin flag no incluye pacientes ajenos; un teléfono con formato distinto al almacenado advierte igual. Verificar con `uv run pytest tests/test_pacientes_create.py -q`
+- [x] 3.4 **REFACTOR** — Extraer la consulta de duplicados a un helper testeable y reutilizable por la reutilización de C-09, correr `uv run ruff check app tests && uv run ruff format --check app tests` y confirmar los tests verdes
+
+## 4. Búsqueda por nombre (trigram) y teléfono
+
+- [x] 4.1 **RED** — Escribir `backend/tests/test_pacientes_search.py` (marcado `integration`): un nombre parcial con error de tipeo encuentra al paciente por trigram; un teléfono con formato encuentra al paciente normalizado; sin `q` se listan todos ordenados por nombre; `limit`/`offset` recortan el resultado; la búsqueda no devuelve pacientes de otro tenant. Correr `uv run pytest tests/test_pacientes_search.py -q` y confirmar el fallo
+- [x] 4.2 **GREEN** — Implementar `buscar_pacientes(session, *, q, alcance, usuario_id, limit, offset)` con `similarity(lower(nombre), lower(:q)) >= 0.3 OR lower(nombre) LIKE ...` y `telefono LIKE '%' || :digits || '%'`, ordenando por similitud y nombre; verificar que `uv run pytest tests/test_pacientes_search.py -q` pasa
+- [x] 4.3 **TRIANGULATE** — Agregar ≥2 casos: `q` de menos de 3 caracteres usa solo `ILIKE`; mayúsculas/minúsculas no afectan; una búsqueda sin resultados devuelve lista vacía; `limit` mayor a 100 se rechaza o se recorta; `EXPLAIN` de la búsqueda por nombre usa el índice trigram (test `integration`). Verificar con `uv run pytest tests/test_pacientes_search.py -q`
+- [x] 4.4 **REFACTOR** — Extraer el constructor de la consulta (`_consulta_busqueda`) y las constantes de umbral/límites, correr `uv run ruff check app tests && uv run ruff format --check app tests` y confirmar los tests verdes
+
+## 5. Lectura, actualización parcial y alcance RN-AU-03
+
+- [x] 5.1 **RED** — Escribir `backend/tests/test_pacientes_scope.py` (marcado `integration`): recepción y dueño leen/editan cualquier paciente; un profesional sin flag lista solo los suyos; leer o editar un paciente ajeno responde 403 `RN-AU-03`; un `PATCH` parcial cambia solo los campos enviados. Correr `uv run pytest tests/test_pacientes_scope.py -q` y confirmar el fallo
+- [x] 5.2 **GREEN** — Implementar `backend/app/domain/pacientes/dependencies.py` (`AlcancePacientes`, `alcance_pacientes`, `exigir_acceso_paciente`) y `obtener_paciente`/`actualizar_paciente` en `service.py` con `model_dump(exclude_unset=True)` y asignación explícita de campos (sin `tenant_id` ni `creado_por_usuario_id`); verificar que `uv run pytest tests/test_pacientes_scope.py -q` pasa
+- [x] 5.3 **TRIANGULATE** — Agregar ≥2 casos: un paciente creado por un profesional sin flag queda en su listado; un id inexistente responde 404 `RN-PA-02` con `details.reason = "no_encontrado"`; un id ajeno responde 403 `RN-AU-03` y no 404; un `PATCH` con body vacío devuelve el paciente sin cambios; el rol enviado en el body se ignora. Verificar con `uv run pytest tests/test_pacientes_scope.py -q`
+- [x] 5.4 **REFACTOR** — Reutilizar `es_dueno`/`alcance_agenda` de C-03 donde aplique, documentar la diferencia entre 404 y 403, correr `uv run ruff check app tests && uv run ruff format --check app tests` y confirmar los tests verdes
+
+## 6. Router `/pacientes` y registro en la app
+
+- [x] 6.1 **RED** — Escribir `backend/tests/test_pacientes_api.py` (marcado `integration`): `GET /pacientes` autenticado devuelve 200; `POST /pacientes` devuelve 201 con `{paciente, advertencia}`; `PATCH /pacientes/{id}` devuelve 200; sin token los tres devuelven 401; un payload inválido o con campos extra devuelve 422. Correr `uv run pytest tests/test_pacientes_api.py -q` y confirmar el fallo
+- [x] 6.2 **GREEN** — Implementar `backend/app/domain/pacientes/router.py` con `APIRouter(prefix="/pacientes", tags=["pacientes"], dependencies=[Depends(require_role(RolUsuario.RECEPCION, RolUsuario.PROFESIONAL))])` y las tres operaciones, y registrarlo en `backend/app/main.py` con `app.include_router(...)`; verificar que `uv run pytest tests/test_pacientes_api.py -q` pasa
+- [x] 6.3 **TRIANGULATE** — Agregar ≥2 casos: `limit`/`offset` inválidos devuelven 422; `GET /pacientes/{id}` inexistente devuelve 404 con sobre de dominio; `PATCH` con solo `observaciones` no pisa `nombre`/`telefono`; el 201 de duplicado conserva `advertencia.codigo = "RN-PA-01"`. Verificar con `uv run pytest tests/test_pacientes_api.py -q`
+- [x] 6.4 **REFACTOR** — Mover serialización a helpers del router, mantener una operación HTTP por función, correr `uv run ruff check app tests && uv run ruff format --check app tests` y confirmar los tests verdes
+
+## 7. Contrato de reutilización por teléfono para C-09
+
+- [x] 7.1 **RED** — Escribir `backend/tests/test_pacientes_reuse.py` (marcado `integration`): un teléfono existente devuelve la identidad mínima del mismo `id` con `creado = false`; un teléfono nuevo crea el paciente con `creado = true`; un teléfono formateado reutiliza al paciente almacenado; un teléfono de otro tenant crea uno nuevo; con `usuario_id = None` el paciente creado queda con `creado_por_usuario_id = NULL`. Correr `uv run pytest tests/test_pacientes_reuse.py -q` y confirmar el fallo
+- [x] 7.2 **GREEN** — Implementar `crear_o_reutilizar_paciente(session, *, nombre, telefono, usuario_id: UUID | None, alcance) -> ResultadoReutilizacion` reutilizando `normalizar_telefono` y `_buscar_duplicados`, devolviendo `identidad: PacienteIdentidadMinima`, `creado` y `advertencia`; verificar que `uv run pytest tests/test_pacientes_reuse.py -q` pasa
+- [x] 7.3 **TRIANGULATE** — Agregar ≥2 casos: mismo nombre con otro teléfono crea uno nuevo y devuelve advertencia `RN-PA-01`; con `usuario_id = None` la advertencia no incluye `duplicados` (sin PII); el resultado nunca incluye `observaciones` ni la ficha completa; la reutilización no devuelve pacientes de otro tenant. Verificar con `uv run pytest tests/test_pacientes_reuse.py -q`
+- [x] 7.4 **REFACTOR** — Compartir el camino de creación con `crear_paciente`, documentar en el docstring que C-09 consume este contrato y no la ficha, correr `uv run ruff check app tests && uv run ruff format --check app tests` y confirmar los tests verdes
+
+## 8. Frontera pública RN-PA-02 (sin rutas públicas que expongan pacientes)
+
+- [x] 8.1 **RED** — Escribir `backend/tests/public_boundary.py` y `backend/tests/test_pacientes_public_boundary.py`: el helper `rutas_publicas_que_exponen_pacientes(app)` debe devolver `[]` para la app real; el test debe fallar porque el helper todavía no existe. Incluir aserciones de que `RUTAS_PUBLICAS`/`PREFIJOS_PUBLICOS` de `app.domain.auth.middleware` y las de `test_architecture.py` no contienen `/pacientes`, y que `GET /pacientes` sin token devuelve 401. Correr `uv run pytest tests/test_pacientes_public_boundary.py -q` y confirmar el fallo por import
+- [x] 8.2 **GREEN** — Implementar `rutas_publicas_que_exponen_pacientes(app)` en `backend/tests/public_boundary.py` (recorre `app.routes`, las allowlists de `app.domain.auth.middleware` y `test_architecture.py`, y el esquema OpenAPI; considera exposición si una ruta pública coincide con `/pacientes` o referencia `PacienteOut`/`PacienteCreadoOut`/`PacienteIdentidadMinima`) y verificar que `uv run pytest tests/test_pacientes_public_boundary.py -q` pasa
+- [x] 8.3 **TRIANGULATE** — Agregar ≥2 casos: una app falsa con una ruta pública `/pacientes/publico` es detectada por el helper; una app falsa cuya ruta pública devuelve `PacienteOut` es detectada; `/health` y `/turnero/demo` siguen permitidos; el guard existente `_rutas_sin_proteccion(app_del_panel)` sigue devolviendo `[]`. Verificar con `uv run pytest tests/test_pacientes_public_boundary.py tests/test_architecture.py -q`
+- [x] 8.4 **REFACTOR** — Extraer constantes de prefijos/schemas sensibles, mantener el helper sin dependencias de red, correr `uv run ruff check app tests && uv run ruff format --check app tests` y confirmar los tests verdes
+
+## 9. Borrado físico y deuda de auditoría (RN-PA-03, DD-07, IN-01)
+
+- [x] 9.1 **RED** — Escribir `backend/tests/test_pacientes_delete_policy.py` (marcado `integration`): la tabla `paciente` no tiene columnas de borrado lógico; `eliminar_paciente(session, paciente, alcance)` borra la fila físicamente y una lectura posterior no la encuentra; un segundo borrado devuelve `False`. Correr `uv run pytest tests/test_pacientes_delete_policy.py -q` y confirmar el fallo
+- [x] 9.2 **GREEN** — Implementar `eliminar_paciente` en `service.py` con un docstring que cite `RN-PA-03 / DD-07 / IN-01` y explique que no hay auditoría ni soft delete; verificar que `uv run pytest tests/test_pacientes_delete_policy.py -q` pasa
+- [x] 9.3 **TRIANGULATE** — Agregar ≥2 casos: borrar un id de otro tenant no elimina nada; tras el borrado el paciente desaparece del listado y de la búsqueda; el borrado no crea ninguna fila de auditoría (no hay tabla de auditoría). Verificar con `uv run pytest tests/test_pacientes_delete_policy.py -q`
+- [x] 9.4 **REFACTOR** — Confirmar que no se expone ninguna ruta HTTP de borrado (`app.routes` no contiene `DELETE /pacientes`), correr `uv run ruff check app tests && uv run ruff format --check app tests` y confirmar los tests verdes
+
+## 10. Seed demo de dos pacientes ficticios
+
+- [x] 10.1 **RED** — Escribir `backend/tests/test_pacientes_seed.py` (marcado `integration`): `run_seed()` crea exactamente dos pacientes del tenant `demo` con nombres/teléfonos ficticios y `creado_por_usuario_id` del dueño; ejecutarlo dos veces deja dos pacientes y no duplica; el resultado incluye `pacientes_creados`. Correr `uv run pytest tests/test_pacientes_seed.py -q` y confirmar el fallo
+- [x] 10.2 **GREEN** — Ampliar `backend/app/db/seed.py` con `_crear_pacientes_faltantes(tenant, dueno_id)` idempotente por teléfono normalizado y actualizar `run_seed()`/`main()`; verificar que `uv run pytest tests/test_pacientes_seed.py -q` pasa
+- [x] 10.3 **TRIANGULATE** — Agregar ≥2 casos: un paciente demo existente con el mismo teléfono no se duplica ni se sobreescribe; los pacientes demo no aparecen en otro tenant; los datos no contienen PII real (nombres/teléfonos inventados y documentados). Verificar con `uv run pytest tests/test_pacientes_seed.py -q`
+- [x] 10.4 **REFACTOR** — Reutilizar `normalizar_telefono` en el seed, mantener el seed sin dependencia de la app HTTP, correr `uv run ruff check app tests && uv run ruff format --check app tests` y confirmar los tests verdes
+
+## 11. Verificación integral
+
+- [ ] 11.1 Correr `uv run ruff check app tests`, `uv run ruff format --check app tests`, `uv run pytest -q` (unitarios + `integration`) y `uv run alembic check`; verificar cero errores, cero diferencias de metadata y un único head (`uv run alembic heads`)
+- [ ] 11.2 Correr el guard de arquitectura y la frontera pública: `uv run pytest tests/test_architecture.py tests/test_pacientes_public_boundary.py -q`; confirmar que ninguna ruta pública expone pacientes y que toda ruta de panel declara autenticación/roles
+- [ ] 11.3 Levantar el stack (`docker compose down -v && cp .env.example .env && docker compose up --build -d`), correr el seed y verificar con `curl`: login `recepcion@demo`; `POST /pacientes` (201), repetir con el mismo teléfono (201 + `RN-PA-01`), `GET /pacientes?q=` por nombre y teléfono, `PATCH` parcial; `GET /pacientes` sin token (401); profesional sin flag sobre paciente ajeno (403 `RN-AU-03`)
+- [ ] 11.4 Correr `openspec validate c-05-pacientes-ficha --strict` y verificar cero errores; al cerrar el change, archivar con `/opsx:archive` y marcar `[C-05]` como archivado en `CHANGES.md`

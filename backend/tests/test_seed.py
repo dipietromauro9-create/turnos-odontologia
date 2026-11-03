@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 from argon2 import PasswordHasher
-from sqlalchemy import inspect, select, text
+from sqlalchemy import select, text
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.db.models import RolUsuario, Tenant, Usuario
@@ -62,14 +62,14 @@ def test_seed_crea_el_escenario_demo(app_env: None, session_factory: sessionmake
         assert hasher.verify(usuario.password_hash, DEMO_PASSWORDS[email]) is True
 
 
-def test_seed_no_crea_pacientes(app_env: None, db_engine: object) -> None:
+def test_seed_crea_dos_pacientes_ficticios(app_env: None, db_engine: object) -> None:
     run_seed()
 
-    tablas = set(inspect(db_engine).get_table_names())  # type: ignore[arg-type]
-    assert "paciente" not in tablas
     with db_engine.connect() as conexion:  # type: ignore[union-attr]
-        valor = conexion.execute(text("SELECT count(*) FROM usuario")).scalar_one()
-    assert valor == 2
+        usuarios = conexion.execute(text("SELECT count(*) FROM usuario")).scalar_one()
+        pacientes = conexion.execute(text("SELECT count(*) FROM paciente")).scalar_one()
+    assert usuarios == 2
+    assert pacientes == 2
 
 
 def test_seed_es_idempotente(app_env: None, session_factory: sessionmaker[Session]) -> None:

@@ -3,8 +3,12 @@
 from __future__ import annotations
 
 import pytest
+from alembic.config import Config
+from alembic.script import ScriptDirectory
 from sqlalchemy import text
 from sqlalchemy.engine import Engine
+
+from tests.conftest import BACKEND_DIR
 
 
 @pytest.mark.integration
@@ -18,6 +22,10 @@ def test_harness_conecta_a_una_base_de_test(db_engine: Engine, db_url: str) -> N
 
 @pytest.mark.integration
 def test_harness_dejo_las_migraciones_aplicadas(db_engine: Engine) -> None:
+    config = Config(str(BACKEND_DIR / "alembic.ini"))
+    config.set_main_option("script_location", str(BACKEND_DIR / "alembic"))
+    head = ScriptDirectory.from_config(config).get_current_head()
+
     with db_engine.connect() as conn:
         version = conn.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
-    assert version == "0002_tenancy_usuario"
+    assert version == head

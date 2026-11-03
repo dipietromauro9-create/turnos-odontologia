@@ -64,3 +64,10 @@ def login(
     password: str = PASSWORD,
 ) -> object:
     return client.post("/auth/login", json={"email": email, "password": password})
+
+
+def autorizacion(app: FastAPI, email: str = EMAIL_DUENO) -> dict[str, str]:
+    """Cabecera Authorization con un access real emitido por /auth/login."""
+    respuesta = login(cliente(app), email=email)
+    assert respuesta.status_code == 200
+    return {"Authorization": f"Bearer {respuesta.json()['access_token']}"}

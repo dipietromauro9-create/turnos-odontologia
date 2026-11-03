@@ -157,7 +157,7 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
 > Los changes C-04, C-05 y C-06 pueden proponerse en paralelo (GATE 3). Los tres deben archivarse antes de C-07.
 
 ### [C-04] `profesionales-prestaciones`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-03 — 25/25 tasks; specs `core/profesionales` y `core/prestaciones` sincronizadas a main; `core/tenancy` actualizado)
 - **Scope**: Catálogo clínico-administrativo que todo turno referencia (US-008 parcial)
   - Modelos: `Profesional` (usuario_id unique nullable, matrícula/especialidad nullables, índice (tenant_id, activo)), `Prestacion` (duracion_min múltiplo de 5 > 0, precio_ref informativo, índice (tenant_id, activa))
   - Endpoints dueño-only: `GET/POST/PATCH /profesionales`, `GET/POST/PATCH /prestaciones` (+ desactivar, sin borrado físico de referenciadas)

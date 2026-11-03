@@ -14,8 +14,10 @@ from app.db.base import Base
 from app.db.models import Tenant, TenantMixin
 
 DOMAIN_DIR = Path(__file__).resolve().parents[1] / "app" / "domain"
+AGENDA_DIR = DOMAIN_DIR / "agenda"
 SQL_CRUDO = re.compile(r"\btext\s*\(")
 BULK = re.compile(r"\bbulk_")
+TURNO = re.compile(r"\bTurno\b")
 
 RUTAS_PUBLICAS = frozenset(
     {
@@ -91,6 +93,25 @@ def test_todo_modelo_de_dominio_usa_tenant_mixin() -> None:
     assert dominio, "debe haber al menos un modelo de dominio además de Tenant"
     sin_mixin = sorted(modelo.__name__ for modelo in dominio if not issubclass(modelo, TenantMixin))
     assert sin_mixin == []
+
+
+def _archivos_con_patron(directorio: Path, patron: re.Pattern[str]) -> list[str]:
+    if not directorio.exists():
+        return []
+    return [
+        str(archivo.relative_to(DOMAIN_DIR))
+        for archivo in sorted(directorio.rglob("*.py"))
+        if patron.search(archivo.read_text(encoding="utf-8"))
+    ]
+
+
+def infracciones_turno_en_agenda() -> list[str]:
+    """RN-AG-03: el catálogo no puede importar ni escribir `Turno` (llega en C-07)."""
+    return _archivos_con_patron(AGENDA_DIR, TURNO)
+
+
+def test_el_dominio_de_agenda_no_referencia_turno() -> None:
+    assert infracciones_turno_en_agenda() == []
 
 
 @pytest.fixture()

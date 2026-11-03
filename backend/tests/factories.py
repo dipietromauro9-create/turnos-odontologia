@@ -2,10 +2,18 @@
 
 from __future__ import annotations
 
+from decimal import Decimal
+
 from sqlalchemy.orm import Session
 
 from app.core.security import hash_password
-from app.db.models import RolUsuario, Tenant, Usuario
+from app.db.models import (
+    Prestacion,
+    Profesional,
+    RolUsuario,
+    Tenant,
+    Usuario,
+)
 
 PASSWORD_FICTICIO = "$argon2id$v=19$m=65536,t=3,p=4$hash$ficticio"
 
@@ -67,3 +75,49 @@ def crear_usuario_con_password(
     session.add(usuario)
     session.commit()
     return usuario
+
+
+def crear_profesional(
+    session: Session,
+    tenant: Tenant,
+    *,
+    usuario: Usuario | None = None,
+    nombre: str = "Profesional Ficticio",
+    matricula: str | None = None,
+    especialidad: str | None = None,
+    activo: bool = True,
+) -> Profesional:
+    """Profesional ficticio, opcionalmente vinculado a un usuario de login (R9)."""
+    profesional = Profesional(
+        tenant_id=tenant.id,
+        usuario_id=usuario.id if usuario is not None else None,
+        nombre=nombre,
+        matricula=matricula,
+        especialidad=especialidad,
+        activo=activo,
+    )
+    session.add(profesional)
+    session.commit()
+    return profesional
+
+
+def crear_prestacion(
+    session: Session,
+    tenant: Tenant,
+    *,
+    nombre: str = "Prestación Ficticia",
+    duracion_min: int = 30,
+    precio_ref: Decimal | None = None,
+    activa: bool = True,
+) -> Prestacion:
+    """Prestación ficticia con duración válida (positiva y múltiplo de 5)."""
+    prestacion = Prestacion(
+        tenant_id=tenant.id,
+        nombre=nombre,
+        duracion_min=duracion_min,
+        precio_ref=precio_ref,
+        activa=activa,
+    )
+    session.add(prestacion)
+    session.commit()
+    return prestacion
