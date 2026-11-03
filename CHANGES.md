@@ -173,7 +173,7 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
   - `knowledge-base/06_funcionalidades.md` §US-008
 
 ### [C-05] `pacientes-ficha`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-03 — 44/44 tasks; spec `core/pacientes` sincronizada a main; 317 tests backend y 14 guards en verde)
 - **Scope**: Ficha básica del paciente + búsqueda (US-009)
   - Modelo: `Paciente` (nombre, teléfono, documento/fecha_nac nullables, observaciones ficha básica; duplicados (nombre, teléfono) advertidos no bloqueados; índices (tenant_id, teléfono) + trigram (tenant_id, nombre))
   - Endpoints `GET/POST/PATCH /pacientes` (recepción CRUD todos; profesional CRUD sus pacientes, resto 403 — RN-AU-03; jamás expuesto en rutas públicas — RN-PA-02)
