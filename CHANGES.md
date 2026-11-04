@@ -190,7 +190,7 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
   - `knowledge-base/10_preguntas_abiertas.md` §IN-01
 
 ### [C-06] `disponibilidad-bloqueos`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-03 — 25/25 tasks; specs `core/disponibilidad` y `core/bloqueos` sincronizadas a main)
 - **Scope**: Plantilla semanal + cierres puntuales (US-008)
   - Modelos: `Disponibilidad` (profesional_id, dia_semana 0–6, hora_desde/hasta; constraints hora_hasta > hora_desde, sin duplicados por profesional/día/rango), `Bloqueo` (profesional_id nullable, desde/hasta; `hasta > desde`; profesional nulo = cierra todo el consultorio — RN-AG-02)
   - Endpoints dueño-only: `GET/POST/DELETE /disponibilidad`, `GET/POST/DELETE /bloqueos` (recepción R, profesional R propia)

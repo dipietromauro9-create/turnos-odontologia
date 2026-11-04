@@ -9,7 +9,7 @@ from sqlalchemy import text
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.db.models import Prestacion, Profesional, RolUsuario, Tenant, Usuario
+from app.db.models import Disponibilidad, Prestacion, Profesional, RolUsuario, Tenant, Usuario
 from app.db.seed import run_seed
 from tests.factories import crear_prestacion, crear_profesional, crear_tenant, crear_usuario
 
@@ -44,10 +44,13 @@ def _borrar_disponibilidad(engine: Engine) -> None:
 
 @pytest.fixture(autouse=True)
 def sin_disponibilidad(db_engine: Engine) -> None:
-    """Aísla cada test: la tabla de C-06 no debe filtrarse entre casos."""
+    """Simula C-04 sin agenda y restaura siempre el esquema real de C-06."""
     _borrar_disponibilidad(db_engine)
-    yield
-    _borrar_disponibilidad(db_engine)
+    try:
+        yield
+    finally:
+        _borrar_disponibilidad(db_engine)
+        Disponibilidad.__table__.create(db_engine)
 
 
 def _tenant(app_env: None, session_factory: sessionmaker[Session]) -> Tenant:

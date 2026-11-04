@@ -15,6 +15,8 @@ from app.core import settings as settings_module
 from app.core.errors import register_handlers
 from app.core.logging import configure_logging
 from app.db.session import TenantContextMiddleware, get_engine, get_session, ping_database
+from app.domain.agenda.bloqueos.router import router as bloqueos_router
+from app.domain.agenda.disponibilidad.router import router as disponibilidad_router
 from app.domain.agenda.prestaciones.router import router as prestaciones_router
 from app.domain.agenda.profesionales.router import router as profesionales_router
 from app.domain.auth.middleware import AuthMiddleware
@@ -63,6 +65,8 @@ def create_app() -> FastAPI:
     app.include_router(prestaciones_router)
     app.include_router(profesionales_router)
     app.include_router(pacientes_router)
+    app.include_router(disponibilidad_router)
+    app.include_router(bloqueos_router)
 
     @app.get("/health")
     def health() -> HealthResponse:
