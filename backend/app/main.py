@@ -22,6 +22,7 @@ from app.domain.agenda.profesionales.router import router as profesionales_route
 from app.domain.auth.middleware import AuthMiddleware
 from app.domain.auth.router import router as auth_router
 from app.domain.pacientes.router import router as pacientes_router
+from app.domain.turnos.router import router as turnos_router
 
 
 class HealthResponse(BaseModel):
@@ -67,6 +68,7 @@ def create_app() -> FastAPI:
     app.include_router(pacientes_router)
     app.include_router(disponibilidad_router)
     app.include_router(bloqueos_router)
+    app.include_router(turnos_router)
 
     @app.get("/health")
     def health() -> HealthResponse:

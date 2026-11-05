@@ -2,23 +2,39 @@
 
 `python -m app.db.seed` crea el tenant `demo`, los usuarios `dueno@demo` /
 `recepcion@demo`, el catálogo base y dos pacientes ficticios creados por el
-dueño. Si ya existen no los modifica (no re-hashea, no pisa roles ni fichas).
+dueño y tres turnos de ejemplo mediante el servicio. Si ya existen no los modifica
+(no re-hashea, no pisa roles, fichas ni turnos). Los turnos nuevos que no cumplen
+las reglas se omiten y se informan.
 """
 
 from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from datetime import time
+from datetime import datetime, time, timedelta
 from typing import Any
+from zoneinfo import ZoneInfo
 
 from argon2 import PasswordHasher
 from sqlalchemy import inspect, select, text
 
-from app.db.models import Paciente, Prestacion, Profesional, RolUsuario, Tenant, Usuario
+from app.core.errors import DomainError
+from app.core.settings import get_settings
+from app.db.models import (
+    EstadoTurno,
+    Paciente,
+    Prestacion,
+    Profesional,
+    RolUsuario,
+    Tenant,
+    Turno,
+    Usuario,
+)
 from app.db.session import get_engine, system_session, tenant_context, tenant_session
 from app.domain.pacientes.telefono import normalizar_telefono
 from app.domain.persistence import UnitOfWork
+from app.domain.turnos.schemas import TurnoCreate
+from app.domain.turnos.service import crear_ejemplo
 
 DEMO_SLUG = "demo"
 DEMO_NOMBRE = "Consultorio Demo"
@@ -214,12 +230,89 @@ def _sembrar_disponibilidad_demo(
     return {"disponibilidad_creadas": creadas, "disponibilidad_omitida": False}
 
 
+def _sembrar_turnos_demo(
+    tenant: Tenant, profesional_id: uuid.UUID | None, dueno_id: uuid.UUID | None
+) -> dict[str, int]:
+    """Tres ejemplos persistidos por el servicio; nunca reabre ni mueve los existentes."""
+    inspector = inspect(get_engine())
+    if not inspector.has_table("turno") or not inspector.has_table("disponibilidad"):
+        return {"turnos_creados": 0, "turnos_omitidos": 3}
+    ids = [uuid.uuid5(tenant.id, f"C07-demo-{indice}") for indice in range(3)]
+    with tenant_session(tenant.id) as session:
+        existentes = set(
+            session.execute(
+                select(Turno.id).where(Turno.tenant_id == tenant.id, Turno.id.in_(ids))
+            ).scalars()
+        )
+        profesional = session.get(Profesional, profesional_id) if profesional_id else None
+        dueno = session.get(Usuario, dueno_id) if dueno_id else None
+        # El catálogo permite nombres repetidos: elegir una candidata estable,
+        # preferentemente activa, sin imponer unicidad nueva al usuario.
+        prestacion = (
+            session.execute(
+                select(Prestacion)
+                .where(Prestacion.tenant_id == tenant.id, Prestacion.nombre == "Consulta")
+                .order_by(Prestacion.activa.desc(), Prestacion.creado_en, Prestacion.id)
+                .limit(1)
+            )
+            .scalars()
+            .first()
+        )
+        pacientes = list(
+            session.execute(
+                select(Paciente)
+                .where(
+                    Paciente.tenant_id == tenant.id,
+                    Paciente.telefono.in_([telefono for _, telefono in PACIENTES_DEMO]),
+                )
+                .order_by(Paciente.telefono)
+            ).scalars()
+        )
+    if (
+        profesional is None
+        or not profesional.activo
+        or dueno is None
+        or not dueno.activo
+        or prestacion is None
+        or not prestacion.activa
+        or not pacientes
+    ):
+        return {"turnos_creados": 0, "turnos_omitidos": len(set(ids) - existentes)}
+    ahora = datetime.now(ZoneInfo(get_settings().tz))
+    dia = ahora.date() + timedelta(days=1)
+    while dia.weekday() > 4:
+        dia += timedelta(days=1)
+    primero = datetime.combine(dia, time(9), ahora.tzinfo)
+    creados, omitidos = 0, 0
+    destinos = (EstadoTurno.RESERVADO, EstadoTurno.CONFIRMADO, EstadoTurno.ATENDIDO)
+    for indice, destino in enumerate(destinos):
+        if ids[indice] in existentes:
+            continue
+        datos = TurnoCreate(
+            profesional_id=profesional.id,
+            prestacion_id=prestacion.id,
+            paciente_id=pacientes[indice % len(pacientes)].id,
+            inicio=primero + timedelta(minutes=indice * prestacion.duracion_min),
+        )
+        try:
+            with tenant_context(tenant.id, tenant.slug):
+                resultado = crear_ejemplo(ids[indice], datos, dueno, destino, ahora=ahora)
+            creados += int(resultado.creado)
+        except DomainError as exc:
+            if exc.code not in {"RN-AG-01", "RN-AG-02", "RN-TU-01", "RN-TU-02", "RN-AU-03"}:
+                raise
+            omitidos += 1
+    return {"turnos_creados": creados, "turnos_omitidos": omitidos}
+
+
 def run_seed() -> dict[str, Any]:
     tenant, tenant_creado = _get_or_create_tenant()
     usuarios_creados = _crear_usuarios_faltantes(tenant)
     catalogo = _sembrar_catalogo(tenant)
-    disponibilidad = _sembrar_disponibilidad_demo(tenant, catalogo.pop("profesional_id"))
-    pacientes_creados = _crear_pacientes_faltantes(tenant, catalogo.pop("dueno_id"))
+    profesional_id, dueno_id = catalogo.pop("profesional_id"), catalogo.pop("dueno_id")
+    disponibilidad = _sembrar_disponibilidad_demo(tenant, profesional_id)
+    pacientes_creados = _crear_pacientes_faltantes(tenant, dueno_id)
+    turnos = _sembrar_turnos_demo(tenant, profesional_id, dueno_id)
     return {
         "tenant": tenant.slug,
         "tenant_creado": tenant_creado,
@@ -227,6 +320,7 @@ def run_seed() -> dict[str, Any]:
         **catalogo,
         "pacientes_creados": pacientes_creados,
         **disponibilidad,
+        **turnos,
     }
 
 
@@ -240,6 +334,8 @@ def main() -> int:
         f"prestaciones_creadas={resultado['prestaciones_creadas']} "
         f"pacientes_creados={resultado['pacientes_creados']} "
         f"disponibilidad_creadas={resultado['disponibilidad_creadas']}"
+        f" turnos_creados={resultado['turnos_creados']}"
+        f" turnos_omitidos={resultado['turnos_omitidos']}"
     )
     if resultado["disponibilidad_omitida"]:
         mensaje += " disponibilidad=omitida (tabla ausente)"

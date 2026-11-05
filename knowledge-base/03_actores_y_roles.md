@@ -18,7 +18,7 @@ Recursos × roles (C=crear, R=leer, U=actualizar, D=eliminar; `—` = sin acceso
 | Recurso | Paciente (link/código) | Recepción | Profesional | Profesional dueño |
 |---|---|---|---|---|
 | Disponibilidad | R (solo lectura pública) | R | R | R |
-| Turnos propios (reservar/cancelar/reprogramar) | CUD con código | CRUD todos | CRUD todos | CRUD todos |
+| Turnos propios (reservar/cancelar/reprogramar) | CUD con código (C-09) | C/R/transiciones/reprogramar todos | C/R/transiciones/reprogramar propios | C/R/transiciones/reprogramar todos |
 | Transiciones de estado (confirmar, ausencia) | — | U | U (propios) | U |
 | Pacientes (ficha básica) | R propia con código | CRUD | CRUD (sus pacientes) | CRUD |
 | Agenda de profesionales | — | R (todos) | R (propia) | R (todos) |
@@ -30,7 +30,7 @@ Recursos × roles (C=crear, R=leer, U=actualizar, D=eliminar; `—` = sin acceso
 
 Reglas transversales:
 - El paciente solo opera sobre sus turnos mediante código único por turno (sin login).
-- Un profesional nunca ve fichas de pacientes de otro profesional salvo que sea dueño.
+- El profesional sin flag accede a una ficha si la creó o su Profesional vinculado tiene un turno reservado, confirmado o atendido con ese paciente en el mismo tenant. Cancelado/ausente solos no habilitan; cancelar la última cita sin atención revoca el acceso si no creó la ficha ni conserva otro turno activo. El dueño y recepción ven todas las fichas del tenant. El mismo criterio rige búsqueda, duplicados, reutilización, lectura y edición.
 - La recepción no configura prestaciones, horarios ni usuarios.
 
 ## Rutas públicas

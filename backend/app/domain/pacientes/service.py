@@ -10,6 +10,7 @@ from sqlalchemy import ColumnElement, Select, func, or_, select
 from app.core.errors import DomainError
 from app.db.models import Paciente, Usuario
 from app.db.session import TenantSession
+from app.domain.pacientes.alcance import condicion_paciente_propio
 from app.domain.pacientes.dependencies import (
     AlcancePacientes,
     alcance_pacientes,
@@ -72,7 +73,7 @@ def _buscar_duplicados(
         if usuario_id is None:
             msg = "alcance PROPIOS requiere usuario_id"
             raise ValueError(msg)
-        consulta = consulta.where(Paciente.creado_por_usuario_id == usuario_id)
+        consulta = consulta.where(condicion_paciente_propio(session.tenant_id, usuario_id))
     consulta = consulta.where(
         or_(
             Paciente.telefono == telefono,
@@ -154,7 +155,7 @@ def crear_o_reutilizar_paciente(
         if usuario_id is None:
             msg = "alcance PROPIOS requiere usuario_id"
             raise ValueError(msg)
-        consulta = consulta.where(Paciente.creado_por_usuario_id == usuario_id)
+        consulta = consulta.where(condicion_paciente_propio(session.tenant_id, usuario_id))
     existente = session.execute(consulta.order_by(Paciente.creado_en)).scalars().first()
     if existente is not None:
         return ResultadoReutilizacion(
@@ -198,7 +199,7 @@ def _consulta_busqueda(
     """Construye la consulta y su orden; sin `q` solo ordena por nombre."""
     consulta = select(Paciente).where(Paciente.tenant_id == tenant_id)
     if alcance is AlcancePacientes.PROPIOS:
-        consulta = consulta.where(Paciente.creado_por_usuario_id == usuario_id)
+        consulta = consulta.where(condicion_paciente_propio(tenant_id, usuario_id))
 
     termino = (q or "").strip()
     if not termino:
@@ -263,7 +264,7 @@ def eliminar_paciente(
     paciente = session.execute(consulta).scalar_one_or_none()
     if paciente is None:
         return False
-    exigir_acceso_paciente(usuario, paciente)
+    exigir_acceso_paciente(usuario, paciente, session)
     session.delete(paciente)
     session.flush()
     return True
@@ -307,7 +308,7 @@ def obtener_paciente(
     usuario: Usuario,
 ) -> Paciente:
     """404 si no existe en el tenant; 403 `RN-AU-03` si existe fuera del alcance."""
-    return exigir_acceso_paciente(usuario, _obtener_en_tenant(session, paciente_id))
+    return exigir_acceso_paciente(usuario, _obtener_en_tenant(session, paciente_id), session)
 
 
 def actualizar_paciente(
@@ -317,7 +318,7 @@ def actualizar_paciente(
     usuario: Usuario,
 ) -> Paciente:
     """PATCH parcial: solo los campos enviados; nunca tenant ni creador."""
-    paciente = exigir_acceso_paciente(usuario, _obtener_en_tenant(session, paciente_id))
+    paciente = exigir_acceso_paciente(usuario, _obtener_en_tenant(session, paciente_id), session)
     cambios = datos.model_dump(exclude_unset=True)
     _validar_cambios(cambios)
     for campo in CAMPOS_ACTUALIZABLES:

@@ -82,7 +82,7 @@ Organizadas por **épica** y luego por **historia de usuario** (formato US-NNN).
 **Para** mantener la agenda fiel a la realidad
 
 **Criterios de aceptación**:
-- [ ] Solo transiciones permitidas por la máquina (RN-TU-04); otra = 422 con código de regla
+- [ ] Solo transiciones permitidas por la máquina (RN-TU-04), incluidas confirmar y registrar atención mediante la misma máquina; otra o repetida = 422 con código de regla y registro intacto
 - [ ] `ausente` conserva historial para métricas (RN-TU-05)
 
 **Reglas relacionadas**: RN-TU-04, RN-TU-05, RN-GL-01

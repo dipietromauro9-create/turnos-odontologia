@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from enum import StrEnum
 
+from sqlalchemy import select
+
 from app.core.errors import DomainError
 from app.db.models import Paciente, Usuario
+from app.db.session import TenantSession
 from app.domain.auth.dependencies import AlcanceAgenda, alcance_agenda
+from app.domain.pacientes.alcance import condicion_paciente_propio
 
 RN_AU_03 = "RN-AU-03"
 
@@ -25,7 +29,9 @@ def alcance_pacientes(usuario: Usuario) -> AlcancePacientes:
     return AlcancePacientes.PROPIOS
 
 
-def exigir_acceso_paciente(usuario: Usuario, paciente: Paciente) -> Paciente:
+def exigir_acceso_paciente(
+    usuario: Usuario, paciente: Paciente, session: TenantSession
+) -> Paciente:
     """403 `RN-AU-03` si un profesional sin flag intenta tocar un paciente ajeno.
 
     Diferencia con el 404 `RN-PA-02`: el 404 solo se usa cuando el paciente no
@@ -34,7 +40,16 @@ def exigir_acceso_paciente(usuario: Usuario, paciente: Paciente) -> Paciente:
     """
     if alcance_pacientes(usuario) is AlcancePacientes.TODOS:
         return paciente
-    if paciente.creado_por_usuario_id != usuario.id:
+    permitido = (
+        session.execute(
+            select(Paciente.id).where(
+                Paciente.id == paciente.id,
+                condicion_paciente_propio(session.tenant_id, usuario.id),
+            )
+        ).first()
+        is not None
+    )
+    if not permitido:
         raise DomainError(
             RN_AU_03,
             "El profesional solo puede acceder a sus propios pacientes",

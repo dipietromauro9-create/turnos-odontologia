@@ -70,11 +70,11 @@ Paciente → Frontend → API → DB
 
 **Pasos**:
 1. Recepción crea turno con flag `es_sobreturno=true` + motivo.
-2. API valida: hueco libre (aunque fuera de disponibilidad estándar) y anti-solape (RN-TU-03 no excepciona RN-TU-01).
+2. API valida: inicio futuro, hueco libre y ausencia de bloqueos personales/globales. Puede omitir solo la plantilla semanal; RN-TU-03 nunca excepciona RN-TU-01 ni RN-AG-02.
 3. Turno nace en `confirmado` (paciente presente).
 
 **Casos de error**:
-- Solape real → 409 `RN-TU-01`; se ofrece el siguiente hueco libre sugerido.
+- Solape real → 409 `RN-TU-01`; C-07 no sugiere el siguiente hueco (enumeración en C-08).
 
 ## Flujo 5: Export CSV en background
 **Disparador**: dueño pide exportación
@@ -87,3 +87,6 @@ Paciente → Frontend → API → DB
 
 **Casos de error**:
 - Job fallido → estado `failed` con mensaje; reintento con un clic. Nunca bloquea la API.
+
+
+**Contrato C-07 aprobado de reprogramación**: solo reservado/confirmado; mismo id/código/estado y duración `fin - inicio`, sin cancelar/crear otra fila. Un cambio posterior de duración en el catálogo no altera ese intervalo. Un destino inválido o una carrera perdida dejan el original intacto.

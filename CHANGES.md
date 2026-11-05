@@ -209,13 +209,13 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
 ## FASE 3 — Núcleo de turnos
 
 ### [C-07] `turnos-state-machine`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-05 — 36/36 tareas; `core/turnos` y `core/pacientes` sincronizadas; 633 tests + E2E verdes)
 - **Scope**: Entidad Turno + máquina de estados explícita + endpoints internos (US-006, US-007)
   - Modelo `Turno`: profesional/paciente/prestación FK, `inicio/fin` timestamptz, `estado` enum (reservado, confirmado, atendido, cancelado, ausente), `codigo_publico` varchar(12) unique ≥70 bits entropía, `es_sobreturno` bool, `motivo_cancelacion` nullable
-  - **Anti-solape**: `EXCLUDE USING gist (profesional_id WITH =, tsrange(inicio, fin) WITH &&) WHERE (estado NOT IN ('cancelado'))` + validación previa en servicio para error legible `RN-TU-01` (RN-GL-01)
+  - **Anti-solape**: `EXCLUDE USING gist (tenant_id WITH =, profesional_id WITH =, tstzrange(inicio, fin, '[)') WITH &&) WHERE (estado <> 'cancelado')` + validación previa en servicio para error legible `RN-TU-01` (RN-GL-01)
   - Servicio: `fin = inicio + duracion(prestacion)` calculado en backend, cliente nunca envía `fin` (RN-TU-02); máquina `reservado → confirmado|cancelado`, `confirmado → atendido|cancelado|ausente`, terminales sin salida, otra transición → 422 con código (RN-TU-04); todo transaccional (RN-GL-02); solo `cancelado` libera hueco, `ausente` conserva historial (RN-TU-05)
-  - Endpoints internos: `GET/POST /turnos`, `GET/PATCH /turnos/:id`, `POST /turnos/:id/confirmar|/cancelar|/registrar-ausencia|/reprogramar` (interna); sobreturno exige `es_sobreturno=true` + motivo urgencia y nace `confirmado`, sin excepcionar RN-TU-01 (RN-TU-03, flujo 4 de `07`)
-  - Migración 005: tabla turno + EXCLUDE + índices ((tenant_id, profesional_id, inicio), codigo_publico, (tenant_id, estado, inicio)); seed 3 turnos demo (reservado, confirmado, atendido)
+  - Endpoints internos: `GET/POST /turnos`, `GET/PATCH /turnos/:id`, `POST /turnos/:id/confirmar|/atender|/cancelar|/registrar-ausencia|/reprogramar` (interna); sobreturno exige `es_sobreturno=true` + motivo urgencia y nace `confirmado`, sin excepcionar RN-TU-01 (RN-TU-03, flujo 4 de `07`)
+  - Migración 0006: tabla turno + EXCLUDE + índices ((tenant_id, profesional_id, inicio), codigo_publico, (tenant_id, estado, inicio)); seed 3 turnos demo (reservado, confirmado, atendido)
   - Tests: anti-solape concurrente (doble insert → 409 `RN-TU-01`), cada transición válida/inválida de RN-TU-04, sobreturno con/sin motivo, `ausente` no libera hueco, RBAC (profesional solo propios)
 - **Dependencias**: C-04, C-05, C-06
 - **Governance**: CRITICO
@@ -225,6 +225,7 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
   - `knowledge-base/06_funcionalidades.md` §US-006
   - `knowledge-base/06_funcionalidades.md` §US-007
   - `knowledge-base/07_flujos_principales.md` §Flujo 4
+
 
 ### [C-08] `motor-disponibilidad`
 - **Estado**: `[ ]` pendiente

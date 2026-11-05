@@ -68,7 +68,7 @@ Agrupada por recurso (detalle de contratos en `08`, flujos en `07`):
 - `GET/POST/PATCH /profesionales` — staff del consultorio (dueño gestiona).
 - `GET/POST/PATCH /prestaciones` — catálogo con duración y precio referencial.
 - `GET /disponibilidad?profesional=&desde=&hasta=` — huecos calculados (pública, por slug).
-- `GET/POST /turnos · GET/PATCH/DELETE /turnos/:id` — CRUD + transiciones de estado (`POST /turnos/:id/confirmar`, `/cancelar`, `/registrar-ausencia`, `/reprogramar`).
+- `GET/POST /turnos · GET/PATCH /turnos/:id` — PATCH solo transiciona estado (y motivo opcional al cancelar). Acciones POST `/turnos/:id/confirmar`, `/atender`, `/cancelar`, `/registrar-ausencia`, `/reprogramar`; no hay DELETE físico. El horario solo cambia mediante reprogramar; paciente, profesional y prestación son inmutables.
 - `GET/POST/PATCH /pacientes` — ficha básica + búsqueda.
 - `GET /recordatorios/pendientes` — cola manual de mensajes a enviar (v1).
 - `GET /reportes/ocupacion · /reportes/ausencias` — métricas v1.

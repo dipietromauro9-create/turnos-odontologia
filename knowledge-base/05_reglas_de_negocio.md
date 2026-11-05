@@ -4,14 +4,14 @@ Cada regla tiene un código único `RN-{DOMINIO}-{NN}` para trazabilidad (refere
 
 ## Dominio: Turnos (RN-TU)
 
-- **RN-TU-01**: Un profesional no puede tener dos turnos superpuestos en estado activo (reservado, confirmado, atendido). La DB lo garantiza con `EXCLUDE`; el servicio lo valida antes para devolver error legible.
-- **RN-TU-02**: `fin = inicio + duracion(prestacion)` siempre; el cliente nunca envía `fin` (se calcula en backend).
-- **RN-TU-03**: El sobreturno es explícito (`es_sobreturno=true`) y solo sobre huecos libres o con motivo `urgencia`; nunca viola RN-TU-01.
+- **RN-TU-01**: Un profesional no puede tener dos turnos superpuestos en ningún estado salvo cancelado (reservado, confirmado, atendido y ausente ocupan el intervalo). La DB lo garantiza con `EXCLUDE`; el servicio lo valida antes para devolver error legible.
+- **RN-TU-02**: Al crear, `fin = inicio + duracion(prestacion)`; al reprogramar se conserva la duración congelada `fin - inicio`. El cliente nunca envía `fin` (se calcula en backend).
+- **RN-TU-03**: El sobreturno exige flag explícito (`es_sobreturno=true`) y motivo de urgencia no vacío; nace confirmado y omite solo la plantilla semanal. Nunca ignora bloqueos, inicio futuro ni anti-solape RN-TU-01.
 - **RN-TU-04**: Máquina de estados — transiciones permitidas únicamente:
-  `reservado → confirmado | cancelado` · `confirmado → atendido | cancelado | ausente` · terminales (`atendido, cancelado, ausente`) sin salida. Cualquier otra transición se rechaza con 422.
+  `reservado → confirmado | cancelado` · `confirmado → atendido | cancelado | ausente` · terminales (`atendido, cancelado, ausente`) sin salida. Cualquier otra transición, incluida repetir el mismo estado, se rechaza con 422 RN-TU-04 sin cambios. PATCH y acciones confirmar/atender/cancelar/registrar-ausencia pasan por el mismo servicio; cancelar conserva la fila y el motivo opcional.
 - **RN-TU-05**: Solo turnos `cancelado` liberan el hueco; `ausente` conserva el registro histórico (métrica de ausentismo).
 - **RN-TU-06**: Cancelación/reprogramación del paciente con código exige el `codigo_publico` del turno; sin código, solo recepción/profesional.
-- **RN-TU-07**: La reprogramación es cancelación + reserva atómica (misma transacción): si no hay hueco destino, el turno original queda intacto.
+- **RN-TU-07**: La reprogramación mueve el mismo turno reservado o confirmado en una transacción: conserva id, código, estado, referencias y duración congelada. Si el destino no está permitido, el original queda intacto; no cancela ni crea otra fila.
 
 ## Dominio: Agenda y disponibilidad (RN-AG)
 
@@ -36,7 +36,7 @@ Cada regla tiene un código único `RN-{DOMINIO}-{NN}` para trazabilidad (refere
 
 - **RN-AU-01**: Panel bajo JWT (access 15 min + refresh 7 días); turnero público sin login, solo con `codigo_publico` por turno.
 - **RN-AU-02**: `es_dueno` solo válido con `rol=profesional`; la recepción nunca accede a configuración, usuarios ni exports.
-- **RN-AU-03**: Un profesional no ve fichas de pacientes de otro profesional salvo dueño (ver matriz en `03`).
+- **RN-AU-03**: El profesional sin flag accede a pacientes que creó o con un turno reservado, confirmado o atendido de su Profesional vinculado en el mismo tenant. Cancelado/ausente solos no conceden; al cancelar la última cita se revoca si no creó ni atendió al paciente. Dueño/recepción conservan alcance total del tenant. Un único predicado aplica a lista, búsqueda, lectura, edición, duplicados y reutilización (ver `03`).
 
 ## Dominio: Reportes y exportación (RN-RP)
 

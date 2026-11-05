@@ -7,12 +7,14 @@ from app.db.models.paciente import Paciente
 from app.db.models.prestacion import Prestacion
 from app.db.models.profesional import Profesional
 from app.db.models.tenant import SlugInmutableError, Tenant
+from app.db.models.turno import EstadoTurno, Turno
 from app.db.models.usuario import RolUsuario, Usuario
 
 __all__ = [
     "AuditMixin",
     "Bloqueo",
     "Disponibilidad",
+    "EstadoTurno",
     "Paciente",
     "Prestacion",
     "Profesional",
@@ -20,5 +22,6 @@ __all__ = [
     "SlugInmutableError",
     "Tenant",
     "TenantMixin",
+    "Turno",
     "Usuario",
 ]

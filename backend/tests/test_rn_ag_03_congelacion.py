@@ -1,7 +1,7 @@
 """RN-AG-03: cambiar la duración de una prestación no puede tocar ninguna otra fila.
 
-El extremo a extremo (``fin`` congelado por turno) se completa en C-07; acá se
-verifica el invariante de catálogo: el ``PATCH`` de ``duracion_min`` escribe una
+C-07 verifica también turnos reales y reprogramación con duración congelada.
+El invariante de catálogo: el ``PATCH`` de ``duracion_min`` escribe una
 sola fila y las FKs del catálogo no declaran cascadas.
 """
 
@@ -204,3 +204,32 @@ def test_una_prestacion_desactivada_sigue_consultable_por_id(
     activas = client.get("/prestaciones", params={"activa": True}, headers=auth)
     assert activas.status_code == 200
     assert [item["id"] for item in activas.json()] == []
+
+
+@pytest.mark.parametrize("cambios", [{"duracion_min": 60}, {"precio_ref": "2000.50"}])
+def test_catalogo_real_no_modifica_turno_y_reprogramacion_congela_duracion(
+    app_env, session_factory, cambios
+):
+    from datetime import timedelta
+
+    from app.db.session import tenant_context
+    from app.domain.turnos.service import reprogramar
+    from tests.test_agenda_api import cabecera
+    from tests.test_turnos_create import _alta
+    from tests.test_turnos_estados import foto
+    from tests.turnos_factories import AHORA, INICIO, entorno_turnos
+
+    with session_factory() as session:
+        base = entorno_turnos(session)
+    turno = _alta(base)
+    antes = foto(session_factory, turno.id)
+    client = cliente(app_de_prueba()[0])
+    respuesta = client.patch(
+        f"/prestaciones/{base.prestacion.id}", json=cambios, headers=cabecera(base.usuario)
+    )
+    assert respuesta.status_code == 200
+    assert foto(session_factory, turno.id) == antes
+    with tenant_context(base.tenant.id, "demo"):
+        movido = reprogramar(turno.id, INICIO + timedelta(hours=1), base.usuario, ahora=AHORA)
+    assert movido.fin - movido.inicio == timedelta(minutes=30)
+    assert movido.codigo_publico == turno.codigo_publico

@@ -71,11 +71,11 @@ Tenant 1───* Usuario 1───1 Profesional 1───* Turno *───1
 - Nota: Q-datos:c — borrado físico permitido en v1; documentar como deuda en `10`
 
 ### Turno
-- Atributos: `id (uuid, pk)`, `tenant_id (fk)`, `profesional_id (fk)`, `paciente_id (fk)`, `prestacion_id (fk)`, `inicio (timestamptz)`, `fin (timestamptz)`, `estado (enum: reservado, confirmado, atendido, cancelado, ausente)`, `codigo_publico (varchar(12), unique, para operar sin login)`, `es_sobreturno (bool)`, `motivo_cancelacion (nullable)`, timestamps
+- Atributos: `id (uuid, pk)`, `tenant_id (fk)`, `profesional_id (fk)`, `paciente_id (fk)`, `prestacion_id (fk)`, `inicio (timestamptz)`, `fin (timestamptz)`, `estado (enum: reservado, confirmado, atendido, cancelado, ausente)`, `codigo_publico (varchar(12), unique, para operar sin login)`, `es_sobreturno (bool)`, `motivo_sobreturno (nullable; obligatorio y no vacío para urgencia)`, `motivo_cancelacion (nullable)`, timestamps
 - Relaciones: *─1 Profesional, Paciente, Prestación, Tenant; 1─* Recordatorio
 - Constraints:
-  - `fin = inicio + duracion(prestacion)` (se valida en servicio, RN-TU-02)
-  - **Anti-solape**: `EXCLUDE USING gist (profesional_id WITH =, tsrange(inicio, fin) WITH &&) WHERE (estado NOT IN ('cancelado'))` — la DB es la última línea de defensa (RN-TU-01)
+  - Al crear, `fin = inicio + duracion(prestacion)`; al reprogramar se conserva `fin - inicio` congelado (servicio, RN-TU-02/RN-AG-03)
+  - **Anti-solape**: `EXCLUDE USING gist (tenant_id WITH =, profesional_id WITH =, tstzrange(inicio, fin, '[)') WITH &&) WHERE (estado <> 'cancelado')` — la DB es la última línea de defensa (RN-TU-01)
   - Transiciones de estado solo las permitidas por la máquina (RN-TU-04, se valida en servicio)
 - Índices: `(tenant_id, profesional_id, inicio)`, `codigo_publico` unique, `(tenant_id, estado, inicio)` para agenda del día
 
@@ -93,3 +93,5 @@ Tenant 1───* Usuario 1───1 Profesional 1───* Turno *───1
 - Prestaciones base: Consulta (30 min), Limpieza (60 min), Extracción (45 min), Control (20 min), Urgencia (30 min, habilita sobreturno).
 - Disponibilidad Lun–Vie 9–13 y 16–20 para el profesional demo.
 - 2 pacientes + 3 turnos de ejemplo (uno por estado: reservado, confirmado, atendido).
+
+- Los tres turnos demo se crean y transicionan por el servicio, con identificadores internos deterministas por tenant/ejemplo; nunca aceptados desde HTTP. Reejecutar no modifica turnos existentes, incluso cancelados/reprogramados. Si un ejemplo nuevo no cumple catálogo/plantilla/bloqueos/ocupación se informa omisión, sin forzar reglas. Las prestaciones pueden repetir nombre: selección demo determinista de Consulta activa, luego antigüedad/id.

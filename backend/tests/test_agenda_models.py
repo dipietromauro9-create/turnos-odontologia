@@ -60,19 +60,31 @@ def test_bloqueo_admite_cierre_global_y_exige_intervalo_y_motivo() -> None:
     )
 
 
-def test_migracion_crea_las_tablas_y_constraints_en_postgres(db_engine: Engine) -> None:
-    inspector = inspect(db_engine)
-    assert inspector.has_table("disponibilidad")
-    assert inspector.has_table("bloqueo")
-    assert any(
-        c["column_names"]
-        == ["tenant_id", "profesional_id", "dia_semana", "hora_desde", "hora_hasta"]
-        for c in inspector.get_unique_constraints("disponibilidad")
-    )
-    with db_engine.connect() as conexion:
-        assert conexion.execute(text("SELECT version_num FROM alembic_version")).scalar_one() == (
-            "0005_disponibilidad_bloqueo"
+def test_migracion_crea_las_tablas_y_constraints_en_postgres(
+    db_engine: Engine, db_url: str
+) -> None:
+    from alembic import command
+    from tests.test_pacientes_model import _alembic_config, _database_url
+
+    config = _alembic_config(db_url)
+    try:
+        with _database_url(db_url):
+            command.downgrade(config, "0005_disponibilidad_bloqueo")
+        inspector = inspect(db_engine)
+        assert inspector.has_table("disponibilidad")
+        assert inspector.has_table("bloqueo")
+        assert any(
+            c["column_names"]
+            == ["tenant_id", "profesional_id", "dia_semana", "hora_desde", "hora_hasta"]
+            for c in inspector.get_unique_constraints("disponibilidad")
         )
+        with db_engine.connect() as conexion:
+            assert conexion.execute(
+                text("SELECT version_num FROM alembic_version")
+            ).scalar_one() == ("0005_disponibilidad_bloqueo")
+    finally:
+        with _database_url(db_url):
+            command.upgrade(config, "head")
 
 
 @pytest.mark.parametrize("dia", [0, 6, -1, 7])
