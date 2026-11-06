@@ -37,8 +37,11 @@ Reglas transversales:
 
 Sin autenticación:
 
-- `GET /turnero/:slug` — disponibilidad del consultorio (solo huecos, sin datos personales).
+- `GET /turnero/:slug/catalogo` — profesionales y prestaciones activas del consultorio.
+- `GET /turnero/:slug/disponibilidad` — huecos libres del consultorio (solo huecos, sin datos personales).
 - `POST /turnero/:slug/reservas` — crear reserva (nombre + teléfono + prestación + horario).
 - `GET /turnero/mis-turnos?codigo=` — ver turno propio con código.
 - `POST /turnero/mis-turnos/cancelar · /reprogramar` — con código.
 - `GET /health` — estado del sistema (para Docker/orquestador).
+
+Todas las rutas `/turnero/*` están limitadas a 10 peticiones por minuto por IP (429 `RN-GL-01` al excederse).

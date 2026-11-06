@@ -44,6 +44,7 @@ class TenantContext:
 
 
 PUBLIC_PATHS = frozenset({"/health", "/openapi.json", "/docs", "/docs/oauth2-redirect", "/redoc"})
+PUBLIC_PREFIXES = ("/turnero",)
 
 _tenant_ctx: ContextVar[TenantContext | None] = ContextVar("tenant_context", default=None)
 
@@ -205,6 +206,29 @@ def resolve_tenant(slug: str) -> TenantContext:
     return contexto
 
 
+def resolver_tenant_por_codigo_publico(codigo: str) -> TenantContext:
+    """Resuelve el tenant dueño de un `codigo_publico` (único a nivel global).
+
+    Excepción acotada de R3: el código es opaco y único globalmente
+    (`uq_turno_codigo_publico`), por lo que no existe un `tenant_id` previo con
+    el cual filtrar. Esta consulta devuelve **solo** `tenant_id` y `slug`; con
+    el tenant ya resuelto, toda lectura o escritura de dominio pasa por
+    `tenant_session()`. No se reutiliza para ninguna otra consulta.
+    """
+    with get_engine().connect() as conn:
+        fila = conn.execute(
+            text(
+                "SELECT t.id, t.slug FROM turno tu "
+                "JOIN tenant t ON t.id = tu.tenant_id "
+                "WHERE tu.codigo_publico = :codigo"
+            ),
+            {"codigo": codigo},
+        ).first()
+    if fila is None:
+        raise TenantNotFoundError("El código público no corresponde a ningún turno")
+    return TenantContext(tenant_id=fila[0], slug=fila[1])
+
+
 @contextmanager
 def system_session() -> Iterator[SystemSession]:
     with get_system_session_factory()() as session:
@@ -241,7 +265,8 @@ class TenantContextMiddleware:
         self._default_slug = default_slug
 
     async def __call__(self, scope: Any, receive: Any, send: Any) -> None:
-        if scope["type"] != "http" or scope.get("path") in PUBLIC_PATHS:
+        path = scope.get("path", "")
+        if scope["type"] != "http" or path in PUBLIC_PATHS or path.startswith(PUBLIC_PREFIXES):
             await self.app(scope, receive, send)
             return
 

@@ -43,13 +43,19 @@ def crear_consultorio(session: Session, *, con_recepcion: bool = False) -> Consu
     return Consultorio(tenant=tenant, dueno=dueno, recepcion=recepcion)
 
 
-def app_de_prueba(store: TokenStore | None = None) -> tuple[FastAPI, TokenStore]:
-    """App real con el `TokenStore` inyectado (sin Redis en los tests)."""
+def app_de_prueba(
+    store: TokenStore | None = None,
+    rate_limiter: object | None = None,
+) -> tuple[FastAPI, TokenStore]:
+    """App real con `TokenStore` y rate limiter en memoria (sin Redis en tests)."""
+    from app.domain.turnero.rate_limit import InMemoryRateLimiter, get_rate_limiter
     from app.main import create_app
 
     store = store or InMemoryTokenStore()
+    limiter = rate_limiter or InMemoryRateLimiter()
     app = create_app()
     app.dependency_overrides[get_token_store] = lambda: store
+    app.dependency_overrides[get_rate_limiter] = lambda: limiter
     return app, store
 
 

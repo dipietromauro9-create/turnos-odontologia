@@ -248,7 +248,7 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
 > C-09, C-10 y C-12 pueden proponerse en paralelo cuando C-08 está archivado (GATE 6). C-11 arranca en GATE 5 (solo necesita C-07).
 
 ### [C-09] `turnero-publico`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-06 — 27/27 tareas; spec `publico/turnero` sincronizada; 752 tests backend (incl. E2E) + 15 frontend en verde; sin migración nueva)
 - **Scope**: Turnero online 24/7 sin cuenta (US-001, US-002, US-003, US-004)
   - Endpoints públicos por slug: `GET /turnero/:slug/disponibilidad` (solo huecos, RN-AG-04), `POST /turnero/:slug/reservas` (nombre + teléfono; transacción busca/crea paciente por teléfono con advertencia de duplicado RN-PA-01, crea turno `reservado` con `fin` calculado y `codigo_publico`; → 201 + código; hueco ocupado → 409 `RN-TU-01` legible), `GET /turnero/mis-turnos?codigo=`, `POST /turnero/mis-turnos/cancelar|/reprogramar` (exige código RN-TU-06, 404 genérico si inválido; reprogramación atómica — sin hueco destino el original queda intacto RN-TU-07; cancelación guarda motivo y libera hueco RN-TU-05)
   - Rate limit 10 req/min por IP en rutas públicas; códigos de error RN-XX-NN en toda respuesta (RN-GL-01)

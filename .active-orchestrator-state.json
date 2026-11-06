@@ -272,7 +272,7 @@
     "engram": "not available"
   },
   "step": "done",
-  "version": 4,
+  "version": 5,
   "kb": {
     "created_by": "kb-creator",
     "source": "interactive",
@@ -330,5 +330,11 @@
       "U2",
       "U3"
     ]
+  },
+  "visual_design": {
+    "created_by": "design-system",
+    "mode": "off",
+    "status": "skipped",
+    "path": "design-system/README.md"
   }
 }

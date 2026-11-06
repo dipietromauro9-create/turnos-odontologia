@@ -25,6 +25,16 @@ class TurnosRepository(BaseRepository[Turno]):
             .with_for_update()
         ).scalar_one_or_none()
 
+    def por_codigo(self, codigo: str, *, bloquear: bool = False) -> Turno | None:
+        """Busca por `codigo_publico` dentro del tenant resuelto (RN-TU-06)."""
+        consulta = select(Turno).where(
+            Turno.tenant_id == self.tenant_id,
+            Turno.codigo_publico == codigo,
+        )
+        if bloquear:
+            consulta = consulta.with_for_update()
+        return self._session.execute(consulta).scalar_one_or_none()
+
     def consultar(self, filtros: TurnoFiltros, profesional_id: uuid.UUID | None) -> list[Turno]:
         consulta = select(Turno).where(Turno.tenant_id == self.tenant_id)
         if profesional_id is not None:

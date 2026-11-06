@@ -23,6 +23,7 @@ from app.domain.auth.middleware import AuthMiddleware
 from app.domain.auth.router import router as auth_router
 from app.domain.huecos.router import router as huecos_router
 from app.domain.pacientes.router import router as pacientes_router
+from app.domain.turnero.router import router as turnero_router
 from app.domain.turnos.router import router as turnos_router
 
 
@@ -71,6 +72,7 @@ def create_app() -> FastAPI:
     app.include_router(huecos_router)
     app.include_router(bloqueos_router)
     app.include_router(turnos_router)
+    app.include_router(turnero_router)
 
     @app.get("/health")
     def health() -> HealthResponse:

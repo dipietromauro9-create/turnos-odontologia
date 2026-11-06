@@ -9,6 +9,8 @@ import {
 } from "react-router-dom";
 
 import { readAuthState } from "./shared/api/auth";
+import { TurneroPublicoPage } from "./features/turnero/TurneroPublicoPage";
+import { MisTurnosPage } from "./pages/turnero/MisTurnosPage";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 
@@ -33,6 +35,8 @@ export function RouteTree(): React.JSX.Element {
       <Route element={<PublicRoute />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/turnero/:slug" element={<TurneroPublicoPage />} />
+        <Route path="/turnero/mis-turnos" element={<MisTurnosPage />} />
       </Route>
       <Route element={<PrivateRoute />}>
         <Route path="/app" element={<HomePage />} />

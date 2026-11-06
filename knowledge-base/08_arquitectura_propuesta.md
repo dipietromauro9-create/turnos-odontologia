@@ -34,7 +34,7 @@ turnos-odontologia/
 │   └── pyproject.toml
 ├── frontend/
 │   └── src/
-│       ├── features/               # turnero-publico, agenda, pacientes, recordatorios, reportes
+│       ├── features/               # turnero, agenda, pacientes, recordatorios, reportes
 │       ├── shared/                 # api client (inyecta JWT / codigo_publico), ui, hooks
 │       ├── pages/                  # /turnero/:slug, /app/*
 │       └── routes.tsx              # guardia: público vs. requiere rol

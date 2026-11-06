@@ -67,7 +67,10 @@ Agrupada por recurso (detalle de contratos en `08`, flujos en `07`):
 - `POST /auth/login · POST /auth/refresh` — sesiones por rol.
 - `GET/POST/PATCH /profesionales` — staff del consultorio (dueño gestiona).
 - `GET/POST/PATCH /prestaciones` — catálogo con duración y precio referencial.
-- `GET /disponibilidad?profesional=&desde=&hasta=` — huecos calculados (pública, por slug).
+- `GET /disponibilidad/huecos?profesional_id=&prestacion_id=&desde=&hasta=` — huecos calculados del panel (JWT + RBAC, rango máx. 31 días).
+- `GET /turnero/:slug/catalogo` · `GET /turnero/:slug/disponibilidad` — catálogo y huecos públicos por slug, sin JWT ni datos de pacientes.
+- `POST /turnero/:slug/reservas` — reserva anónima con nombre + teléfono; devuelve `codigo_publico`.
+- `GET /turnero/mis-turnos?codigo=` · `POST /turnero/mis-turnos/cancelar · /reprogramar` — autogestión por código (404 genérico si no existe).
 - `GET/POST /turnos · GET/PATCH /turnos/:id` — PATCH solo transiciona estado (y motivo opcional al cancelar). Acciones POST `/turnos/:id/confirmar`, `/atender`, `/cancelar`, `/registrar-ausencia`, `/reprogramar`; no hay DELETE físico. El horario solo cambia mediante reprogramar; paciente, profesional y prestación son inmutables.
 - `GET/POST/PATCH /pacientes` — ficha básica + búsqueda.
 - `GET /recordatorios/pendientes` — cola manual de mensajes a enviar (v1).
