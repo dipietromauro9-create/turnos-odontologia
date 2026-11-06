@@ -228,11 +228,11 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
 
 
 ### [C-08] `motor-disponibilidad`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-06 — 27/27 tareas; spec `core/huecos` sincronizada; 723 tests + E2E aislada en verde; sin migración 0007)
 - **Scope**: Cálculo de huecos reservables (corazón del turnero, RN-AG-01)
-  - Servicio puro `calcular_huecos(profesional, prestación, desde, hasta)`: disponibilidad semanal − bloqueos (incl. null = todo cerrado) − turnos activos, solo `inicio` futuro, granularidad = duracion_min de la prestación; `GET /disponibilidad?profesional=&prestacion=&desde=&hasta=` paginado por rango, < 1 s por semana
-  - Respuesta pública-compatible: solo huecos, cero datos de pacientes (RN-AG-04) — el envoltorio público con slug va en C-09, aquí el motor + endpoint interno
-  - Tests: hueco dentro/fuera de disponibilidad, intersectado por bloqueo parcial y total, ocupado por turno activo vs. libre por cancelado, inicio pasado excluido, prestación con distinta duración cambia la grilla, performance semana < 1 s
+  - Servicio puro `calcular_huecos(profesional, prestación, desde, hasta)`: disponibilidad semanal − bloqueos (incl. null = todo cerrado) − turnos activos, solo `inicio` futuro, granularidad = duracion_min de la prestación; `GET /disponibilidad/huecos?profesional_id=&prestacion_id=&desde=&hasta=` paginado por rango (máximo 31 días), < 1 s por semana (medido ~0.08 s)
+  - Respuesta pública-compatible: solo huecos (inicio, fin, profesional_id, prestacion_id), cero datos de pacientes (RN-AG-04) — el envoltorio público con slug va en C-09, aquí el motor + endpoint interno autenticado con RBAC
+  - Tests: hueco dentro/fuera de disponibilidad, intersectado por bloqueo parcial y total, ocupado por turno activo vs. libre por cancelado, inicio pasado excluido, prestación con distinta duración cambia la grilla, aislamiento multi-tenant, performance semana < 1 s
 - **Dependencias**: C-07 (requiere C-06 y C-04 ya archivados vía C-07)
 - **Governance**: ALTO
 - **Leer antes**:

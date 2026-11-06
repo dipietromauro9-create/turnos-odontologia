@@ -7,7 +7,7 @@ Cada flujo se documenta extremo a extremo, mostrando interacciones entre compone
 **Actor**: paciente (sin cuenta)
 
 **Pasos**:
-1. Frontend pide `GET /disponibilidad?desde=&hasta=` → API calcula huecos (disponibilidad − bloqueos − turnos activos).
+1. Frontend pide `GET /disponibilidad/huecos?profesional_id=&prestacion_id=&desde=&hasta=` (rango máx. 31 días) → API calcula huecos (disponibilidad − bloqueos − turnos activos).
 2. Paciente elige hueco y completa nombre + teléfono → `POST /turnero/:slug/reservas`.
 3. API (transacción): busca/crea paciente por teléfono, crea turno en `reservado` con `fin` calculado y `codigo_publico`.
 4. API devuelve código de gestión; frontend lo muestra + sugiere guardarlo.
@@ -15,7 +15,7 @@ Cada flujo se documenta extremo a extremo, mostrando interacciones entre compone
 **Diagrama de secuencia**:
 ```
 Paciente → Frontend → API → DB
-  ver huecos:  GET /disponibilidad → calcula (RN-AG-01)
+  ver huecos:  GET /disponibilidad/huecos → calcula (RN-AG-01)
   reservar:    POST /reservas → BEGIN → paciente + turno → COMMIT
                           ← 201 + codigo_publico
 ```
