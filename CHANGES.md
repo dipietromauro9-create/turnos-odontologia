@@ -299,7 +299,7 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
 ## FASE 5 — Gestión y cierre MVP
 
 ### [C-12] `reportes-export`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-08 — 34/34 tareas; spec `core/reportes` sincronizada; 864 tests backend + 29 frontend en verde; migración `0008_exportacion`)
 - **Scope**: Métricas de gestión + exportación anti-lock-in (US-012, US-013) — cierra el MVP
   - Endpoints: `GET /reportes/ocupacion` (turnos activos / huecos disponibles por profesional y período) y `GET /reportes/ausencias` (`ausente` / (atendido + ausente)) — fórmulas RN-RP-01, rango seleccionable; dueño ve consolidado, profesional solo lo propio, recepción 403 (RN-AU-02)
   - Export: `POST /export/turnos.csv|/pacientes.csv?desde=&hasta=` → 202 + job_id (worker RQ genera CSV con `tenant_id` + timestamp en primera línea de metadata — RN-RP-02), `GET /export/:job_id` estado/descarga; dueño-only; reintento con un clic si falla, nunca bloquea la API (flujo 5 de `07`)

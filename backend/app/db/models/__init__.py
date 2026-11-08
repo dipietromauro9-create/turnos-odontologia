@@ -2,6 +2,7 @@
 
 from app.db.models.bloqueo import Bloqueo
 from app.db.models.disponibilidad import Disponibilidad
+from app.db.models.exportacion import EstadoExportacion, Exportacion, TipoExportacion
 from app.db.models.mixins import AuditMixin, TenantMixin
 from app.db.models.paciente import Paciente
 from app.db.models.prestacion import Prestacion
@@ -16,8 +17,10 @@ __all__ = [
     "Bloqueo",
     "CanalRecordatorio",
     "Disponibilidad",
+    "EstadoExportacion",
     "EstadoRecordatorio",
     "EstadoTurno",
+    "Exportacion",
     "Paciente",
     "Prestacion",
     "Profesional",
@@ -26,6 +29,7 @@ __all__ = [
     "SlugInmutableError",
     "Tenant",
     "TenantMixin",
+    "TipoExportacion",
     "Turno",
     "Usuario",
 ]

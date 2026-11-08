@@ -10,6 +10,7 @@ import {
 
 import { readAuthState } from "./shared/api/auth";
 import { RecordatoriosPage } from "./features/recordatorios/RecordatoriosPage";
+import { ReportesPage } from "./features/reportes/ReportesPage";
 import { TurneroPublicoPage } from "./features/turnero/TurneroPublicoPage";
 import { MisTurnosPage } from "./pages/turnero/MisTurnosPage";
 import { HomePage } from "./pages/HomePage";
@@ -42,6 +43,7 @@ export function RouteTree(): React.JSX.Element {
       <Route element={<PrivateRoute />}>
         <Route path="/app" element={<HomePage />} />
         <Route path="/app/recordatorios" element={<RecordatoriosPage />} />
+        <Route path="/app/reportes" element={<ReportesPage />} />
       </Route>
     </Routes>
   );

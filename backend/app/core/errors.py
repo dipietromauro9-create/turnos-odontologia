@@ -47,6 +47,18 @@ class DomainError(Exception):
         self.headers = headers
 
 
+class InfraError(Exception):
+    """Fallo de infraestructura (Redis, storage): 503 con código de dominio."""
+
+    def __init__(self, code: str, message: str) -> None:
+        if not _CODE_RE.match(code):
+            msg = f"code debe tener formato RN-XX-NN, recibido: {code}"
+            raise ValueError(msg)
+        super().__init__(message)
+        self.code = code
+        self.message = message
+
+
 async def domain_error_handler(_request: Request, exc: DomainError) -> JSONResponse:
     envelope = ErrorEnvelope(code=exc.code, message=exc.message, details=exc.details)
     return JSONResponse(
@@ -56,5 +68,13 @@ async def domain_error_handler(_request: Request, exc: DomainError) -> JSONRespo
     )
 
 
+async def infra_error_handler(_request: Request, exc: InfraError) -> JSONResponse:
+    return JSONResponse(
+        status_code=503,
+        content={"code": exc.code, "message": exc.message},
+    )
+
+
 def register_handlers(app: FastAPI) -> None:
     app.add_exception_handler(DomainError, domain_error_handler)  # type: ignore[arg-type]
+    app.add_exception_handler(InfraError, infra_error_handler)  # type: ignore[arg-type]

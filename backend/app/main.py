@@ -21,9 +21,11 @@ from app.domain.agenda.prestaciones.router import router as prestaciones_router
 from app.domain.agenda.profesionales.router import router as profesionales_router
 from app.domain.auth.middleware import AuthMiddleware
 from app.domain.auth.router import router as auth_router
+from app.domain.exportacion.router import router as exportacion_router
 from app.domain.huecos.router import router as huecos_router
 from app.domain.pacientes.router import router as pacientes_router
 from app.domain.recordatorios.router import router as recordatorios_router
+from app.domain.reportes.router import router as reportes_router
 from app.domain.turnero.router import router as turnero_router
 from app.domain.turnos.router import router as turnos_router
 
@@ -75,6 +77,8 @@ def create_app() -> FastAPI:
     app.include_router(turnos_router)
     app.include_router(turnero_router)
     app.include_router(recordatorios_router)
+    app.include_router(reportes_router)
+    app.include_router(exportacion_router)
 
     @app.get("/health")
     def health() -> HealthResponse:

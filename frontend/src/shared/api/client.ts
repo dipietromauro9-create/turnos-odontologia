@@ -66,3 +66,22 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
 export async function apiGet<T>(path: string): Promise<T> {
   return apiFetch<T>(path, { method: "GET" });
 }
+
+/** Descarga binaria autenticada (CSV); no intenta parsear JSON. */
+export async function apiBlob(path: string): Promise<Blob> {
+  const response = await fetch(`${apiBaseUrl()}${path}`, { headers: authHeaders() });
+  if (!response.ok) {
+    const payload: unknown =
+      response.headers.get("content-type")?.includes("application/json") === true
+        ? await response.json()
+        : null;
+    if (isDomainEnvelope(payload)) {
+      throw new ApiError(payload, response.status);
+    }
+    throw new ApiError(
+      { code: "NETWORK_ERROR", message: `Fallo HTTP ${response.status}` },
+      response.status,
+    );
+  }
+  return response.blob();
+}
