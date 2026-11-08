@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     tz: str = Field(alias="TZ", default="America/Argentina/Buenos_Aires")
     frontend_origin: str = Field(alias="FRONTEND_ORIGIN")
     recordatorio_ventana_hs: str = Field(alias="RECORDATORIO_VENTANA_HS")
+    consultorio_direccion: str = Field(alias="CONSULTORIO_DIRECCION", default="")
 
     @field_validator("secret_key")
     @classmethod

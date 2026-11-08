@@ -278,7 +278,7 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
   - `knowledge-base/05_reglas_de_negocio.md` §Turnos (RN-TU-03, RN-TU-04)
 
 ### [C-11] `recordatorios-manuales`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-08 — 33/33 tareas; spec `core/recordatorios` sincronizada; 808 tests backend + 22 frontend en verde; migración `0007_recordatorio`; servicio `scheduler` en Compose)
 - **Scope**: Cola WA manual con generación programada (US-010, US-011)
   - Modelo `Recordatorio` (turno FK, canal enum `whatsapp_manual`, texto por plantilla, estado pendiente/enviado/fallido, enviado_por nullable; constraint un pendiente por turno y tipo — RN-CO-01) + migración 006
   - Worker RQ `generar_recordatorios` + rq-scheduler cada hora: crea un pendiente por turno confirmado en ventana 24–48 h (`RECORDATORIO_VENTANA_HS`), idempotente; job `export_csv` NO aquí (va en C-12)

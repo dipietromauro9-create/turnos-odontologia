@@ -1,6 +1,8 @@
-"""Entrada del worker RQ (+ chequeo de conexión a Redis y al scheduler).
+"""Entrada del worker RQ: consume la cola `default`.
 
-El servicio `worker` de Compose reutiliza la imagen de api con este comando.
+El servicio `worker` de Compose reutiliza la imagen de `api` con este comando.
+El cron de recordatorios lo agenda el servicio `scheduler` (proceso aparte,
+porque rq-scheduler necesita el hilo principal para sus señales).
 """
 
 from __future__ import annotations
@@ -20,13 +22,10 @@ def chequear_redis(redis_url: str) -> None:
 def main() -> None:
     redis_url = os.environ.get("REDIS_URL", "redis://redis:6379/0")
     chequear_redis(redis_url)
-    # rq-scheduler se cablea en C-11; acá solo validamos que el paquete importa.
-    import rq_scheduler  # noqa: F401
-
+    conexion = redis.Redis.from_url(redis_url)
+    cola = Queue("default", connection=conexion)
     print(f"[worker] conectado a {redis_url}; escuchando cola 'default'", flush=True)
-    cola = Queue("default", connection=redis.Redis.from_url(redis_url))
-    worker = Worker([cola], connection=cola.connection)
-    worker.work()
+    Worker([cola], connection=cola.connection).work()
 
 
 if __name__ == "__main__":
