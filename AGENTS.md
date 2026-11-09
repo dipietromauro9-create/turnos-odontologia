@@ -50,11 +50,22 @@ La fuente de verdad del dominio vive en `knowledge-base/`. **Leé el archivo rel
 |--------|-----|------------------|
 | **Backend Core** | FastAPI, Pydantic, SQLAlchemy, migraciones | `fastapi`, `sqlmodel` |
 | **Frontend** | React+TS, UX de agenda/turnero, E2E | `vercel-react-best-practices`, `frontend-design`, `playwright` |
+| **UI desde diseño** | Implementar pantallas del panel a partir de Stitch | `pantalla-a-componente` |
 | **Transversal** | Diagnóstico de bugs (ej. lógica anti-solape) | `diagnosing-bugs` |
 
 Cargá la skill correspondiente al contexto ANTES de escribir código.
 
 > Los compact rules de cada skill los resuelve el orquestador desde `.atl/skill-registry.md` (generado por `skill-registry`; no versionado — no está en el repo). Esta tabla solo mapea skill→rol.
+
+### MCP Stitch (diseño de UI)
+
+`opencode.json` expone el MCP remoto de Stitch (`https://stitch.googleapis.com/mcp`). Requiere una API key **personal** en el entorno del proceso — OpenCode **no** la lee del `.env` del backend:
+
+```bash
+export STITCH_API_KEY="..."   # stitch.withgoogle.com/settings → API Keys
+```
+
+Verificar con `opencode mcp list` y una llamada a `list_projects`. Sin key, OpenCode arranca igual y las llamadas devuelven 401. Ficha completa: `docs/skills-mcp/investigacion.md`; convención de artefactos: `docs/design/README.md`.
 
 ---
 

@@ -8,7 +8,7 @@ Brinda el shell de frontend ejecutable sobre el que construyen todas las funcion
 
 ### Requirement: El cliente API base maneja el sobre y la auth
 
-El shell DEBE (SHALL) proveer un único cliente HTTP tipado apuntado a la URL base del backend tomada del entorno, que envía JSON, parsea el sobre de errores de dominio (`code: RN-XX-NN`) y adjunta la credencial de auth (cableado de JWT / codigo_publico que se completa en C-03/C-09) desde un solo lugar.
+El shell DEBE (SHALL) proveer un único cliente HTTP tipado apuntado a la URL base del backend tomada del entorno, que envía JSON, parsea el sobre de errores de dominio (`code: RN-XX-NN`) y adjunta la credencial de auth desde un solo lugar. El access token DEBE (SHALL) guardarse en el almacenamiento local versionado del shell y adjuntarse como `Authorization: Bearer` en toda request de panel. Cuando una request de panel responde 401 por access expirado o inválido y existe un refresh válido en la cookie `HttpOnly`, el cliente DEBE (SHALL) reintentar la operación una sola vez tras `POST /auth/refresh`; si el refresh falla, DEBE (SHALL) limpiar la sesión y redirigir al login. Un 401 de credenciales inválidas en `POST /auth/login` NUNCA DEBE (SHALL) disparar un refresh. Las requests a `/auth/refresh` y `/auth/logout` DEBEN (SHALL) enviar la cookie de refresh.
 
 #### Scenario: La petición fallida propaga el código de regla
 
@@ -20,9 +20,24 @@ El shell DEBE (SHALL) proveer un único cliente HTTP tipado apuntado a la URL ba
 - **WHEN** la app se construye con la variable de URL de API definida
 - **THEN** todas las peticiones apuntan a esa URL base sin hosts hardcodeados en el código de features
 
+#### Scenario: El access vencido se refresca una vez
+
+- **WHEN** una request de panel responde 401 por access vencido y la cookie de refresh es válida
+- **THEN** el cliente renueva el access con `/auth/refresh` y repite la operación original una sola vez
+
+#### Scenario: El refresh inválido devuelve al login
+
+- **WHEN** el refresh también es rechazado
+- **THEN** el cliente limpia el access local y la aplicación redirige al login sin repetir en bucle
+
+#### Scenario: Credenciales inválidas no disparan refresh
+
+- **WHEN** el usuario envía credenciales incorrectas en el login
+- **THEN** la respuesta 401 se muestra como error de login y no se llama a `/auth/refresh`
+
 ### Requirement: El router separa rutas públicas y privadas
 
-El shell DEBE (SHALL) definir una tabla de rutas con una rama pública (sin login; las páginas del turnero caen acá en C-09) y una rama privada que requiere autenticación (las páginas del panel caen acá en C-10), redirigiendo las visitas no autenticadas a la rama privada hacia un login provisorio.
+El shell DEBE (SHALL) definir una tabla de rutas con una rama pública (el turnero, sin login) y una rama privada que requiere autenticación. La rama privada DEBE (SHALL) exigir una sesión válida y redirigir a la pantalla de login real cuando no la haya. El login DEBE (SHALL) autenticar con `POST /auth/login`, guardar el access token y cargar `GET /auth/me` para obtener `rol` y `es_dueno`. La navegación del panel DEBE (SHALL) mostrar u ocultar secciones según el rol: recepción no ve configuración ni reportes exclusivos del dueño, y el profesional sin flag solo accede a su propia agenda. El logout DEBE (SHALL) invocar `POST /auth/logout`, limpiar la sesión y volver al login.
 
 #### Scenario: La ruta pública renderiza sin login
 
@@ -32,7 +47,22 @@ El shell DEBE (SHALL) definir una tabla de rutas con una rama pública (sin logi
 #### Scenario: La ruta privada protege a anónimos
 
 - **WHEN** un visitante anónimo abre una ruta privada
-- **THEN** el router redirige a la entrada de login en lugar de renderizar contenido protegido
+- **THEN** el router redirige al login real en lugar de renderizar contenido protegido
+
+#### Scenario: Login exitoso carga la identidad
+
+- **WHEN** el usuario ingresa credenciales válidas
+- **THEN** el shell guarda el access, obtiene rol y `es_dueno` desde `/auth/me` y entra a la agenda
+
+#### Scenario: La navegación depende del rol
+
+- **WHEN** inicia sesión un usuario con `rol = recepcion`
+- **THEN** la navegación no muestra las secciones de configuración exclusivas del dueño
+
+#### Scenario: Logout limpia la sesión
+
+- **WHEN** el usuario cierra sesión
+- **THEN** se invalida el refresh en el backend, se limpia el access local y se vuelve al login
 
 ### Requirement: Compuerta estricta de TypeScript sin any
 

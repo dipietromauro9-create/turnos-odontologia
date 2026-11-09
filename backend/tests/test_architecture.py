@@ -106,8 +106,16 @@ def _archivos_con_patron(directorio: Path, patron: re.Pattern[str]) -> list[str]
 
 
 def infracciones_turno_en_agenda() -> list[str]:
-    """RN-AG-03: el catálogo no puede importar ni escribir `Turno` (llega en C-07)."""
-    return _archivos_con_patron(AGENDA_DIR, TURNO)
+    """RN-AG-03: el catálogo no escribe `Turno`; C-10 agrega solo lectura en `agenda/panel`.
+
+    El agregador de agenda lee turnos (sin construirlos ni mutarlos); la guarda de
+    escrituras fuera del servicio de turnos sigue vigente en `tests/turnos_boundary.py`.
+    """
+    return [
+        archivo
+        for archivo in _archivos_con_patron(AGENDA_DIR, TURNO)
+        if not archivo.startswith("agenda/panel/")
+    ]
 
 
 def test_el_dominio_de_agenda_no_referencia_turno() -> None:

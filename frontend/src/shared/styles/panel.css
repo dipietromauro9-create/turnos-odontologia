@@ -1,0 +1,578 @@
+/* Estilos del panel interno: shell, agenda, modal, login y configuración.
+   Inspirado en el design system "OdontoGrid Clinical OS" (docs/design/agenda/DESIGN.md).
+   No aplica al turnero público (queda fuera de .panel-shell). */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui, sans-serif;
+  color: #0f172a;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.panel-shell,
+.login-page {
+  --teal: #0d9488;
+  --teal-oscuro: #0f766e;
+  --teal-suave: #ccfbf1;
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-500: #64748b;
+  --slate-700: #334155;
+  --slate-900: #0f172a;
+  --violeta: #7c3aed;
+  --radio: 0.5rem;
+  --radio-chico: 0.25rem;
+  --sombra: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+/* ---------- Shell ---------- */
+
+.panel-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 400px at 50% -160px, #e2e8f0 0%, transparent 70%),
+    var(--slate-50);
+}
+
+.panel-barra {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid var(--slate-200);
+  backdrop-filter: blur(8px);
+}
+
+.panel-barra strong {
+  font-family: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: var(--slate-900);
+}
+
+.panel-barra nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background: var(--slate-100);
+  border-radius: 999px;
+}
+
+.panel-barra nav a {
+  padding: 0.375rem 0.875rem;
+  border-radius: 999px;
+  color: var(--slate-500);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.panel-barra nav a:hover {
+  color: var(--slate-900);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.panel-barra nav a.active {
+  color: #0f766e;
+  background: #ffffff;
+  box-shadow: var(--sombra);
+}
+
+.panel-barra__usuario {
+  margin-left: auto;
+  color: var(--slate-500);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.panel-shell main {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.panel-shell main > h1 {
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+/* ---------- Controles ---------- */
+
+.panel-shell button,
+.login-page button {
+  appearance: none;
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radio-chico);
+  background: #ffffff;
+  color: var(--slate-700);
+  padding: 0.4375rem 0.8125rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.panel-shell button:hover:not(:disabled),
+.login-page button:hover:not(:disabled) {
+  background: var(--slate-50);
+  border-color: var(--slate-500);
+}
+
+.panel-shell button:disabled,
+.login-page button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.panel-shell button.boton-primario,
+.login-page button.boton-primario {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #ffffff;
+}
+
+.panel-shell button.boton-primario:hover:not(:disabled),
+.login-page button.boton-primario:hover:not(:disabled) {
+  background: var(--teal-oscuro);
+  border-color: var(--teal-oscuro);
+}
+
+.panel-shell button:focus-visible,
+.login-page button:focus-visible,
+.panel-shell a:focus-visible,
+.panel-shell input:focus-visible,
+.panel-shell select:focus-visible,
+.panel-shell textarea:focus-visible,
+.login-page input:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.panel-shell input,
+.panel-shell select,
+.panel-shell textarea,
+.login-page input {
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radio-chico);
+  background: #ffffff;
+  color: var(--slate-900);
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.panel-shell input:focus,
+.panel-shell select:focus,
+.panel-shell textarea:focus,
+.login-page input:focus {
+  border-color: var(--teal);
+}
+
+.panel-shell label,
+.login-page label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: var(--slate-700);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ---------- Toolbar de agenda ---------- */
+
+.agenda-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 1.25rem;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.agenda-toolbar button[aria-pressed="true"] {
+  background: var(--teal-suave);
+  border-color: #5eead4;
+  color: #115e59;
+}
+
+.agenda-toolbar label {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.agenda-toolbar select {
+  width: auto;
+  min-width: 11rem;
+}
+
+.agenda-toolbar .boton-primario {
+  margin-left: auto;
+}
+
+.agenda-periodo {
+  padding: 0 0.25rem;
+  color: var(--slate-700);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+/* ---------- Grilla y columnas ---------- */
+
+.agenda-grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.agenda-columna {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.agenda-columna > h2 {
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+}
+
+.agenda-columna > .turno__detalle {
+  margin: -0.375rem 0 0.25rem;
+  color: var(--slate-500);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.agenda-bloqueos {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.agenda-bloqueos h2 {
+  margin-bottom: 0.5rem;
+  font-size: 0.9375rem;
+}
+
+.agenda-bloqueos ul {
+  margin: 0;
+  padding-left: 1.125rem;
+  color: var(--slate-700);
+  font-size: 0.8125rem;
+}
+
+/* ---------- Estados de la vista ---------- */
+
+.agenda-error {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #fca5a5;
+  border-radius: var(--radio);
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 0.875rem;
+}
+
+.agenda-vacia {
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px dashed var(--slate-300);
+  border-radius: var(--radio-chico);
+  color: var(--slate-500);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.panel-shell > main > .agenda-vacia {
+  padding: 2rem;
+  margin-bottom: 1rem;
+  background: #ffffff;
+}
+
+.agenda-cargando {
+  padding: 2rem;
+  color: var(--slate-500);
+  text-align: center;
+}
+
+/* ---------- Login ---------- */
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 100vh;
+  padding: 1.5rem;
+  background:
+    radial-gradient(900px 500px at 50% 0%, #ccfbf1 0%, transparent 60%),
+    var(--slate-50);
+}
+
+.login-page > h1 {
+  margin-bottom: 0.25rem;
+  font-size: 1.5rem;
+}
+
+.login-page > form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  width: min(22rem, 100%);
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 24px -12px rgba(15, 23, 42, 0.18);
+}
+
+.login-page > form button[type="submit"] {
+  margin-top: 0.25rem;
+  padding: 0.625rem;
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #ffffff;
+}
+
+.login-page > form button[type="submit"]:hover:not(:disabled) {
+  background: var(--teal-oscuro);
+  border-color: var(--teal-oscuro);
+}
+
+/* ---------- Modal ---------- */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.modal__caja {
+  width: min(34rem, 100%);
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 32px -8px rgba(15, 23, 42, 0.24);
+}
+
+.modal__caja h2 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.modal__caja form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.modal__caja fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radio-chico);
+}
+
+.modal__caja legend {
+  padding: 0 0.25rem;
+  color: var(--slate-700);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.modal__caja ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.modal__caja li button {
+  width: 100%;
+  margin-top: 0.25rem;
+  text-align: left;
+}
+
+.modal__caja label:has(input[type="checkbox"]) {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.modal__caja label:has(input[type="checkbox"]) input {
+  width: auto;
+}
+
+.modal__caja > form > button[type="submit"] {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #ffffff;
+}
+
+.modal__caja > form > button[type="submit"]:hover:not(:disabled) {
+  background: var(--teal-oscuro);
+  border-color: var(--teal-oscuro);
+}
+
+.modal__caja [role="status"] {
+  margin: 0;
+  color: var(--teal-oscuro);
+  font-size: 0.8125rem;
+}
+
+/* ---------- Configuración de agenda ---------- */
+
+.config-agenda {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.config-agenda h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+}
+
+.config-agenda h3 {
+  margin: 1.25rem 0 0.5rem;
+  color: var(--slate-700);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.config-agenda ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.config-agenda li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.625rem;
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radio-chico);
+  font-size: 0.8125rem;
+}
+
+.config-agenda form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.config-agenda form input,
+.config-agenda form select {
+  width: auto;
+  min-width: 8rem;
+}
+
+.config-agenda form input[type="text"] {
+  flex: 1 1 10rem;
+}
+
+.config-agenda form button[type="submit"] {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #ffffff;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 720px) {
+  .panel-barra {
+    padding: 0.625rem 1rem;
+  }
+
+  .panel-barra__usuario {
+    margin-left: 0;
+  }
+
+  .panel-shell main {
+    padding: 1rem;
+  }
+
+  .agenda-toolbar .boton-primario {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .agenda-grilla {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    padding: 0.75rem;
+  }
+}

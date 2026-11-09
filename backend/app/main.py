@@ -17,6 +17,7 @@ from app.core.logging import configure_logging
 from app.db.session import TenantContextMiddleware, get_engine, get_session, ping_database
 from app.domain.agenda.bloqueos.router import router as bloqueos_router
 from app.domain.agenda.disponibilidad.router import router as disponibilidad_router
+from app.domain.agenda.panel.router import router as agenda_router
 from app.domain.agenda.prestaciones.router import router as prestaciones_router
 from app.domain.agenda.profesionales.router import router as profesionales_router
 from app.domain.auth.middleware import AuthMiddleware
@@ -62,6 +63,7 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[settings.frontend_origin],
+        allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
@@ -74,6 +76,7 @@ def create_app() -> FastAPI:
     app.include_router(disponibilidad_router)
     app.include_router(huecos_router)
     app.include_router(bloqueos_router)
+    app.include_router(agenda_router)
     app.include_router(turnos_router)
     app.include_router(turnero_router)
     app.include_router(recordatorios_router)

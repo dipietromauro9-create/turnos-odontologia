@@ -1,0 +1,174 @@
+/* Tokens de color por estado de turno — copiar a frontend/src/features/<feature>/estados.css
+   Fuente de verdad: references/tokens-estado.md. No escribir hex en los componentes. */
+
+:root {
+  --turno-reservado-bg: #dbeafe;
+  --turno-reservado-fg: #1e40af;
+  --turno-confirmado-bg: #dcfce7;
+  --turno-confirmado-fg: #166534;
+  --turno-atendido-bg: #ccfbf1;
+  --turno-atendido-fg: #115e59;
+  --turno-ausente-bg: #fef3c7;
+  --turno-ausente-fg: #92400e;
+  --turno-cancelado-bg: #fee2e2;
+  --turno-cancelado-fg: #991b1b;
+
+  --turno-sobreturno-bg: #ede9fe;
+  --turno-sobreturno-fg: #5b21b6;
+  --turno-sobreturno-borde: #7c3aed;
+
+  --agenda-bg: #ffffff;
+  --agenda-superficie: #f8fafc;
+  --agenda-borde: #e2e8f0;
+  --agenda-texto: #0f172a;
+  --agenda-texto-suave: #475569;
+  --agenda-foco: #2563eb;
+}
+
+.turno {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--agenda-borde);
+  border-left: 4px solid var(--agenda-borde);
+  border-radius: 0.375rem;
+  background: var(--agenda-bg);
+  color: var(--agenda-texto);
+}
+
+.turno:focus-visible {
+  outline: 2px solid var(--agenda-foco);
+  outline-offset: 2px;
+}
+
+.turno--reservado {
+  background: var(--turno-reservado-bg);
+  color: var(--turno-reservado-fg);
+  border-left-color: var(--turno-reservado-fg);
+}
+
+.turno--confirmado {
+  background: var(--turno-confirmado-bg);
+  color: var(--turno-confirmado-fg);
+  border-left-color: var(--turno-confirmado-fg);
+}
+
+.turno--atendido {
+  background: var(--turno-atendido-bg);
+  color: var(--turno-atendido-fg);
+  border-left-color: var(--turno-atendido-fg);
+}
+
+.turno--ausente {
+  background: var(--turno-ausente-bg);
+  color: var(--turno-ausente-fg);
+  border-left-color: var(--turno-ausente-fg);
+}
+
+.turno--cancelado {
+  background: var(--turno-cancelado-bg);
+  color: var(--turno-cancelado-fg);
+  border-left-color: var(--turno-cancelado-fg);
+  text-decoration: line-through;
+}
+
+.turno--sobreturno {
+  border-left-color: var(--turno-sobreturno-borde);
+  box-shadow: inset 0 0 0 1px var(--turno-sobreturno-borde);
+}
+
+.turno__etiqueta-estado,
+.turno__etiqueta-sobreturno {
+  align-self: flex-start;
+  padding: 0.0625rem 0.375rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.turno__etiqueta-sobreturno {
+  background: var(--turno-sobreturno-bg);
+  color: var(--turno-sobreturno-fg);
+}
+
+.turno__detalle {
+  color: var(--agenda-texto-suave);
+}
+
+.agenda-vacia,
+.agenda-cargando {
+  padding: 1.5rem;
+  color: var(--agenda-texto-suave);
+  text-align: center;
+}
+
+.agenda-error {
+  padding: 1rem;
+  border: 1px solid var(--turno-cancelado-fg);
+  border-radius: 0.375rem;
+  background: var(--turno-cancelado-bg);
+  color: var(--turno-cancelado-fg);
+}
+
+/* Composición interna de la tarjeta */
+
+.turno {
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.turno:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.14);
+}
+
+.turno header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.turno__hora {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.turno__etiqueta-estado {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.turno__paciente {
+  margin: 0;
+  font-weight: 600;
+}
+
+.turno__detalle {
+  margin: 0;
+  font-size: 0.8125rem;
+}
+
+.turno footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.25rem;
+}
+
+.turno footer button {
+  padding: 0.25rem 0.5rem;
+  border-color: rgba(15, 23, 42, 0.18);
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turno,
+  .turno:hover {
+    transform: none;
+    transition: none;
+  }
+}

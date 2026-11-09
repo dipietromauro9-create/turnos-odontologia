@@ -8,26 +8,33 @@ import {
   Routes,
 } from "react-router-dom";
 
-import { readAuthState } from "./shared/api/auth";
+import { useAuthState } from "./shared/api/auth";
+import { LoginPage } from "./features/auth/LoginPage";
+import { SessionGate } from "./features/auth/SessionGate";
+import { AgendaPage } from "./features/agenda/AgendaPage";
 import { RecordatoriosPage } from "./features/recordatorios/RecordatoriosPage";
 import { ReportesPage } from "./features/reportes/ReportesPage";
+import { AppShell } from "./features/shell/AppShell";
 import { TurneroPublicoPage } from "./features/turnero/TurneroPublicoPage";
 import { MisTurnosPage } from "./pages/turnero/MisTurnosPage";
 import { HomePage } from "./pages/HomePage";
-import { LoginPage } from "./pages/LoginPage";
 
-/** Rama pública: renderiza sin login (las páginas del turnero caen acá en C-09). */
+/** Rama pública: renderiza sin login (turnero y login del panel). */
 export function PublicRoute(): React.JSX.Element {
   return <Outlet />;
 }
 
-/** Rama privada: anónimo redirige al login provisorio (panel real en C-10). */
+/** Rama privada: sin sesión redirige al login; con token completa la identidad. */
 export function PrivateRoute(): React.JSX.Element {
-  const { token } = readAuthState();
+  const { token } = useAuthState();
   if (token === null) {
     return <Navigate to="/login" replace />;
   }
-  return <Outlet />;
+  return (
+    <SessionGate>
+      <Outlet />
+    </SessionGate>
+  );
 }
 
 /** Árbol de rutas único: lo usan prod (BrowserRouter) y tests (MemoryRouter). */
@@ -41,9 +48,11 @@ export function RouteTree(): React.JSX.Element {
         <Route path="/turnero/mis-turnos" element={<MisTurnosPage />} />
       </Route>
       <Route element={<PrivateRoute />}>
-        <Route path="/app" element={<HomePage />} />
-        <Route path="/app/recordatorios" element={<RecordatoriosPage />} />
-        <Route path="/app/reportes" element={<ReportesPage />} />
+        <Route path="/app" element={<AppShell />}>
+          <Route index element={<AgendaPage />} />
+          <Route path="recordatorios" element={<RecordatoriosPage />} />
+          <Route path="reportes" element={<ReportesPage />} />
+        </Route>
       </Route>
     </Routes>
   );

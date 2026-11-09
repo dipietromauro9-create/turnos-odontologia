@@ -14,6 +14,7 @@ See `_shared/skill-resolver.md` for the full resolution protocol.
 | Building new UI or reshaping existing UI: aesthetic direction, typography, distinctive visual design | frontend-design | .opencode/skills/frontend-design/SKILL.md |
 | User says "diagnose"/"debug this", or reports something broken / throwing / failing / slow | diagnosing-bugs | .opencode/skills/diagnosing-bugs/SKILL.md |
 | Automating a real browser from the terminal: navigation, form filling, snapshots, screenshots, data extraction, UI-flow debugging | playwright | .opencode/skills/playwright/SKILL.md |
+| Converting a designed screen (Stitch projectId/screenId or docs/design HTML/PNG) into React+TS components with state color tokens and Vitest tests | pantalla-a-componente | .opencode/skills/pantalla-a-componente/SKILL.md |
 
 ## Compact Rules
 
@@ -72,10 +73,19 @@ Pre-digested rules per skill. Delegators copy matching blocks into sub-agent pro
 - Form pattern: `open` → `snapshot` → `fill e1/e2 ...` → `click e3` → `snapshot`; multi-tab via `tab-new/tab-list/tab-select`; traces via `tracing-start` … `tracing-stop`
 - Artifacts from this repo go to `output/playwright/` (no new top-level artifact folders); open only needed references (`references/cli.md`, `references/workflows.md`)
 
+### pantalla-a-componente
+- Stitch HTML is design input, not final code: rewrite as semantic HTML + `className` + plain CSS (project has no Tailwind; adding dependencies requires a U3 notice)
+- Cite the source `projectId/screenId` (or local artifact path) in every generated file; never invent screens, API fields or endpoints — if the screen shows unknown data, stop and ask
+- Colors only via tokens in `estados.css` (`--turno-<estado>-bg/fg`); state always has a visible text label + `aria-label`, never color alone; sobreturno is a flag with an explicit label
+- Turno states `reservado|confirmado|atendido|ausente|cancelado`; transitions per RN-TU-04 (reservado→confirmar|cancelar, confirmado→atender|ausencia|cancelar, terminal states have no actions); a 422 with RN code from the backend is the source of truth
+- Implement the 4 UI states explicitly (error → cargando → vacío → datos); surface `RN-XX-NN` codes; keep presentational components separate from the fetching page
+- R2: no `any`, readonly props, PascalCase, `React.JSX.Element`; R9: fictitious patient data only in fixtures, prompts and tests
+- Verify with `npm run typecheck`, `npm run lint`, `npm test` and a `any` grep in the feature; do not report done if any fails
+
 ## Project Conventions
 
 | File | Path | Notes |
 |------|------|-------|
-| (none) | — | No CLAUDE.md / AGENTS.md / agents.md / .cursorrules / GEMINI.md / copilot-instructions.md at project root yet (agent-instruction phase runs next and will generate them from this registry + knowledge-base) |
+| AGENTS.md / CLAUDE.md | `./AGENTS.md`, `./CLAUDE.md` | Canonical agent instructions: stack, KB index, skills per role, hard rules R1–R9 + U1–U3, OpenSpec workflow |
 
 Read the convention files listed above for project-specific patterns and rules. All referenced paths have been extracted — no need to read index files to discover more.

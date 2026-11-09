@@ -1,0 +1,23 @@
+{
+  "skill_name": "pantalla-a-componente",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Tengo la pantalla de la agenda semanal multi-profesional en Stitch (projectId 'proj-demo', screenId 'scr-agenda-semana'). Pasala a componentes en frontend/src/features/agenda, con los colores por estado de turno y sus tests.",
+      "expected_output": "Componentes TSX en features/agenda con TurnoCard y vista semanal, estados.css con tokens por estado, tests Vitest de datos/vacío/error/cargando/sobreturno, sin any y citando el screenId.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Implementá la vista de agenda de un día a partir de docs/design/agenda/scr-agenda-dia.html. Cuando no haya turnos tiene que mostrar el estado vacío, y si el backend rechaza una transición quiero ver el mensaje con el código RN-TU-04.",
+      "expected_output": "Vista diaria con los 4 estados de UI, etiqueta textual por estado, error mostrando el código RN-XX-NN, tokens desde estados.css y tests Vitest en verde.",
+      "files": ["docs/design/agenda/scr-agenda-dia.html"]
+    },
+    {
+      "id": 3,
+      "prompt": "Necesito la grilla semanal con los 5 estados de turno (reservado, confirmado, atendido, ausente, cancelado) y los sobreturnos marcados explícitamente. El diseño está en Stitch projectId 'proj-demo', screenId 'scr-agenda-estados'. No agregues librerías de estilos.",
+      "expected_output": "Grilla con los 5 estados mapeados a tokens, sobreturno con etiqueta textual, sin dependencias nuevas, tests que cubran transiciones válidas y terminales.",
+      "files": []
+    }
+  ]
+}

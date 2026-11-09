@@ -132,7 +132,23 @@ Es el change pendiente con alcance predominantemente de interfaz que puede **pre
 
 1. **La página oficial de Stitch no pudo leerse por `fetch`** (renderiza con JavaScript). Se contrastó con un espejo no oficial y con `google-labs-code/stitch-skills`; falta confirmarla en navegador.
 2. **La doc oficial no lista OpenCode** (documenta Cursor, Antigravity, VS Code, Claude Code y Gemini CLI); la config se armó combinando el esquema de OpenCode con el snippet de `google-labs-code/stitch-skills`.
-3. **Sin API key disponible:** no se ejecutó aún una llamada autenticada de punta a punta.
-4. **Reporte de foro** según el cual `generate_screen_from_text` exige OAuth y falla con API key; no confirmado en documentación oficial.
-5. **Decisión de estilos pendiente** (CSS puro vs Tailwind); agregar Tailwind requiere aviso previo por la regla U3.
+3. ~~**Sin API key disponible**~~ ✅ **Probado el 2026-11-09:** `list_projects` autenticó (HTTP 200) y `generate_screen_from_text` completó una pantalla real (`583dff22e2694257a60010f10a833229`).
+4. ~~**Reporte de foro** según el cual `generate_screen_from_text` exige OAuth~~ ✅ **Descartado el 2026-11-09:** la generación funcionó con API key; no pidió OAuth.
+5. ~~**Decisión de estilos pendiente** (CSS puro vs Tailwind)~~ ✅ **Resuelta:** CSS puro con variables (DD-10); no se agregó Tailwind.
 6. **Estado del MCP oficial de Postgres:** verificado como archivado a la fecha; re-verificar antes de presentar.
+
+---
+
+## Estado de implementación (2026-11-09)
+
+| Ítem | Estado |
+|---|---|
+| Skill `pantalla-a-componente` | ✅ creada en `.opencode/skills/pantalla-a-componente/` (SKILL.md + references + assets + evals) |
+| Plantillas TSX/CSS | ✅ compilan con `tsc --noEmit`, ESLint sin warnings y 5 tests Vitest en verde |
+| Decisión de estilos | ✅ resuelta: CSS puro con variables (DD-10), sin Tailwind |
+| MCP Stitch en `opencode.json` | ✅ configurado con `{env:STITCH_API_KEY}` |
+| Autenticación end-to-end | ✅ probada: `list_projects` HTTP 200 y `generate_screen_from_text` completó la pantalla `583dff22e2694257a60010f10a833229` |
+| Pantalla exportada a `docs/design/` | ✅ `docs/design/agenda/583dff22e2694257a60010f10a833229.{html,png}` + `DESIGN.md` (2560×2048) |
+| Evals de la skill | ⏳ `evals/evals.json` listo (3 prompts); ejecutar al implementar C-10 |
+
+**Nota**: la foto del repo de §1 y §2 es del 2026-11-01 y quedó desactualizada (hoy `features/` tiene turnero, recordatorios y reportes, y hay 11/12 changes archivados). Se conserva como registro de la investigación; el estado vigente es el de esta tabla.

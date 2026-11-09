@@ -1,0 +1,50 @@
+Desktop 1440px internal clinic management panel (Panel interno de gestión de turnos) for an Argentine dental practice ('OdontoGrid Gestión Clínica').
+
+Language & tone: Argentine Spanish (español rioplatense - 'Turnos', 'Hoy', 'Dra. Martina Rossi', 'Dr. Pérez Leandro', 'Dra. Gómez Lucía', 'Obra social / Prepaga: OSDE 210, Swiss Medical, Particular').
+
+Layout & Structure:
+1. Left Sidebar Navigation (SideNavBar):
+   - Brand header: 'OdontoGrid' with dental tooth mark icon, clinic subtitle 'Sede Belgrano, CABA'.
+   - Nav items: 'Agenda' (active), 'Pacientes', 'Tratamientos & Fichas', 'Liquidaciones', 'Reportes', 'Configuración'.
+   - Quick clinic summary widget at bottom: 'Turnos de hoy: 28' | 'Confirmados: 82%' | 'Sobreturnos: 2'.
+   - User footer: 'Recepción Central - Belén F.' with status 'En guardia'.
+
+2. Top Bar (TopNavBar):
+   - Search bar: 'Buscar paciente por DNI, apellido o turno...'
+   - Notification icons, connection status ('Online - Sincronizado').
+   - Quick CTA: '+ Nuevo turno' button (primary teal #0D9488 with white text and plus icon).
+
+3. Secondary Toolbar (Control de Agenda):
+   - Page title 'Agenda' with breadcrumb 'Panel > Agenda Semanal'.
+   - Date range selector: 'Lunes 18 a Viernes 22 de Marzo, 2024' with '<' and '>' chevrons, and 'Hoy' quick button.
+   - View mode toggle segmented control: 'Día' | 'Semana' (active state with elevated pill) | 'Mes'.
+   - Professional filters: Multi-select pill filters with avatars or color chips for the 3 fictitious doctors:
+     * 'Dra. Martina Rossi (Odontopediatría / General)' - Checkbox active, badge color Indigo.
+     * 'Dr. Pérez Leandro (Endodoncia & Cirugía)' - Checkbox active, badge color Teal.
+     * 'Dra. Gómez Lucía (Ortodoncia & Estética)' - Checkbox active, badge color Amber.
+     * Option '+ Filtrar por box o especialidad'.
+   - Status legend strip with readable text badges:
+     * 'Reservado' (Azul)
+     * 'Confirmado' (Verde)
+     * 'Atendido' (Teal)
+     * 'Ausente' (Ámbar)
+     * 'Cancelado' (Rojo tachado)
+     * 'Sobreturno' (Borde violeta + tag 'Sobreturno')
+
+4. Multi-Professional Weekly Timetable Grid:
+   - Full timetable grid view across the week or across columns for the 3 professionals (Dra. Martina, Dr. Pérez, Dra. Gómez) with time intervals from 09:00 to 18:00 (hourly rows: 09:00, 10:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00, 18:00 with subtle 30-min dashed subdividers).
+   - Column headers displaying each professional clearly with their box/consultorio (e.g. Consultorio 1, 2, 3), today's total turnos count, and active schedule status.
+   - Rich appointment cards (Tarjetas de Turno) positioned within the time slots with thick 4px left-colored border based on status:
+     * RESERVADO: Start & end '09:00 - 09:45', Paciente 'Agustín Bianchi (DNI 38.412.990 - OSDE 210)', Prestación 'Consulta general y diagnóstico', Badge '[Reservado]' in blue text & blue soft bg. Quick action buttons: 'Confirmar' (primary micro-btn), 'Cancelar'.
+     * CONFIRMADO: Start & end '10:00 - 10:45', Paciente 'Camila Fernández (Swiss Medical)', Prestación 'Limpieza dental y profilaxis ultrasónica', Badge '[Confirmado]' in green text & green soft bg. Quick action buttons: 'Atender' (btn), 'Registrar ausencia'.
+     * ATENDIDO: Start & end '11:00 - 12:00', Paciente 'Marcos Benítez (Galeno Oro)', Prestación 'Endodoncia birradicular pieza 14', Badge '[Atendido]' in teal text & teal soft bg. Status stamp 'Finalizado 11:55'.
+     * AUSENTE: Start & end '14:00 - 14:30', Paciente 'Valeria Domínguez (Particular)', Prestación 'Control periódico de ortodoncia', Badge '[Ausente]' in amber text & amber soft bg with alert icon. Quick action: 'Reagendar turno'.
+     * CANCELADO: Start & end '15:00 - 15:30', Paciente with strikethrough 'Esteban Morales (IOMA)', Prestación 'Evaluación por dolor agudo', Badge '[Cancelado]' in red with strikethrough text 'Cancelado por paciente con 2hs de aviso'.
+     * SOBRETURNO (Obligatorio con destaque especial): Start & end '12:00 - 12:30', Paciente 'Ignacio Soria (Urgencia / Particular)', Prestación 'Urgencia por fractura dental coronaria', Full border violet-600 (2px border, soft violet-50 background), with two prominent badges: '[Sobreturno]' in bright violet pill + '[Confirmado]' in green. Action buttons: 'Atender ahora', 'Ver ficha'.
+     * Additional realistic slots: Dra. Martina with pediatric fluoride checkup, Dr. Pérez with surgical extraction, Dra. Gómez with brackets adjustment.
+     * Empty slot interaction: Hover state '+ Agregar turno' dashed slot placeholder.
+
+5. Quick Details Slide-over / Modal Preview panel on the right side:
+   - Showing selected turno details: 'Ficha rápida de turno: Camila Fernández', teléfono '+54 9 11 4829-3310', obra social 'Swiss Medical (Plan SMG20)', notas clínicas ('Paciente refiere sensibilidad en cuadrante superior derecho'), historial de turnos ('3 asistidos / 0 ausencias'), botones de acción rápida ('Atender paciente', 'Enviar recordatorio WhatsApp', 'Reprogramar', 'Cancelar turno').
+
+High contrast, accessible typography, pristine spacing, professional medical aesthetic with Plus Jakarta Sans or Inter font. Clean, structured, highly functional desktop web application UI.

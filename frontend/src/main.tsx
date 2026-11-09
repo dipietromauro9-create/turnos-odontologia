@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import { AppRoutes } from "./routes";
+import "./shared/styles/panel.css";
 
 const rootElement = document.getElementById("root");
 if (rootElement === null) {

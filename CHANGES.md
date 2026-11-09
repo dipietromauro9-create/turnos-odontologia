@@ -264,9 +264,10 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
   - `knowledge-base/05_reglas_de_negocio.md` §Turnos (RN-TU-05, RN-TU-06, RN-TU-07)
 
 ### [C-10] `agenda-panel`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-09 — 19/19 tareas; spec `core/agenda` creada y `core/profesionales`, `core/prestaciones`, `foundation/frontend-shell` sincronizadas; 874 tests backend + 58 frontend en verde; sin migración)
 - **Scope**: Panel interno día/semana multi-profesional (US-005 + UI de US-006/US-007/US-008)
   - Frontend `features/agenda` + `pages//app/*`: vista día y semana con colores por estado, filtro por profesional (recepción/dueño todos; profesional solo propia — RN-AU-03), crear turno interno + sobreturno con flag explícito (usa endpoints de C-07), botones de transición (confirmar/atender/ausencia/cancelar) con mensajes por código RN-XX-NN, gestión de disponibilidad/bloqueos (dueño)
+  - Artefactos de diseño: exportar la pantalla a `docs/design/agenda/` (HTML + PNG + `DESIGN.md`) y congelar los tokens por estado en `estados.css` (DD-10); los componentes se generan con la skill `pantalla-a-componente`
   - Sin endpoints nuevos salvo `GET /agenda/dia|/semana` agregador si el filtrado cliente resulta insuficiente (justificar en propose)
   - Tests frontend (Vitest): RBAC de vistas, colores por estado, transición inválida muestra error de regla; tests backend del agregador si se crea
 - **Dependencias**: C-07, C-08
@@ -343,3 +344,16 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
 | FASE 5 — Gestión y cierre MVP | C-12 | Reportes + export CSV |
 
 **12 changes, 6 fases, 7 gates, camino crítico de 7 changes. Primer change recomendado: `C-01` (foundation-setup). Para arrancar: `/opsx:propose C-01-foundation-setup`.**
+
+---
+
+## Post-MVP (mantenimiento)
+
+### [C-13] `panel-visual`
+- **Estado**: `[x]` archivado (2026-11-09 — 6/6 tareas; solo presentación, `skip_specs`; sin cambios de API, datos ni dependencias)
+- **Scope**: estilos del panel (shell, toolbar, grilla, tarjetas, modal, login y configuración) alineados al design system exportado de Stitch (`docs/design/agenda/DESIGN.md`); no toca el turnero público
+- **Dependencias**: C-10
+- **Governance**: BAJO
+- **Leer antes**:
+  - `docs/design/agenda/DESIGN.md`
+  - `.opencode/skills/pantalla-a-componente/references/tokens-estado.md`

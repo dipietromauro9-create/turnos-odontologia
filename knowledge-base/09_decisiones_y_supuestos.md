@@ -63,6 +63,13 @@
 **Contexto**: mensajes exactos en UI y tests que asertan comportamiento, no strings.
 **Trade-offs aceptados**: acopla API a la numeración de la KB (cambio de código = cambio versionado).
 
+### DD-10 — CSS puro con variables, sin Tailwind
+**Decisión**: estilos con CSS plano y custom properties (`estados.css` por feature); sin Tailwind ni librería de componentes. El HTML de Stitch es insumo de diseño, no código final.
+**Contexto**: el frontend ya usa HTML semántico + `className` sin librería de estilos; las pantallas se diseñan en Stitch y se convierten con la skill `pantalla-a-componente`.
+**Alternativas consideradas**: Tailwind (build y dependencias nuevas, aviso U3); CSS-in-JS (runtime y otro modelo mental); librería de componentes (peso y look ajeno al diseño).
+**Justificación**: cero dependencias nuevas, tokens centralizados y auditables, y el diseño de Stitch se reescribe igual como componentes tipados.
+**Trade-offs aceptados**: más CSS escrito a mano; si el design system crece mucho, evaluar una migración con ADR propio.
+
 ## Supuestos inferidos
 
 ### SU-01 — El consultorio piloto existe y colabora
