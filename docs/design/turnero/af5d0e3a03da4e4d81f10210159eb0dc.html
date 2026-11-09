@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OdontoGrid • Consultorio Demo - Reservá tu turno online</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=JetBrains+Mono:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Config Verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#fffbff",
+            "surface-tint": "#006a61",
+            "surface-dim": "#d2d9f4",
+            "secondary-fixed-dim": "#80d5cb",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-container": "#8a4cfc",
+            "outline-variant": "#bcc9c6",
+            "secondary": "#006a63",
+            "primary-container": "#008378",
+            "surface-container": "#eaedff",
+            "on-secondary": "#ffffff",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed": "#25005a",
+            "tertiary-fixed-dim": "#d2bbff",
+            "on-surface-variant": "#3d4947",
+            "inverse-surface": "#283044",
+            "surface-container-high": "#e2e7ff",
+            "outline": "#6d7a77",
+            "tertiary-fixed": "#eaddff",
+            "surface-container-low": "#f2f3ff",
+            "surface": "#faf8ff",
+            "primary": "#00685f",
+            "background": "#faf8ff",
+            "secondary-container": "#99efe5",
+            "on-background": "#131b2e",
+            "surface-container-highest": "#dae2fd",
+            "on-secondary-fixed": "#00201d",
+            "on-primary-container": "#f4fffc",
+            "on-primary-fixed": "#00201d",
+            "inverse-primary": "#6bd8cb",
+            "tertiary": "#712ae2",
+            "on-tertiary-fixed-variant": "#5a00c6",
+            "surface-variant": "#dae2fd",
+            "on-secondary-fixed-variant": "#00504a",
+            "inverse-on-surface": "#eef0ff",
+            "surface-bright": "#faf8ff",
+            "on-primary": "#ffffff",
+            "error-container": "#ffdad6",
+            "on-secondary-container": "#006f67",
+            "error": "#ba1a1a",
+            "secondary-fixed": "#9cf2e8",
+            "primary-fixed-dim": "#6bd8cb",
+            "on-primary-fixed-variant": "#005049",
+            "on-error": "#ffffff",
+            "primary-fixed": "#89f5e7",
+            "on-surface": "#131b2e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "margin-compact": "1rem",
+            "gutter-compact": "0.5rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-2xl": "2rem",
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "margin": "1.5rem",
+            "space-md": "0.75rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-default": ["Inter"],
+            "label-compact": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-default": ["Inter"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "code-time": ["Inter"],
+            "body-compact": ["Inter"],
+            "body-medium": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "mono": ["JetBrains Mono", "monospace"]
+          },
+          "fontSize": {
+            "headline-md": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-default": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "label-compact": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-lg": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-default": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0em", "fontWeight": "400" }],
+            "title-sm": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "code-time": ["0.8125rem", { "lineHeight": "1rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-compact": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0em", "fontWeight": "400" }],
+            "body-medium": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0em", "fontWeight": "500" }],
+            "headline-xl": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased font-body-default min-h-screen flex flex-col selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- ========================================== -->
+<!-- 1. TOP APP BAR (Shared Component Anchor)  -->
+<!-- ========================================== -->
+<header class="bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-40 transition-colors duration-150">
+<div class="flex justify-between items-center w-full px-6 py-3 max-w-7xl mx-auto">
+<!-- Brand & Operatory Badge -->
+<div class="flex items-center gap-4">
+<a class="flex items-center gap-2 group" href="#">
+<div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]" data-icon="dentistry" style="font-variation-settings: 'FILL' 1;">dentistry</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight">Consultorio Demo</span>
+<span class="text-label-compact font-label-compact uppercase px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container">Turnos Web</span>
+</div>
+<p class="text-label-compact font-label-compact text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+              Atención por orden de llegada con turno previo • Córdoba / Belgrano
+            </p>
+</div>
+</a>
+</div>
+<!-- Navigation & Action Cluster -->
+<div class="hidden md:flex items-center gap-6">
+<nav class="flex items-center gap-6">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-150 text-body-medium font-body-medium" href="#especialidades">Especialidades</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-150 text-body-medium font-body-medium" href="#profesionales">Profesionales</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-150 text-body-medium font-body-medium" href="#ubicacion">Ubicación</a>
+</nav>
+<div class="h-4 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-3">
+<!-- Trailing Secondary Action -->
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-outline-variant rounded-xl text-body-compact font-body-medium text-on-surface-variant hover:text-primary hover:border-primary transition-all duration-150 hover:bg-surface-container-low active:scale-[0.99]" href="#consultar-codigo">
+<span class="material-symbols-outlined text-[18px]" data-icon="confirmation_number">confirmation_number</span>
+<span>Ya tengo un turno: consultar con mi código</span>
+</a>
+<!-- Trailing Primary Action -->
+<a class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-primary text-on-primary rounded-xl text-body-compact font-headline-md font-semibold hover:bg-primary-container shadow-sm hover:shadow transition-all duration-150 active:scale-[0.99]" href="#agenda-grid">
+<span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>
+<span>Reservá tu turno online</span>
+</a>
+</div>
+</div>
+</div>
+</header>
+<!-- ========================================== -->
+<!-- MAIN CONTENT CANVAS                        -->
+<!-- ========================================== -->
+<main class="flex-grow max-w-7xl w-full mx-auto px-4 md:px-6 py-8 space-y-8">
+<!-- 2. HERO / VALUE PROPOSITION & SIMPLE STEPS -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8 relative overflow-hidden shadow-sm">
+<div class="max-w-3xl space-y-3">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low border border-outline-variant text-label-default font-label-default text-primary">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified_user">verified_user</span>
+<span>Sin contraseñas ni registros previos • Confirmación inmediata por WhatsApp y correo</span>
+</div>
+<h1 class="text-headline-xl font-headline-xl text-on-surface tracking-tight">
+          Elegí a tu profesional y reservá en simples pasos
+        </h1>
+<p class="text-body-default font-body-default text-on-surface-variant max-w-2xl">
+          Programá tu consulta odontológica particular o con tu obra social en menos de 2 minutos. Te asignamos el consultorio en tiempo real.
+        </p>
+</div>
+<!-- Linear Step Visuals -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-outline-variant/60">
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low/60 border border-outline-variant/40">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-label-default">1</div>
+<div>
+<p class="text-title-sm font-title-sm text-on-surface">Elegí servicio y horario</p>
+<p class="text-label-compact font-label-compact text-on-surface-variant">Filtrá por profesional o especialidad</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low/60 border border-outline-variant/40">
+<div class="w-8 h-8 rounded-full bg-primary-fixed-dim text-on-primary-fixed-variant flex items-center justify-center font-bold text-label-default">2</div>
+<div>
+<p class="text-title-sm font-title-sm text-on-surface">Ingresá tus datos</p>
+<p class="text-label-compact font-label-compact text-on-surface-variant">Solo tu nombre y celular de contacto</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low/60 border border-outline-variant/40">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-label-default">3</div>
+<div>
+<p class="text-title-sm font-title-sm text-on-surface">Guardá tu código</p>
+<p class="text-label-compact font-label-compact text-on-surface-variant">Acceso inmediato para gestionar tu cita</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. INTERACTIVE FILTERS PANEL -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm space-y-5">
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="tune">tune</span>
+<h2 class="text-title-sm font-title-sm text-on-surface">Filtros de disponibilidad clínica</h2>
+</div>
+<button class="text-label-default font-label-default text-primary hover:underline flex items-center gap-1" onclick="resetFilters()">
+<span class="material-symbols-outlined text-[14px]" data-icon="restart_alt">restart_alt</span>
+          Restablecer selección
+        </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+<!-- Professional Selector -->
+<div class="md:col-span-6 space-y-1.5">
+<label class="text-label-default font-label-default text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]" data-icon="person">person</span>
+            Profesional a cargo
+          </label>
+<div class="grid grid-cols-2 gap-2">
+<!-- Active Option -->
+<button class="flex items-center gap-2.5 p-2 rounded-lg border-2 border-primary bg-primary-fixed/10 text-left transition-all" type="button">
+<div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-body-compact">MR</div>
+<div class="min-w-0">
+<p class="text-body-compact font-body-medium text-on-surface truncate">Dra. Martina Rossi</p>
+<p class="text-label-compact font-label-compact text-primary truncate">Odontopediatría • Sillón 1</p>
+</div>
+</button>
+<button class="flex items-center gap-2.5 p-2 rounded-lg border border-outline-variant bg-surface hover:border-primary/50 text-left transition-all" type="button">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center font-bold text-body-compact">LP</div>
+<div class="min-w-0">
+<p class="text-body-compact font-body-medium text-on-surface truncate">Dr. Leandro Pérez</p>
+<p class="text-label-compact font-label-compact text-on-surface-variant truncate">Endodoncia / Cirugía</p>
+</div>
+</button>
+<button class="flex items-center gap-2.5 p-2 rounded-lg border border-outline-variant bg-surface hover:border-primary/50 text-left transition-all" type="button">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center font-bold text-body-compact">LG</div>
+<div class="min-w-0">
+<p class="text-body-compact font-body-medium text-on-surface truncate">Dra. Lucía Gómez</p>
+<p class="text-label-compact font-label-compact text-on-surface-variant truncate">Ortodoncia y Estética</p>
+</div>
+</button>
+<button class="flex items-center gap-2.5 p-2 rounded-lg border border-outline-variant bg-surface hover:border-primary/50 text-left transition-all" type="button">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="groups">groups</span>
+</div>
+<div class="min-w-0">
+<p class="text-body-compact font-body-medium text-on-surface truncate">Cualquier profesional</p>
+<p class="text-label-compact font-label-compact text-on-surface-variant truncate">Primer horario libre</p>
+</div>
+</button>
+</div>
+</div>
+<!-- Treatment / Reason Selector -->
+<div class="md:col-span-6 space-y-1.5">
+<label class="text-label-default font-label-default text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]" data-icon="medical_services">medical_services</span>
+            Prestación / Motivo de consulta
+          </label>
+<div class="space-y-1.5">
+<select class="w-full h-11 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-default focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+<option selected="">Limpieza dental y profilaxis ultrasónica (45 min)</option>
+<option>Consulta diagnóstica y presupuesto integral (30 min)</option>
+<option>Urgencia odontológica o dolor agudo (Prioridad clínica)</option>
+<option>Tratamiento de conducto / Endodoncia mecanizada</option>
+<option>Alineadores y Ortodoncia invisible (Evaluación 3D)</option>
+</select>
+<div class="flex flex-wrap items-center gap-1.5 pt-1">
+<span class="text-label-compact font-label-compact text-on-surface-variant">Frecuentes:</span>
+<span class="text-label-compact font-label-compact px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant cursor-pointer hover:bg-secondary-container hover:text-on-secondary-container transition-colors">Profilaxis</span>
+<span class="text-label-compact font-label-compact px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant cursor-pointer hover:bg-secondary-container hover:text-on-secondary-container transition-colors">Blanqueamiento</span>
+<span class="text-label-compact font-label-compact px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant cursor-pointer hover:bg-secondary-container hover:text-on-secondary-container transition-colors">Control semestral</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Week Navigator Bar -->
+<div class="pt-3 border-t border-outline-variant/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<div class="inline-flex rounded-lg border border-outline-variant p-0.5 bg-surface-container-low">
+<button class="p-1 rounded hover:bg-surface-container-lowest text-on-surface-variant hover:text-on-surface transition-colors" title="Semana anterior">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="px-3 py-1 rounded bg-surface-container-lowest text-on-surface font-body-medium text-body-compact shadow-xs">
+              Esta semana
+            </button>
+<button class="p-1 rounded hover:bg-surface-container-lowest text-on-surface-variant hover:text-on-surface transition-colors" title="Semana siguiente">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<span class="text-title-sm font-title-sm text-on-surface font-bold">
+            Semana del Lunes 24 al Domingo 30 de Marzo, 2025
+          </span>
+</div>
+<div class="flex items-center gap-3 text-label-compact font-label-compact text-on-surface-variant">
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-primary"></span> Turno seleccionado</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-surface-container-high border border-outline-variant"></span> Disponible</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span> Guardia de urgencia</span>
+</div>
+</div>
+</section>
+<!-- 4. SCHEDULE GRID: HORARIOS DISPONIBLES (LUNES A DOMINGO) -->
+<section class="space-y-3" id="agenda-grid">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-md font-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="event_available">event_available</span>
+          Horarios disponibles según filtros activos
+        </h2>
+<span class="text-body-compact font-body-compact text-on-surface-variant">Zona horaria: Argentina (GMT-3)</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
+<!-- LUNES 24 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-3 flex flex-col justify-between space-y-3">
+<div class="border-b border-outline-variant/60 pb-2 text-center">
+<p class="text-label-compact font-label-compact uppercase text-on-surface-variant">Lun</p>
+<p class="text-title-sm font-title-sm font-bold text-on-surface">24 Mar</p>
+<span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-medium">5 libres</span>
+</div>
+<div class="space-y-1.5 flex-1">
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">09:00</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">10:30</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">11:15</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">15:00</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">16:45</button>
+</div>
+</div>
+<!-- MARTES 25 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-3 flex flex-col justify-between space-y-3">
+<div class="border-b border-outline-variant/60 pb-2 text-center">
+<p class="text-label-compact font-label-compact uppercase text-on-surface-variant">Mar</p>
+<p class="text-title-sm font-title-sm font-bold text-on-surface">25 Mar</p>
+<span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-medium">4 libres</span>
+</div>
+<div class="space-y-1.5 flex-1">
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">09:30</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">11:00</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">14:00</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">17:15</button>
+</div>
+</div>
+<!-- MIÉRCOLES 26 (CON TURNO SELECCIONADO) -->
+<div class="bg-surface-container-lowest border-2 border-primary rounded-xl p-3 flex flex-col justify-between space-y-3 relative ring-2 ring-primary/20 shadow-md">
+<div class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-primary text-on-primary text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+            Seleccionado
+          </div>
+<div class="border-b border-outline-variant/60 pb-2 text-center pt-1">
+<p class="text-label-compact font-label-compact uppercase text-primary font-bold">Mié</p>
+<p class="text-title-sm font-title-sm font-bold text-primary">26 Mar</p>
+<span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-semibold">6 libres</span>
+</div>
+<div class="space-y-1.5 flex-1">
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">09:00</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">09:30</button>
+<!-- SELECTED CHIP ACTIVE -->
+<button class="w-full py-1.5 rounded bg-primary text-on-primary text-code-time font-code-time font-bold shadow-sm flex items-center justify-center gap-1.5 ring-2 ring-offset-1 ring-primary">
+<span class="material-symbols-outlined text-[14px]" data-icon="check">check</span>
+              10:15
+            </button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">11:00</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">14:30</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">16:00</button>
+</div>
+</div>
+<!-- JUEVES 27 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-3 flex flex-col justify-between space-y-3">
+<div class="border-b border-outline-variant/60 pb-2 text-center">
+<p class="text-label-compact font-label-compact uppercase text-on-surface-variant">Jue</p>
+<p class="text-title-sm font-title-sm font-bold text-on-surface">27 Mar</p>
+<span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-medium">4 libres</span>
+</div>
+<div class="space-y-1.5 flex-1">
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">10:00</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">11:30</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">15:15</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">18:00</button>
+</div>
+</div>
+<!-- VIERNES 28 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-3 flex flex-col justify-between space-y-3">
+<div class="border-b border-outline-variant/60 pb-2 text-center">
+<p class="text-label-compact font-label-compact uppercase text-on-surface-variant">Vie</p>
+<p class="text-title-sm font-title-sm font-bold text-on-surface">28 Mar</p>
+<span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-medium">5 libres</span>
+</div>
+<div class="space-y-1.5 flex-1">
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">08:30</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">09:15</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">11:00</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">14:00</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">16:30</button>
+</div>
+</div>
+<!-- SÁBADO 29 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-3 flex flex-col justify-between space-y-3">
+<div class="border-b border-outline-variant/60 pb-2 text-center">
+<p class="text-label-compact font-label-compact uppercase text-on-surface-variant">Sáb</p>
+<p class="text-title-sm font-title-sm font-bold text-on-surface">29 Mar</p>
+<span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-medium">2 libres</span>
+</div>
+<div class="space-y-1.5 flex-1">
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">09:00</button>
+<button class="w-full py-1.5 rounded border border-outline-variant text-code-time font-code-time hover:border-primary hover:text-primary transition-all">10:30</button>
+<div class="p-2 rounded bg-surface-container-low text-center">
+<span class="text-[10px] font-label-compact text-on-surface-variant">Tarde sin agenda</span>
+</div>
+</div>
+</div>
+<!-- DOMINGO 30 (GUARDIA ACTIVA) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-3 flex flex-col justify-between space-y-3">
+<div class="border-b border-outline-variant/60 pb-2 text-center">
+<p class="text-label-compact font-label-compact uppercase text-tertiary font-bold">Dom</p>
+<p class="text-title-sm font-title-sm font-bold text-on-surface">30 Mar</p>
+<span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-bold">Guardia activa</span>
+</div>
+<div class="space-y-1.5 flex-1">
+<button class="w-full py-1.5 rounded border border-tertiary/40 bg-tertiary-fixed/30 text-code-time font-code-time text-tertiary font-semibold hover:bg-tertiary-fixed transition-all">10:00 (Urg)</button>
+<button class="w-full py-1.5 rounded border border-tertiary/40 bg-tertiary-fixed/30 text-code-time font-code-time text-tertiary font-semibold hover:bg-tertiary-fixed transition-all">11:30 (Urg)</button>
+<div class="p-1.5 rounded bg-surface-container text-center">
+<span class="text-[10px] font-label-compact text-on-surface-variant">Atención telefónica 24hs</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================================================== -->
+<!-- 5. RESERVATION FORM & 6. CONFIRMATION CARD (BENTO) -->
+<!-- ==================================================== -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- FORMULARIO DE RESERVA EN TARJETA -->
+<section class="lg:col-span-7 bg-surface-container-lowest border-2 border-primary/40 rounded-xl p-6 md:p-7 shadow-sm space-y-6">
+<!-- Header del Formulario -->
+<div>
+<div class="flex items-center justify-between">
+<h3 class="text-headline-md font-headline-md text-on-surface">Completá tus datos para asegurar el turno</h3>
+<span class="text-label-compact font-label-compact px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded-full">Paso 2 de 3</span>
+</div>
+<p class="text-body-compact font-body-compact text-on-surface-variant mt-0.5">
+            No necesitás registrarte. Te enviaremos el comprobante y el link de autogestión directamente a tu celular.
+          </p>
+</div>
+<!-- Appointment Context Badge (Resumen del turno elegido) -->
+<div class="p-4 rounded-xl bg-surface-container-low border border-outline-variant/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]" data-icon="calendar_month">calendar_month</span>
+</div>
+<div>
+<p class="text-title-sm font-title-sm text-on-surface font-bold">Miércoles 26 de Marzo de 2025 • 10:15 hs</p>
+<p class="text-body-compact font-body-compact text-on-surface-variant">Dra. Martina Rossi • Sillón 1 (Odontopediatría)</p>
+</div>
+</div>
+<span class="text-label-compact font-label-compact px-2.5 py-1 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface font-semibold">
+            Profilaxis Ultrasónica
+          </span>
+</div>
+<!-- Campos de Datos Personales -->
+<form class="space-y-4" onsubmit="event.preventDefault(); document.getElementById('confirmation-card').scrollIntoView({behavior: 'smooth'});">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Nombre y Apellido -->
+<div class="space-y-1">
+<label class="text-label-default font-label-default text-on-surface">Nombre y apellido completo *</label>
+<div class="relative">
+<input class="w-full h-10 px-3 pl-9 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-default focus:border-primary focus:ring-1 focus:ring-primary outline-none" required="" type="text" value="Mariana Solís"/>
+<span class="material-symbols-outlined absolute left-2.5 top-2.5 text-on-surface-variant text-[18px]" data-icon="badge">badge</span>
+</div>
+</div>
+<!-- WhatsApp / Teléfono móvil -->
+<div class="space-y-1">
+<label class="text-label-default font-label-default text-on-surface">Teléfono celular / WhatsApp *</label>
+<div class="relative">
+<input class="w-full h-10 px-3 pl-9 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-default focus:border-primary focus:ring-1 focus:ring-primary outline-none" required="" type="tel" value="+54 9 11 5824-9912"/>
+<span class="material-symbols-outlined absolute left-2.5 top-2.5 text-on-surface-variant text-[18px]" data-icon="phone_iphone">phone_iphone</span>
+</div>
+<p class="text-[11px] font-label-compact text-on-surface-variant">Ahí te llegará la confirmación y el recordatorio automático.</p>
+</div>
+<!-- DNI o Documento -->
+<div class="space-y-1">
+<label class="text-label-default font-label-default text-on-surface">DNI o Documento de Identidad <span class="text-on-surface-variant font-normal">(sugerido)</span></label>
+<div class="relative">
+<input class="w-full h-10 px-3 pl-9 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-default focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="Ej: 36.840.129" type="text"/>
+<span class="material-symbols-outlined absolute left-2.5 top-2.5 text-on-surface-variant text-[18px]" data-icon="id_card">id_card</span>
+</div>
+</div>
+<!-- Obra Social / Prepaga -->
+<div class="space-y-1">
+<label class="text-label-default font-label-default text-on-surface">Cobertura / Prepaga médica</label>
+<div class="relative">
+<select class="w-full h-10 px-3 pl-9 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-default focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+<option selected="">OSDE (Plan 210, 310, 410, 510)</option>
+<option>Swiss Medical</option>
+<option>Galeno</option>
+<option>Medifé</option>
+<option>OMINT</option>
+<option>Particular (Sin cobertura médica)</option>
+</select>
+<span class="material-symbols-outlined absolute left-2.5 top-2.5 text-on-surface-variant text-[18px]" data-icon="health_and_safety">health_and_safety</span>
+</div>
+</div>
+</div>
+<!-- Notas clínicas -->
+<div class="space-y-1">
+<label class="text-label-default font-label-default text-on-surface">Aclaraciones para la recepción o el odontólogo <span class="text-on-surface-variant font-normal">(opcional)</span></label>
+<textarea class="w-full p-2.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface text-body-default focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="Ej: Tengo sensibilidad en molares inferiores, o es mi primera vez en el consultorio..." rows="2">Tengo sensibilidad en molares inferiores al frío y calor.</textarea>
+</div>
+<!-- Término de puntualidad -->
+<div class="flex items-start gap-2 pt-1 text-label-compact font-label-compact text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="info">info</span>
+<span>Solicitamos presentarse 10 minutos antes con DNI y credencial digital. Cancelaciones sin cargo con 24 hs de anticipación.</span>
+</div>
+<!-- Botón de Confirmación -->
+<button class="w-full h-12 bg-primary text-on-primary hover:bg-primary-container rounded-xl text-title-sm font-headline-md font-semibold shadow-sm hover:shadow flex items-center justify-center gap-2 transition-all active:scale-[0.99]" type="submit">
+<span class="material-symbols-outlined text-[20px]" data-icon="check_circle">check_circle</span>
+            Confirmar reserva de turno
+          </button>
+</form>
+</section>
+<!-- 6. TARJETA DE CONFIRMACIÓN DE TURNO (RESULTADO) -->
+<section class="lg:col-span-5 bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-7 shadow-sm space-y-6" id="confirmation-card">
+<!-- Alerta de Éxito -->
+<div class="flex items-center gap-3 p-3.5 rounded-xl bg-secondary-container/40 border border-secondary/30">
+<div class="w-9 h-9 rounded-full bg-secondary text-on-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]" data-icon="check">check</span>
+</div>
+<div>
+<h4 class="text-title-sm font-title-sm text-secondary font-bold">¡Tu turno está reservado con éxito!</h4>
+<p class="text-label-compact font-label-compact text-on-surface-variant">Generamos tu ficha clínica y credencial de acceso.</p>
+</div>
+</div>
+<!-- Bloque destacado del Código Único -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 text-center space-y-2">
+<span class="text-label-compact font-label-compact uppercase tracking-wider text-on-surface-variant">Código de gestión del turno</span>
+<div class="flex items-center justify-center gap-2 py-1">
+<span class="font-mono text-2xl font-bold tracking-widest text-primary px-3 py-1 bg-surface-container-lowest rounded-lg border border-outline-variant">
+              ODN-8429-KR71
+            </span>
+<button class="p-2 rounded-lg border border-outline-variant bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant hover:text-primary transition-colors" onclick="navigator.clipboard.writeText('ODN-8429-KR71'); alert('¡Código copiado al portapapeles!');" title="Copiar código">
+<span class="material-symbols-outlined text-[20px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+<p class="text-label-compact font-label-compact text-on-surface-variant max-w-xs mx-auto">
+            Guardá este código para consultar, cancelar o reprogramar tu turno en cualquier momento sin crear cuenta.
+          </p>
+</div>
+<!-- Datos Resumidos de la Cita & Ubicación -->
+<div class="space-y-3 pt-1 border-t border-outline-variant/60 text-body-compact">
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant">Paciente:</span>
+<span class="font-body-medium text-on-surface font-semibold">Mariana Solís</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant">Fecha y hora:</span>
+<span class="font-body-medium text-on-surface font-semibold">Miércoles 26 Mar • 10:15 hs</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant">Especialista:</span>
+<span class="font-body-medium text-on-surface font-semibold">Dra. Martina Rossi (Sillón 1)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant">Consultorio:</span>
+<span class="font-body-medium text-on-surface font-semibold">Av. Belgrano 1420, Piso 3</span>
+</div>
+</div>
+<!-- Botones de Acción Posterior -->
+<div class="space-y-2 pt-2">
+<a class="w-full py-2.5 px-4 rounded-xl border border-secondary text-secondary font-headline-md font-semibold text-body-compact flex items-center justify-center gap-2 hover:bg-secondary-container/20 transition-all" href="https://wa.me/?text=Mi%20turno%20en%20Consultorio%20Demo%20es%20el%2026%20de%20Marzo%2010:15hs%20con%20codigo%20ODN-8429-KR71" target="_blank">
+<span class="material-symbols-outlined text-[18px]" data-icon="send">send</span>
+            Recibir recordatorio en WhatsApp
+          </a>
+<a class="w-full py-2.5 px-4 rounded-xl border border-outline-variant text-on-surface-variant font-headline-md font-semibold text-body-compact flex items-center justify-center gap-2 hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="event">event</span>
+            Agregar a Google Calendar
+          </a>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant/40 flex items-center gap-2 text-[11px] text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="lock">lock</span>
+<span>Tus datos están protegidos bajo estricto secreto médico y confidencialidad clínica.</span>
+</div>
+</section>
+</div>
+<!-- SECCIÓN DE CONSULTA RÁPIDA CON CÓDIGO (ANCLAJE) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8 text-center space-y-4 max-w-2xl mx-auto shadow-sm" id="consultar-codigo">
+<div class="w-12 h-12 rounded-full bg-surface-container text-primary flex items-center justify-center mx-auto">
+<span class="material-symbols-outlined text-[28px]" data-icon="search">search</span>
+</div>
+<div class="space-y-1">
+<h3 class="text-headline-md font-headline-md text-on-surface">¿Ya tenés un turno programado?</h3>
+<p class="text-body-default font-body-default text-on-surface-variant">Ingresá tu código alfanumérico para revisar el estado o reprogramar tu horario.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+<input class="flex-1 h-11 px-3.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-mono text-title-sm uppercase tracking-wider focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="Ej: ODN-8429-KR71" type="text"/>
+<button class="h-11 px-6 rounded-lg bg-surface-container-high hover:bg-surface-container text-on-surface font-headline-md font-semibold text-body-default border border-outline-variant transition-colors flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="manage_search">manage_search</span>
+          Consultar
+        </button>
+</div>
+</section>
+</main>
+<!-- ========================================== -->
+<!-- 7. FOOTER INSTITUCIONAL (Shared Component) -->
+<!-- ========================================== -->
+<footer class="bg-surface-container-low border-t border-outline-variant mt-12 transition-colors duration-150">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-6 py-6 max-w-7xl mx-auto gap-4">
+<!-- Brand & Copyright Text -->
+<div class="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
+<span class="text-title-sm font-title-sm font-semibold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="local_hospital">local_hospital</span>
+          Consultorio Demo
+        </span>
+<span class="hidden sm:inline text-outline-variant">•</span>
+<p class="text-body-compact font-body-compact text-on-surface-variant">
+          © 2025 Consultorio Demo • Odontología Integral. Powered by OdontoGrid.
+        </p>
+</div>
+<!-- Links Exactos del JSON -->
+<div class="flex flex-wrap justify-center items-center gap-6">
+<a class="text-body-compact font-body-compact text-on-surface-variant hover:text-primary transition-colors duration-150" href="#">Términos del Servicio</a>
+<a class="text-body-compact font-body-compact text-on-surface-variant hover:text-primary transition-colors duration-150" href="#">Política de Privacidad</a>
+<a class="text-body-compact font-body-compact text-on-surface-variant hover:text-primary transition-colors duration-150" href="#">Instructivo de Cancelación</a>
+<a class="text-body-compact font-body-compact text-on-surface-variant hover:text-primary transition-colors duration-150" href="#">Contacto Clínico</a>
+</div>
+</div>
+</footer>
+<!-- Micro-interactions Script -->
+<script>
+    function resetFilters() {
+      alert("Filtros restablecidos a cualquier profesional y toda la semana.");
+    }
+  </script>
+</body></html>

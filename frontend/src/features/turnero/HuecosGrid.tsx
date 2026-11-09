@@ -30,7 +30,7 @@ function agruparPorDia(huecos: readonly HuecoPublico[]): readonly GrupoDia[] {
 /** Grilla de huecos agrupada por día; cada botón abre el formulario de reserva. */
 export function HuecosGrid({ huecos, onSeleccionar }: HuecosGridProps): React.JSX.Element {
   if (huecos.length === 0) {
-    return <p role="status">No hay horarios disponibles esta semana.</p>;
+    return <p role="status" className="turnero-vacio">No hay horarios disponibles esta semana.</p>;
   }
 
   return (

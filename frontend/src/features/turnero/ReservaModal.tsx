@@ -27,8 +27,14 @@ export function ReservaModal({
   const [telefono, setTelefono] = useState("");
 
   return (
-    <div role="dialog" aria-modal="true" aria-labelledby="titulo-reserva">
-      <h2 id="titulo-reserva">Confirmar reserva</h2>
+    <div
+      className="turnero-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="titulo-reserva"
+    >
+      <div className="turnero-modal__caja">
+        <h2 id="titulo-reserva">Confirmar reserva</h2>
       <p>
         {prestacionNombre} con {profesionalNombre}
       </p>
@@ -73,6 +79,7 @@ export function ReservaModal({
           </button>
         </div>
       </form>
+      </div>
     </div>
   );
 }

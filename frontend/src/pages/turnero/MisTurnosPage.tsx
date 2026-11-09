@@ -92,7 +92,7 @@ export function MisTurnosPage(): React.JSX.Element {
   };
 
   return (
-    <main>
+    <main className="turnero-publico mis-turnos">
       <h1>Mis turnos</h1>
 
       <form onSubmit={buscar}>
@@ -122,7 +122,9 @@ export function MisTurnosPage(): React.JSX.Element {
           <p>
             {turno.prestacion.nombre} con {turno.profesional.nombre}
           </p>
-          <p>Estado: {turno.estado}</p>
+          <p className="turno-estado" data-estado={turno.estado}>
+            Estado: {turno.estado}
+          </p>
 
           {turno.estado === "cancelado" ? null : (
             <div className="acciones">

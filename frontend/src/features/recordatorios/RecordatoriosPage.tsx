@@ -84,8 +84,11 @@ export function RecordatoriosPage(): React.JSX.Element {
   };
 
   return (
-    <main>
+    <main className="recordatorios">
       <h1>Recordatorios</h1>
+      <p className="recordatorios__resumen">
+        {filas.length === 0 ? "Cola vacía" : `${filas.length} en cola`}
+      </p>
 
       {error === null ? null : (
         <p role="alert" className="error">

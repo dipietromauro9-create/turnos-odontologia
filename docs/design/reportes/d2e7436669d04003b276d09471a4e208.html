@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OdontoGrid - Reportes y Gestión de Rendimiento</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-background": "#131b2e",
+            "tertiary": "#712ae2",
+            "surface-container-low": "#f2f3ff",
+            "on-secondary-container": "#006f67",
+            "on-error-container": "#93000a",
+            "on-primary-fixed": "#00201d",
+            "outline": "#6d7a77",
+            "inverse-surface": "#283044",
+            "surface": "#faf8ff",
+            "on-secondary": "#ffffff",
+            "secondary": "#006a63",
+            "primary-container": "#008378",
+            "surface-tint": "#006a61",
+            "surface-dim": "#d2d9f4",
+            "surface-container-lowest": "#ffffff",
+            "on-surface": "#131b2e",
+            "primary-fixed-dim": "#6bd8cb",
+            "on-primary": "#ffffff",
+            "outline-variant": "#bcc9c6",
+            "on-tertiary-fixed-variant": "#5a00c6",
+            "tertiary-fixed-dim": "#d2bbff",
+            "secondary-container": "#99efe5",
+            "surface-bright": "#faf8ff",
+            "error": "#ba1a1a",
+            "on-secondary-fixed": "#00201d",
+            "surface-container": "#eaedff",
+            "inverse-primary": "#6bd8cb",
+            "on-primary-fixed-variant": "#005049",
+            "surface-container-high": "#e2e7ff",
+            "on-surface-variant": "#3d4947",
+            "on-tertiary-fixed": "#25005a",
+            "background": "#faf8ff",
+            "on-secondary-fixed-variant": "#00504a",
+            "secondary-fixed-dim": "#80d5cb",
+            "on-tertiary-container": "#fffbff",
+            "error-container": "#ffdad6",
+            "secondary-fixed": "#9cf2e8",
+            "surface-variant": "#dae2fd",
+            "on-error": "#ffffff",
+            "on-primary-container": "#f4fffc",
+            "surface-container-highest": "#dae2fd",
+            "primary-fixed": "#89f5e7",
+            "primary": "#00685f",
+            "on-tertiary": "#ffffff",
+            "tertiary-container": "#8a4cfc",
+            "tertiary-fixed": "#eaddff",
+            "inverse-on-surface": "#eef0ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter": "1rem",
+            "margin-compact": "1rem",
+            "space-xl": "1.5rem",
+            "space-md": "0.75rem",
+            "space-lg": "1rem",
+            "gutter-compact": "0.5rem",
+            "space-2xl": "2rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-compact": ["Inter"],
+            "label-default": ["Inter"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "code-time": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-medium": ["Inter"],
+            "body-default": ["Inter"],
+            "body-compact": ["Inter"]
+          },
+          "fontSize": {
+            "label-compact": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "label-default": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "title-sm": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-md": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-xl": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "code-time": ["0.8125rem", { "lineHeight": "1rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-lg": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-medium": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0em", "fontWeight": "500" }],
+            "body-default": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0em", "fontWeight": "400" }],
+            "body-compact": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0em", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="h-full bg-surface text-on-surface antialiased overflow-hidden flex flex-col font-body-default">
+<!-- ========================================================================= -->
+<!-- 1. SHELL: SIDENAVBAR (Shared Component)                                    -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-60 z-30 bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col justify-between p-space-md shadow-none select-none">
+<!-- Top Branding & Navigation Group -->
+<div class="flex flex-col gap-space-lg">
+<!-- Clinic Brand Anchor -->
+<div class="flex items-center gap-space-md px-space-xs py-space-xs">
+<div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[22px]" data-icon="dentistry" style="font-variation-settings: 'FILL' 1;">dentistry</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight leading-none">OdontoGrid</span>
+<span class="text-label-default font-label-default text-on-surface-variant font-medium mt-0.5">Gestión Clínica</span>
+</div>
+</div>
+<!-- Quick Action CTA -->
+<button class="w-full h-9 bg-primary hover:bg-[#0F766E] active:scale-[0.99] text-on-primary font-body-medium text-body-medium rounded-lg flex items-center justify-center gap-space-sm shadow-sm transition-all duration-150">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+<span>Nuevo Turno</span>
+</button>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-1">
+<!-- Agenda -->
+<a class="flex items-center gap-space-md px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150 font-medium rounded-lg text-body-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_month">calendar_month</span>
+<span>Agenda</span>
+</a>
+<!-- Pacientes -->
+<a class="flex items-center gap-space-md px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150 font-medium rounded-lg text-body-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+<span>Pacientes</span>
+</a>
+<!-- Recordatorios WhatsApp -->
+<a class="flex items-center gap-space-md px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150 font-medium rounded-lg text-body-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="chat">chat</span>
+<span>Recordatorios WhatsApp</span>
+</a>
+<!-- Reportes (ACTIVE TAB) -->
+<a class="flex items-center gap-space-md px-space-md py-space-sm bg-surface-container text-primary font-semibold rounded-lg text-body-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="bar_chart" style="font-variation-settings: 'FILL' 1;">bar_chart</span>
+<span>Reportes</span>
+</a>
+<!-- Liquidaciones -->
+<a class="flex items-center gap-space-md px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150 font-medium rounded-lg text-body-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="receipt_long">receipt_long</span>
+<span>Liquidaciones</span>
+</a>
+<!-- Configuración -->
+<a class="flex items-center gap-space-md px-space-md py-space-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150 font-medium rounded-lg text-body-medium" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span>Configuración</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Account & Support Profile -->
+<div class="flex flex-col gap-space-sm pt-space-md border-t border-outline-variant/30">
+<!-- Support Link -->
+<a class="flex items-center gap-space-md px-space-md py-space-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150 rounded-lg text-label-default font-label-default" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="help_outline">help_outline</span>
+<span>Soporte</span>
+</a>
+<!-- Medical Director Card -->
+<div class="flex items-center justify-between p-space-xs mt-1 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<div class="flex items-center gap-2 overflow-hidden">
+<img class="w-8 h-8 rounded-full object-cover shrink-0 border border-primary/20" data-alt="Fotografía de perfil de odontólogo director y administrador del consultorio con guardapolvo clínico impecable, mirada profesional y fondo neutro iluminado de consultorio moderno de odontología en alta fidelidad." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANJ9oQf0PevH8ksUW__eeVSC0p3VG6hKvY-k1ifPhB2by-_83RlFih7mFXHU2bZUim9o13WBM8eWAJVXeqTQpQ_Oenuu2cYHndSabfr6nlxYBbDvMQ7nLN08KjHcpgb_xEqxqX5COC-eZBIoUu62J_lSGdFchTHHFVCeDet5bwSSWXEW4IdKvlAif7z2XGkARmR7ch1nxFbNmgzn96Q5eZTIl0fgXVZLHWAcddpBXTfLSAMYmtN4941iLYOd9j0EOGFadijkJq5QST"/>
+<div class="flex flex-col truncate">
+<span class="text-label-default font-label-default font-bold text-on-surface truncate">Dr. Martín Arismendi</span>
+<span class="text-label-compact font-label-compact text-on-surface-variant truncate">Director Médico</span>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-error p-1 rounded transition-colors" title="Cerrar Sesión">
+<span class="material-symbols-outlined text-[18px]" data-icon="logout">logout</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- 2. SHELL: TOPNAVBAR (Shared Component)                                     -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 left-60 right-0 h-14 z-20 bg-surface-container-lowest border-b border-outline-variant/30 flex items-center justify-between px-space-xl">
+<!-- Left: Global Quick Search (⌘K) -->
+<div class="flex items-center gap-space-lg w-96">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline text-[18px]" data-icon="search">search</span>
+<input class="w-full h-8 pl-8 pr-12 text-body-compact font-body-compact bg-surface-container-lowest border border-outline-variant/50 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all placeholder:text-outline/70" placeholder="Buscar paciente por DNI, apellido o HC..." type="text"/>
+<div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 px-1.5 py-0.5 bg-surface-container border border-outline-variant/30 rounded text-[10px] font-mono text-on-surface-variant">
+<span>⌘</span><span>K</span>
+</div>
+</div>
+</div>
+<!-- Center & Right Actions -->
+<div class="flex items-center gap-space-lg">
+<!-- Sede Switcher -->
+<div class="flex items-center gap-2 px-space-sm py-1 bg-surface-container-low border border-outline-variant/40 rounded-lg text-body-compact font-body-compact text-on-surface font-medium cursor-pointer hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="location_on" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span>Sede Belgrano, CABA</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Live Sync Status Chip -->
+<div class="flex items-center gap-1.5 px-2 py-0.5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-full text-label-compact font-label-compact">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span>Online • Sincronizado</span>
+</div>
+<!-- Sync micro-action -->
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors rounded-lg" title="Sincronizar novedades de agenda">
+<span class="material-symbols-outlined text-[18px]" data-icon="sync">sync</span>
+</button>
+<!-- Notifications -->
+<div class="relative">
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors rounded-lg">
+<span class="material-symbols-outlined text-[18px]" data-icon="notifications">notifications</span>
+</button>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant/40"></div>
+<!-- Quick Export Trigger -->
+<button class="h-8 px-space-md bg-white border border-outline-variant/60 hover:bg-surface-container-low text-on-surface text-label-default font-label-default font-semibold rounded-lg flex items-center gap-1.5 transition-all">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="file_download">file_download</span>
+<span>Exportar Reporte</span>
+</button>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE CANVAS                                                     -->
+<!-- ========================================================================= -->
+<main class="ml-60 mt-14 flex-1 overflow-y-auto custom-scroll p-space-xl bg-[#F8FAFC]">
+<div class="max-w-[1360px] mx-auto flex flex-col gap-space-xl">
+<!-- ===================================================================== -->
+<!-- 2. ENCABEZADO DE PÁGINA 'REPORTES' & TOOLBAR                           -->
+<!-- ===================================================================== -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-space-md border-b border-outline-variant/30 pb-space-lg">
+<div>
+<div class="flex items-center gap-2 text-label-default font-label-default text-primary font-semibold mb-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="analytics">analytics</span>
+<span>Inteligencia de Negocio &amp; Control Odontológico</span>
+</div>
+<h1 class="text-headline-xl font-headline-xl font-bold text-on-surface tracking-tight">Reportes y Gestión de Rendimiento</h1>
+<p class="text-body-default font-body-default text-on-surface-variant mt-0.5">
+            Métricas de productividad clínica, efectividad de turnos y exportaciones contables y operativas.
+          </p>
+</div>
+<!-- Filter Controls Toolbar -->
+<div class="flex flex-wrap items-center gap-2">
+<!-- Período Selector -->
+<div class="flex items-center bg-white border border-outline-variant/50 rounded-lg px-2.5 py-1.5 shadow-sm text-body-compact font-body-compact">
+<span class="material-symbols-outlined text-outline text-[16px] mr-1.5" data-icon="calendar_today">calendar_today</span>
+<select class="bg-transparent border-0 p-0 text-on-surface font-semibold text-body-compact focus:ring-0 cursor-pointer">
+<option selected="">Mes actual (Marzo 2025)</option>
+<option>Últimos 30 días</option>
+<option>Febrero 2025</option>
+<option>Trimestre 1 (Q1 2025)</option>
+</select>
+</div>
+<!-- Profesional Selector -->
+<div class="flex items-center bg-white border border-outline-variant/50 rounded-lg px-2.5 py-1.5 shadow-sm text-body-compact font-body-compact">
+<span class="material-symbols-outlined text-outline text-[16px] mr-1.5" data-icon="stethoscope">stethoscope</span>
+<select class="bg-transparent border-0 p-0 text-on-surface font-medium text-body-compact focus:ring-0 cursor-pointer">
+<option selected="">Todos los profesionales (3 activos)</option>
+<option>Dra. Martina Rossi (Sillón 1)</option>
+<option>Dr. Leandro Pérez (Sillón 2)</option>
+<option>Dra. Lucía Gómez (Sillón 3)</option>
+</select>
+</div>
+<!-- Botón Secundario Destacado: Exportar CSV + Indicador de Cola Activa -->
+<div class="flex items-center gap-1.5 bg-primary/10 border border-primary/20 rounded-lg p-1 pl-2.5">
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+<span class="text-label-compact font-label-compact text-primary font-bold pr-1">1 en cola</span>
+<button class="h-7 px-3 bg-primary hover:bg-[#0F766E] text-white rounded font-label-default font-label-default font-semibold flex items-center gap-1 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="download">download</span>
+<span>Exportar CSV</span>
+</button>
+</div>
+</div>
+</section>
+<!-- ===================================================================== -->
+<!-- 3. FILA DE KPIS PRINCIPALES (Bento Cards 8px Radius)                  -->
+<!-- ===================================================================== -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- KPI 1: Ocupación de Sillones -->
+<div class="bg-white p-space-md rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 to-emerald-400"></div>
+<div class="flex items-start justify-between">
+<span class="text-label-default font-label-default font-semibold text-on-surface-variant">Ocupación de Sillones</span>
+<span class="p-1 rounded bg-teal-50 text-teal-700">
+<span class="material-symbols-outlined text-[18px]" data-icon="airline_seat_recline_normal">airline_seat_recline_normal</span>
+</span>
+</div>
+<div class="my-2">
+<div class="flex items-baseline gap-2">
+<span class="text-headline-xl font-headline-xl font-extrabold text-on-surface tracking-tight">82%</span>
+<span class="inline-flex items-center text-label-compact font-label-compact text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">
+<span class="material-symbols-outlined text-[12px] mr-0.5" data-icon="arrow_upward">arrow_upward</span>+4.1%
+              </span>
+</div>
+<span class="text-label-compact font-label-compact text-outline">Capacidad efectiva: 256 de 312 hs</span>
+</div>
+<!-- Micro Progress Bar -->
+<div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-teal-600 h-1.5 rounded-full" style="width: 82%"></div>
+</div>
+</div>
+<!-- KPI 2: Ausentismo Clínico -->
+<div class="bg-white p-space-md rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-amber-400"></div>
+<div class="flex items-start justify-between">
+<span class="text-label-default font-label-default font-semibold text-on-surface-variant">Ausentismo Clínico</span>
+<span class="p-1 rounded bg-amber-50 text-amber-700">
+<span class="material-symbols-outlined text-[18px]" data-icon="event_busy">event_busy</span>
+</span>
+</div>
+<div class="my-2">
+<div class="flex items-baseline gap-2">
+<span class="text-headline-xl font-headline-xl font-extrabold text-amber-600 tracking-tight">9%</span>
+<span class="inline-flex items-center text-label-compact font-label-compact text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">
+<span class="material-symbols-outlined text-[12px] mr-0.5" data-icon="arrow_downward">arrow_downward</span>-1.8%
+              </span>
+</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="text-label-compact font-label-compact text-amber-800 bg-amber-100/70 px-1.5 py-0.2 rounded font-semibold">
+                Objetivo &lt; 10%
+              </span>
+<span class="text-label-compact font-label-compact text-outline">18 fallos totales</span>
+</div>
+</div>
+<!-- Micro Progress Bar -->
+<div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-amber-500 h-1.5 rounded-full" style="width: 9%"></div>
+</div>
+</div>
+<!-- KPI 3: Turnos Confirmados -->
+<div class="bg-white p-space-md rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-blue-500"></div>
+<div class="flex items-start justify-between">
+<span class="text-label-default font-label-default font-semibold text-on-surface-variant">Turnos Confirmados</span>
+<span class="p-1 rounded bg-blue-50 text-blue-700">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified">verified</span>
+</span>
+</div>
+<div class="my-2">
+<div class="flex items-baseline gap-1.5">
+<span class="text-headline-xl font-headline-xl font-extrabold text-on-surface tracking-tight">164</span>
+<span class="text-body-compact font-body-compact font-semibold text-on-surface-variant">turnos</span>
+</div>
+<div class="flex items-center justify-between text-label-compact font-label-compact text-outline mt-0.5">
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 142 por WhatsApp</span>
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> 22 recepción</span>
+</div>
+</div>
+<!-- Multi-segment mini bar -->
+<div class="w-full bg-slate-100 rounded-full h-1.5 flex overflow-hidden">
+<div class="bg-emerald-500 h-1.5" style="width: 86.5%"></div>
+<div class="bg-slate-400 h-1.5" style="width: 13.5%"></div>
+</div>
+</div>
+<!-- KPI 4: Ratio WhatsApp -->
+<div class="bg-white p-space-md rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-teal-500"></div>
+<div class="flex items-start justify-between">
+<span class="text-label-default font-label-default font-semibold text-on-surface-variant">Ratio Recordatorios / Conf.</span>
+<span class="p-1 rounded bg-teal-50 text-teal-700">
+<span class="material-symbols-outlined text-[18px]" data-icon="mark_chat_read">mark_chat_read</span>
+</span>
+</div>
+<div class="my-2">
+<div class="flex items-baseline gap-2">
+<span class="text-headline-xl font-headline-xl font-extrabold text-on-surface tracking-tight">0,86</span>
+<span class="text-label-default font-label-default font-bold text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded">
+                86% eficacia
+              </span>
+</div>
+<span class="text-label-compact font-label-compact text-outline">Respuestas en ventana 24hs post-envío</span>
+</div>
+<div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full" style="width: 86%"></div>
+</div>
+</div>
+</section>
+<!-- ===================================================================== -->
+<!-- 4. ANALÍTICA CLÍNICA: BARRAS HORIZONTALES (60%) + TABLA INASISTENCIA (40%) -->
+<!-- ===================================================================== -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-md items-start">
+<!-- Left: Ocupación por Profesional (Col 7 / ~60%) -->
+<div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between border-b border-slate-100 pb-space-sm">
+<div>
+<h2 class="text-headline-md font-headline-md font-bold text-on-surface">Ocupación y Horas por Profesional</h2>
+<p class="text-body-compact font-body-compact text-on-surface-variant">Rendimiento en sillón vs. disponibilidad horaria de marzo</p>
+</div>
+<div class="flex items-center gap-3 text-label-compact font-label-compact">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-sm bg-teal-600"></span>
+<span class="text-on-surface-variant">Turnos estándar</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-sm bg-purple-500"></span>
+<span class="text-on-surface-variant">Sobreturnos</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-sm bg-slate-200"></span>
+<span class="text-outline">Disponible</span>
+</div>
+</div>
+</div>
+<!-- Professional 1: Dra. Martina Rossi -->
+<div class="flex flex-col gap-1.5 p-space-sm bg-slate-50/70 rounded-lg border border-slate-100">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-teal-500"></span>
+<span class="text-body-medium font-body-medium font-bold text-on-surface">Dra. Martina Rossi</span>
+<span class="text-label-compact font-label-compact bg-teal-100 text-teal-800 px-1.5 py-0.5 rounded font-semibold">Odontopediatría • Sillón 1</span>
+</div>
+<div class="text-right">
+<span class="text-title-sm font-title-sm font-bold text-teal-800">90%</span>
+<span class="text-label-compact font-label-compact text-outline ml-1">(88 hs / 98 hs)</span>
+</div>
+</div>
+<!-- Segmented Bar -->
+<div class="w-full bg-slate-200 h-4 rounded-md overflow-hidden flex relative">
+<div class="bg-teal-600 h-full flex items-center justify-center text-[10px] text-white font-bold" style="width: 82%" title="80 hs regulares">
+                80 hs
+              </div>
+<div class="bg-purple-600 h-full flex items-center justify-center text-[10px] text-white font-bold" style="width: 8%" title="8 hs sobreturnos">
+                +8
+              </div>
+</div>
+<div class="flex items-center justify-between text-label-compact font-label-compact text-on-surface-variant pt-0.5">
+<span>Sobreturnos absorbidos: <strong class="text-purple-700">7 pacientes</strong></span>
+<span class="text-emerald-700 font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]" data-icon="check_circle">check_circle</span>
+                Sillón en saturación óptima
+              </span>
+</div>
+</div>
+<!-- Professional 2: Dr. Leandro Pérez -->
+<div class="flex flex-col gap-1.5 p-space-sm bg-slate-50/70 rounded-lg border border-slate-100">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-teal-500"></span>
+<span class="text-body-medium font-body-medium font-bold text-on-surface">Dr. Leandro Pérez</span>
+<span class="text-label-compact font-label-compact bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded font-semibold">Endodoncia / Cirugía • Sillón 2</span>
+</div>
+<div class="text-right">
+<span class="text-title-sm font-title-sm font-bold text-teal-800">84%</span>
+<span class="text-label-compact font-label-compact text-outline ml-1">(92 hs / 110 hs)</span>
+</div>
+</div>
+<!-- Segmented Bar -->
+<div class="w-full bg-slate-200 h-4 rounded-md overflow-hidden flex relative">
+<div class="bg-teal-600 h-full flex items-center justify-center text-[10px] text-white font-bold" style="width: 77%" title="85 hs regulares">
+                85 hs
+              </div>
+<div class="bg-purple-600 h-full flex items-center justify-center text-[10px] text-white font-bold" style="width: 7%" title="7 hs sobreturnos">
+                +7
+              </div>
+</div>
+<div class="flex items-center justify-between text-label-compact font-label-compact text-on-surface-variant pt-0.5">
+<span>Sobreturnos absorbidos: <strong class="text-purple-700">5 cirugías urgencia</strong></span>
+<span class="text-teal-700 font-semibold">Margen disponible: 18 hs libres</span>
+</div>
+</div>
+<!-- Professional 3: Dra. Lucía Gómez -->
+<div class="flex flex-col gap-1.5 p-space-sm bg-slate-50/70 rounded-lg border border-slate-100">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span>
+<span class="text-body-medium font-body-medium font-bold text-on-surface">Dra. Lucía Gómez</span>
+<span class="text-label-compact font-label-compact bg-purple-100 text-purple-900 px-1.5 py-0.5 rounded font-semibold">Ortodoncia • Sillón 3</span>
+</div>
+<div class="text-right">
+<span class="text-title-sm font-title-sm font-bold text-amber-700">72%</span>
+<span class="text-label-compact font-label-compact text-outline ml-1">(76 hs / 105 hs)</span>
+</div>
+</div>
+<!-- Segmented Bar -->
+<div class="w-full bg-slate-200 h-4 rounded-md overflow-hidden flex relative">
+<div class="bg-teal-600 h-full flex items-center justify-center text-[10px] text-white font-bold" style="width: 68%" title="72 hs regulares">
+                72 hs
+              </div>
+<div class="bg-purple-600 h-full flex items-center justify-center text-[10px] text-white font-bold" style="width: 4%" title="4 hs sobreturnos">
+                +4
+              </div>
+</div>
+<div class="flex items-center justify-between text-label-compact font-label-compact text-on-surface-variant pt-0.5">
+<span>Sobreturnos absorbidos: <strong class="text-purple-700">3 ajustes</strong></span>
+<span class="text-amber-700 font-semibold">Capacidad ociosa: 29 hs libres en Sillón 3</span>
+</div>
+</div>
+</div>
+<!-- Right: Tabla de Ausencias e Inasistencias (Col 5 / ~40%) -->
+<div class="lg:col-span-5 bg-white rounded-xl border border-slate-200 p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between border-b border-slate-100 pb-space-sm">
+<div>
+<h2 class="text-headline-md font-headline-md font-bold text-on-surface">Control de Inasistencias</h2>
+<p class="text-body-compact font-body-compact text-on-surface-variant">Cancelaciones y No-Shows con impacto operativo</p>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="person_off">person_off</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-body-compact font-body-compact">
+<thead>
+<tr class="border-b border-slate-200 text-label-compact font-label-compact text-on-surface-variant">
+<th class="py-2 font-bold">Profesional</th>
+<th class="py-2 text-center font-bold">Agendados</th>
+<th class="py-2 text-center font-bold text-amber-700">No-show</th>
+<th class="py-2 text-center font-bold text-rose-700">&lt;24hs</th>
+<th class="py-2 text-right font-bold">Tasa</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-2.5 font-semibold text-on-surface">
+                    Dra. Rossi
+                    <span class="block text-[10px] text-outline font-normal">Sillón 1</span>
+</td>
+<td class="py-2.5 text-center font-medium">92</td>
+<td class="py-2.5 text-center font-bold text-amber-600 bg-amber-50/50">4</td>
+<td class="py-2.5 text-center font-medium text-rose-600">2</td>
+<td class="py-2.5 text-right font-bold text-emerald-700">6.5%</td>
+</tr>
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-2.5 font-semibold text-on-surface">
+                    Dr. Pérez
+                    <span class="block text-[10px] text-outline font-normal">Sillón 2</span>
+</td>
+<td class="py-2.5 text-center font-medium">85</td>
+<td class="py-2.5 text-center font-bold text-amber-600 bg-amber-50/50">5</td>
+<td class="py-2.5 text-center font-medium text-rose-600">3</td>
+<td class="py-2.5 text-right font-bold text-teal-800">9.4%</td>
+</tr>
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-2.5 font-semibold text-on-surface">
+                    Dra. Gómez
+                    <span class="block text-[10px] text-outline font-normal">Sillón 3</span>
+</td>
+<td class="py-2.5 text-center font-medium">78</td>
+<td class="py-2.5 text-center font-bold text-rose-700 bg-rose-50">9</td>
+<td class="py-2.5 text-center font-medium text-rose-600">4</td>
+<td class="py-2.5 text-right font-extrabold text-rose-600">16.6%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Alerta específica de reprogramación -->
+<div class="p-2.5 bg-rose-50 border border-rose-200 rounded-lg flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px] text-rose-700 shrink-0 mt-0.5" data-icon="notification_important">notification_important</span>
+<div class="text-label-compact font-label-compact text-rose-900 leading-tight">
+<strong>Atención en Sillón 3 (Ortodoncia):</strong> Se superó el umbral del 12%. Activada la regla de cobro de seña preventiva y confirmación anticipada 48 hs antes vía bot WhatsApp.
+            </div>
+</div>
+</div>
+</section>
+<!-- ===================================================================== -->
+<!-- 5. TABLA DE EXPORTACIONES RECIENTES Y AUDITORÍA DE JOBS               -->
+<!-- ===================================================================== -->
+<section class="bg-white rounded-xl border border-slate-200 p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between border-b border-slate-100 pb-space-sm">
+<div class="flex items-center gap-3">
+<div>
+<h2 class="text-headline-md font-headline-md font-bold text-on-surface">Exportaciones Recientes y Archivos Generados</h2>
+<p class="text-body-compact font-body-compact text-on-surface-variant">Historial asíncrono de reportes contables, libro de turnos y prepagas</p>
+</div>
+<span class="px-2 py-0.5 bg-slate-100 text-slate-700 font-label-compact font-label-compact rounded-full border border-slate-200">
+              3 jobs registrados en las últimas 48 hs
+            </span>
+</div>
+<button class="text-label-default font-label-default text-primary hover:text-[#0F766E] font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="refresh">refresh</span>
+<span>Actualizar cola</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-body-compact font-body-compact">
+<thead>
+<tr class="border-b border-slate-200 text-label-compact font-label-compact text-on-surface-variant uppercase tracking-wider bg-slate-50/50">
+<th class="py-2.5 px-3">Reporte / Contenido</th>
+<th class="py-2.5 px-3">Período Solicitado</th>
+<th class="py-2.5 px-3">Formato</th>
+<th class="py-2.5 px-3">Fecha y Hora</th>
+<th class="py-2.5 px-3">Solicitado por</th>
+<th class="py-2.5 px-3">Estado del Job</th>
+<th class="py-2.5 px-3">Regla / Mensaje</th>
+<th class="py-2.5 px-3 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<!-- FILA 1: LISTO -->
+<tr class="hover:bg-slate-50/80 transition-colors">
+<td class="py-3 px-3">
+<div class="flex items-center gap-2">
+<span class="p-1 rounded bg-teal-50 text-teal-700">
+<span class="material-symbols-outlined text-[18px]" data-icon="table_chart">table_chart</span>
+</span>
+<div>
+<span class="font-bold text-on-surface">Rendimiento mensual y liquidaciones por sillón</span>
+<span class="block text-[11px] text-outline">Incluye desglose honorarios 60/40 y materiales</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-medium">01/03/2025 - 26/03/2025</td>
+<td class="py-3 px-3">
+<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 text-[11px] font-mono font-semibold">CSV (UTF-8)</span>
+</td>
+<td class="py-3 px-3 text-on-surface font-medium">Hoy 11:42 hs</td>
+<td class="py-3 px-3">
+<div class="flex items-center gap-1.5">
+<div class="w-5 h-5 rounded-full bg-primary/20 text-primary text-[10px] flex items-center justify-center font-bold">MA</div>
+<span class="text-on-surface">Dr. Martín Arismendi</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-label-compact font-label-compact font-semibold">
+<span class="material-symbols-outlined text-[13px]" data-icon="check">check</span>
+                    Listo (420 KB)
+                  </span>
+</td>
+<td class="py-3 px-3 text-label-compact font-label-compact text-outline">
+                  Completado en 4.2 seg sin inconsistencias
+                </td>
+<td class="py-3 px-3 text-right">
+<button class="h-7 px-2.5 bg-white border border-teal-600 text-teal-700 hover:bg-teal-50 active:scale-[0.98] rounded font-label-default font-label-default font-semibold inline-flex items-center gap-1 transition-all">
+<span class="material-symbols-outlined text-[14px]" data-icon="download">download</span>
+<span>Descargar</span>
+</button>
+</td>
+</tr>
+<!-- FILA 2: PENDIENTE -->
+<tr class="bg-blue-50/30 hover:bg-blue-50/60 transition-colors">
+<td class="py-3 px-3">
+<div class="flex items-center gap-2">
+<span class="p-1 rounded bg-blue-50 text-blue-700">
+<span class="material-symbols-outlined text-[18px]" data-icon="history_edu">history_edu</span>
+</span>
+<div>
+<span class="font-bold text-on-surface">Libro de turnos completos y notas de recepción</span>
+<span class="block text-[11px] text-outline">Trazabilidad de modificaciones de agenda</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-medium">Marzo 2025</td>
+<td class="py-3 px-3">
+<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 text-[11px] font-mono font-semibold">CSV</span>
+</td>
+<td class="py-3 px-3 text-on-surface font-medium">Hoy 12:15 hs</td>
+<td class="py-3 px-3">
+<div class="flex items-center gap-1.5">
+<div class="w-5 h-5 rounded-full bg-blue-100 text-blue-800 text-[10px] flex items-center justify-center font-bold">MS</div>
+<span class="text-on-surface">Mariana Solís (Recepción)</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-label-compact font-label-compact font-semibold">
+<span class="material-symbols-outlined text-[13px] animate-spin" data-icon="sync">sync</span>
+                    Pendiente
+                  </span>
+</td>
+<td class="py-3 px-3 text-label-compact font-label-compact text-blue-800 font-medium">
+                  Compilando registros (bloque 3/5)...
+                </td>
+<td class="py-3 px-3 text-right">
+<button class="h-7 px-2.5 bg-slate-100 text-slate-400 border border-slate-200 rounded font-label-default font-label-default font-semibold inline-flex items-center gap-1 cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[14px]" data-icon="hourglass_top">hourglass_top</span>
+<span>Procesando...</span>
+</button>
+</td>
+</tr>
+<!-- FILA 3: FALLIDO -->
+<tr class="hover:bg-rose-50/40 transition-colors">
+<td class="py-3 px-3">
+<div class="flex items-center gap-2">
+<span class="p-1 rounded bg-rose-50 text-rose-700">
+<span class="material-symbols-outlined text-[18px]" data-icon="warning">warning</span>
+</span>
+<div>
+<span class="font-bold text-on-surface">Sábana de ausentismo con cobertura de prepagas</span>
+<span class="block text-[11px] text-outline">Cruces con padrones de OSDE, Swiss Medical, Medifé</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-medium">Febrero 2025</td>
+<td class="py-3 px-3">
+<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 text-[11px] font-mono font-semibold">CSV</span>
+</td>
+<td class="py-3 px-3 text-on-surface font-medium">Ayer 18:30 hs</td>
+<td class="py-3 px-3">
+<div class="flex items-center gap-1.5">
+<div class="w-5 h-5 rounded-full bg-primary/20 text-primary text-[10px] flex items-center justify-center font-bold">MA</div>
+<span class="text-on-surface">Dr. Martín Arismendi</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-rose-100 text-rose-800 rounded-full text-label-compact font-label-compact font-bold">
+<span class="material-symbols-outlined text-[13px]" data-icon="error">error</span>
+                    Fallido
+                  </span>
+</td>
+<td class="py-3 px-3">
+<div class="text-label-compact font-label-compact text-rose-800 font-mono leading-tight max-w-xs">
+                    Error RN-VAL-04: Conflicto en nómina de prestadores OSDE/Medifé sin validar CUIT del titular
+                  </div>
+</td>
+<td class="py-3 px-3 text-right">
+<div class="inline-flex items-center gap-1.5">
+<button class="h-7 px-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-label-compact font-label-compact font-medium transition-colors">
+                      Ver detalle
+                    </button>
+<button class="h-7 px-2.5 bg-rose-50 border border-rose-300 text-rose-800 hover:bg-rose-100 rounded text-label-default font-label-default font-semibold inline-flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[13px]" data-icon="replay">replay</span>
+<span>Reintentar</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ===================================================================== -->
+<!-- 6. NOTIFICACIÓN DE REGLAS CLÍNICAS Y CONSISTENCIA                     -->
+<!-- ===================================================================== -->
+<section class="bg-surface-container border border-outline-variant/40 rounded-xl p-space-md flex items-center gap-space-md shadow-none mb-space-xl">
+<div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]" data-icon="gavel">gavel</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<span class="text-label-default font-label-default font-bold text-primary">Regla Clínica de Cómputo OdontoGrid</span>
+<span class="px-1.5 py-0.2 rounded bg-primary/15 text-primary text-[10px] font-mono font-bold">RN-REP-02</span>
+</div>
+<p class="text-body-compact font-body-compact text-on-surface-variant mt-0.5">
+            Aviso de consistencia: Las cancelaciones notificadas con menos de 2 hs de anticipación computan administrativamente como ausentismo no excusable a menos que se asigne un sobreturno validado en el mismo box durante la misma franja de 48px.
+          </p>
+</div>
+<button class="text-body-compact font-body-compact text-primary hover:underline font-semibold shrink-0 px-space-sm">
+          Configurar parámetros
+        </button>
+</section>
+</div>
+</main>
+</body></html>

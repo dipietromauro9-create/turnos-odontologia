@@ -17,8 +17,14 @@ export function ReprogramarModal({
   const [nuevoInicio, setNuevoInicio] = useState("");
 
   return (
-    <div role="dialog" aria-modal="true" aria-labelledby="titulo-reprogramar">
-      <h2 id="titulo-reprogramar">Reprogramar turno</h2>
+    <div
+      className="turnero-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="titulo-reprogramar"
+    >
+      <div className="turnero-modal__caja">
+        <h2 id="titulo-reprogramar">Reprogramar turno</h2>
       <form
         onSubmit={(evento) => {
           evento.preventDefault();
@@ -50,6 +56,7 @@ export function ReprogramarModal({
           </button>
         </div>
       </form>
+      </div>
     </div>
   );
 }

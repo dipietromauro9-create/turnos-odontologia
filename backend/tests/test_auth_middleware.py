@@ -66,6 +66,17 @@ def _access(entorno: Entorno, *, ahora: datetime | None = None) -> str:
     )
 
 
+def test_el_401_de_auth_conserva_cabeceras_cors(entorno: Entorno) -> None:
+    """Regresión: el navegador solo puede reintentar el refresh si ve el 401 tipado."""
+    respuesta = cliente(entorno.app).get(
+        "/panel/demo", headers={"Origin": "http://localhost:5173"}
+    )
+
+    assert respuesta.status_code == 401
+    assert respuesta.headers["access-control-allow-origin"] == "http://localhost:5173"
+    assert respuesta.headers["access-control-allow-credentials"] == "true"
+
+
 def test_una_ruta_de_panel_sin_token_es_401_por_defecto(entorno: Entorno) -> None:
     respuesta = cliente(entorno.app).get("/panel/demo")
 

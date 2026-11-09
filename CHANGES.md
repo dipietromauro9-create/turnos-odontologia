@@ -357,3 +357,14 @@ Paso │ Agente A (Backend Core)      │ Agente B (Backend Aux)         │ Age
 - **Leer antes**:
   - `docs/design/agenda/DESIGN.md`
   - `.opencode/skills/pantalla-a-componente/references/tokens-estado.md`
+
+### [C-14] `frontend-visual-pass`
+- **Estado**: `[x]` archivado (2026-11-09 — 10/10 tareas; presentación + fix de CORS en 401, `skip_specs`; 58 tests frontend y 875 backend en verde)
+- **Scope**: pasada visual sobre las features de frontend restantes (turnero público y "Mis turnos", recordatorios, reportes y portada) usando pantallas generadas en Stitch con el design system OdontoGrid; nuevo `publico.css`, extensión de `panel.css` y fix para que CORS cubra los 401 de auth y el refresh funcione en el navegador
+- **Dependencias**: C-09, C-11, C-12
+- **Governance**: BAJO
+- **Leer antes**:
+  - `docs/design/turnero/README.md`
+  - `docs/design/recordatorios/README.md`
+  - `docs/design/reportes/README.md`
+  - `.opencode/skills/pantalla-a-componente/references/tokens-estado.md`

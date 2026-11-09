@@ -97,7 +97,7 @@ export function TurneroPublicoPage(): React.JSX.Element {
 
   if (reserva !== null) {
     return (
-      <main>
+      <main className="turnero-publico">
         <CodigoTurnoCard codigo={reserva.codigo_publico} inicio={reserva.inicio} />
       </main>
     );
@@ -131,39 +131,48 @@ export function TurneroPublicoPage(): React.JSX.Element {
   };
 
   return (
-    <main>
-      <h1>Reservar turno</h1>
-      {catalogo === null ? null : (
-        <p>
-          {catalogo.consultorio.nombre} · {catalogo.consultorio.slug}
+    <main className="turnero-publico">
+      <header className="turnero-hero">
+        <p className="turnero-hero__marca">Turno online</p>
+        <h1>Reservar turno</h1>
+        {catalogo === null ? null : (
+          <p className="turnero-hero__consultorio">
+            {catalogo.consultorio.nombre} · {catalogo.consultorio.slug}
+          </p>
+        )}
+        <p className="turnero-hero__ayuda">
+          Sin registro. Elegí profesional, prestación y horario; guardá el código para
+          gestionar tu turno.
         </p>
-      )}
+      </header>
 
-      {catalogo !== null && catalogo.profesionales.length > 0 ? (
-        <label>
-          Profesional
-          <select value={profesionalId} onChange={(e) => setProfesionalId(e.target.value)}>
-            {catalogo.profesionales.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.nombre}
-              </option>
-            ))}
-          </select>
-        </label>
-      ) : null}
+      <section className="turnero-filtros" aria-label="Filtros de disponibilidad">
+        {catalogo !== null && catalogo.profesionales.length > 0 ? (
+          <label>
+            Profesional
+            <select value={profesionalId} onChange={(e) => setProfesionalId(e.target.value)}>
+              {catalogo.profesionales.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.nombre}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
 
-      {catalogo !== null && catalogo.prestaciones.length > 0 ? (
-        <label>
-          Prestación
-          <select value={prestacionId} onChange={(e) => setPrestacionId(e.target.value)}>
-            {catalogo.prestaciones.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.nombre}
-              </option>
-            ))}
-          </select>
-        </label>
-      ) : null}
+        {catalogo !== null && catalogo.prestaciones.length > 0 ? (
+          <label>
+            Prestación
+            <select value={prestacionId} onChange={(e) => setPrestacionId(e.target.value)}>
+              {catalogo.prestaciones.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.nombre}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+      </section>
 
       <SemanaSelector
         inicioSemana={inicioSemana}

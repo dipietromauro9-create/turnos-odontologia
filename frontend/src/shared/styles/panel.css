@@ -576,3 +576,186 @@ h3 {
     padding: 0.75rem;
   }
 }
+
+/* ---------- Recordatorios ---------- */
+
+.recordatorios__resumen {
+  margin: -0.5rem 0 1rem;
+  color: var(--slate-500);
+  font-size: 0.8125rem;
+}
+
+.recordatorios ul {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recordatorio {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-left: 4px solid var(--teal);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.recordatorio__datos {
+  margin: 0;
+  color: var(--slate-900);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.recordatorio__estado {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.recordatorio__estado--pendiente {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.recordatorio__estado--enviado {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.recordatorio__estado--fallido {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.recordatorio__texto {
+  margin: 0;
+  padding: 0.75rem;
+  overflow-x: auto;
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radio-chico);
+  color: var(--slate-700);
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.recordatorio__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ---------- Reportes ---------- */
+
+.reportes__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.reportes__filtros label {
+  min-width: 9rem;
+}
+
+.reportes > section {
+  margin-bottom: 1rem;
+  padding: 1.25rem;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.reportes > section h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+}
+
+.reportes table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.reportes th {
+  padding: 0.5rem 0.625rem;
+  border-bottom: 1px solid var(--slate-200);
+  color: var(--slate-500);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.reportes td {
+  padding: 0.5rem 0.625rem;
+  border-bottom: 1px solid var(--slate-100);
+  color: var(--slate-700);
+  font-variant-numeric: tabular-nums;
+}
+
+.reportes tbody tr:hover {
+  background: var(--slate-50);
+}
+
+.reportes ul {
+  display: grid;
+  gap: 0.375rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reportes li {
+  padding: 0.5rem 0.75rem;
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radio-chico);
+  color: var(--slate-700);
+  font-size: 0.8125rem;
+}
+
+.reportes > p {
+  padding: 2rem;
+  background: #ffffff;
+  border: 1px dashed var(--slate-300);
+  border-radius: var(--radio);
+  color: var(--slate-500);
+  text-align: center;
+}
+
+.reportes section[aria-labelledby="titulo-export"] button {
+  margin: 0 0.5rem 0.5rem 0;
+}
+
+@media (max-width: 720px) {
+  .reportes__filtros {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reportes table {
+    display: block;
+    overflow-x: auto;
+  }
+}

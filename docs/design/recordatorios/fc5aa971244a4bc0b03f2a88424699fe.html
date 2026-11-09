@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-bright" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OdontoGrid • Cola de Recordatorios WhatsApp</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-bright": "#faf8ff",
+            "on-primary-container": "#f4fffc",
+            "tertiary": "#712ae2",
+            "tertiary-fixed": "#eaddff",
+            "on-error-container": "#93000a",
+            "secondary-container": "#99efe5",
+            "secondary": "#006a63",
+            "on-background": "#131b2e",
+            "surface-container-high": "#e2e7ff",
+            "on-secondary-fixed-variant": "#00504a",
+            "on-error": "#ffffff",
+            "primary-fixed": "#89f5e7",
+            "surface-dim": "#d2d9f4",
+            "on-tertiary-fixed-variant": "#5a00c6",
+            "on-tertiary-container": "#fffbff",
+            "surface": "#faf8ff",
+            "on-secondary-fixed": "#00201d",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "on-surface-variant": "#3d4947",
+            "surface-container": "#eaedff",
+            "outline": "#6d7a77",
+            "on-surface": "#131b2e",
+            "primary-fixed-dim": "#6bd8cb",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed": "#00201d",
+            "inverse-surface": "#283044",
+            "on-primary": "#ffffff",
+            "error": "#ba1a1a",
+            "surface-variant": "#dae2fd",
+            "surface-container-low": "#f2f3ff",
+            "on-tertiary-fixed": "#25005a",
+            "on-secondary-container": "#006f67",
+            "tertiary-container": "#8a4cfc",
+            "secondary-fixed-dim": "#80d5cb",
+            "on-primary-fixed-variant": "#005049",
+            "inverse-on-surface": "#eef0ff",
+            "error-container": "#ffdad6",
+            "outline-variant": "#bcc9c6",
+            "primary-container": "#008378",
+            "surface-container-highest": "#dae2fd",
+            "background": "#faf8ff",
+            "primary": "#00685f",
+            "tertiary-fixed-dim": "#d2bbff",
+            "secondary-fixed": "#9cf2e8",
+            "surface-tint": "#006a61",
+            "inverse-primary": "#6bd8cb"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-2xl": "2rem",
+            "space-lg": "1rem",
+            "gutter-compact": "0.5rem",
+            "gutter": "1rem",
+            "space-xl": "1.5rem",
+            "margin-compact": "1rem",
+            "space-md": "0.75rem"
+          },
+          "fontFamily": {
+            "label-default": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-compact": ["Inter"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "code-time": ["Inter"],
+            "body-default": ["Inter"],
+            "body-medium": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-compact": ["Inter"]
+          },
+          "fontSize": {
+            "label-default": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-xl": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "label-compact": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "title-sm": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "code-time": ["0.8125rem", { "lineHeight": "1rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-default": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0em", "fontWeight": "400" }],
+            "body-medium": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0em", "fontWeight": "500" }],
+            "headline-md": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-compact": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0em", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      vertical-align: middle;
+      display: inline-block;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 500;
+    }
+    /* Monospace subtle styling for phone numbers and IDs */
+    .font-num {
+      font-feature-settings: "tnum" 1;
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body class="h-full bg-surface-bright text-on-surface antialiased flex flex-row overflow-hidden">
+<!-- ========================================================================= -->
+<!-- SIDEBAR NAVIGATION (Shared Component: SideNavBar)                        -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-60 z-30 bg-surface-container-lowest border-r border-outline-variant flex flex-col justify-between shrink-0 select-none">
+<!-- Top Branding & Clinica Header -->
+<div class="p-4 pb-2">
+<div class="flex items-center gap-2.5 px-2 py-2">
+<div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">dentistry</span>
+</div>
+<div>
+<span class="text-headline-md font-headline-md font-bold text-primary block leading-none tracking-tight">OdontoGrid</span>
+<span class="text-label-compact font-label-compact text-outline uppercase tracking-wider block mt-1">Recepción Clínica</span>
+</div>
+</div>
+<!-- Sede Switcher Card -->
+<div class="mt-4 px-3 py-2 bg-surface-container-low rounded-xl border border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-primary text-sm">location_on</span>
+<span class="text-label-compact font-label-compact text-on-surface truncate font-semibold">Sede Belgrano, CABA</span>
+</div>
+<span class="material-symbols-outlined text-outline text-sm">unfold_more</span>
+</div>
+<!-- Quick Turno Action CTA -->
+<button class="mt-4 w-full py-2.5 px-3 bg-primary hover:bg-primary-container text-on-primary font-title-sm text-title-sm rounded-xl flex items-center justify-center gap-2 shadow-sm transition-colors duration-150 active:scale-[0.99]">
+<span class="material-symbols-outlined text-base">add_circle</span>
+<span>Nuevo Turno</span>
+</button>
+<!-- Main Navigation Menu -->
+<nav class="mt-5 space-y-1">
+<!-- Tab 1: Agenda -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-body-medium text-body-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-lg text-outline">calendar_month</span>
+<span>Agenda</span>
+</a>
+<!-- Tab 2: Pacientes -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-body-medium text-body-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-lg text-outline">group</span>
+<span>Pacientes</span>
+</a>
+<!-- Tab 3: Recordatorios WhatsApp (ACTIVE AS DEFINED) -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container-high text-primary font-title-sm text-title-sm border-l-4 border-primary transition-colors duration-150 active:scale-[0.99]" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-lg text-primary fill-icon">chat</span>
+<span>Recordatorios WhatsApp</span>
+</div>
+<span class="px-1.5 py-0.5 rounded-full text-label-compact font-label-compact bg-primary text-on-primary font-bold">12</span>
+</a>
+<!-- Tab 4: Reportes -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-body-medium text-body-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-lg text-outline">bar_chart</span>
+<span>Reportes</span>
+</a>
+<!-- Tab 5: Configuración -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-body-medium text-body-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-lg text-outline">settings</span>
+<span>Configuración</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Section: Receptionist Info & Footer tabs -->
+<div class="p-4 border-t border-outline-variant space-y-3">
+<!-- Recepcionista en Guardia -->
+<div class="px-2.5 py-2 rounded-xl bg-surface-container-low border border-outline-variant flex items-center gap-2.5">
+<div class="relative w-8 h-8 rounded-full overflow-hidden bg-primary-container flex items-center justify-center shrink-0">
+<span class="text-xs font-bold text-on-primary">BF</span>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-surface-container-lowest"></span>
+</div>
+<div class="overflow-hidden leading-tight">
+<span class="block text-body-compact font-body-compact font-semibold text-on-surface truncate">Belén F.</span>
+<span class="block text-label-compact font-label-compact text-outline truncate">En recepción • Turno Tarde</span>
+</div>
+</div>
+<!-- Footer action tabs -->
+<div class="pt-1 flex flex-col space-y-1">
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-body-compact font-body-compact transition-colors" href="#">
+<span class="material-symbols-outlined text-base text-outline">help</span>
+<span>Soporte</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-on-surface-variant hover:bg-error-container hover:text-on-error-container text-body-compact font-body-compact transition-colors" href="#">
+<span class="material-symbols-outlined text-base">logout</span>
+<span>Cerrar Sesión</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE & TOP BAR CONTAINER                                       -->
+<!-- ========================================================================= -->
+<div class="flex-1 ml-60 flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="h-14 bg-surface-container-lowest border-b border-outline-variant px-6 flex items-center justify-between shrink-0 z-20">
+<!-- Left side: Quick Patient/Turno Search by DNI or Name -->
+<div class="flex items-center gap-4 flex-1 max-w-lg">
+<div class="relative w-full">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-base">search</span>
+</span>
+<input class="w-full h-9 pl-9 pr-14 text-body-compact font-body-compact bg-surface-container-low border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all" placeholder="Buscar por DNI, nombre o teléfono (ej. 36.812...)" type="text"/>
+<span class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+<kbd class="px-1.5 py-0.5 text-label-compact font-label-compact bg-surface-container-highest text-on-surface-variant rounded border border-outline-variant">⌘K</kbd>
+</span>
+</div>
+</div>
+<!-- Right side: Connection status, sync, direct actions -->
+<div class="flex items-center gap-3">
+<!-- WhatsApp Web Live Status Badge -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="text-label-compact font-label-compact font-medium text-emerald-800">WhatsApp Web sincronizado • En línea</span>
+</div>
+<div class="h-4 w-px bg-outline-variant mx-1"></div>
+<!-- Refresh button -->
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface-container-low transition-colors" title="Sincronizar cola de recordatorios">
+<span class="material-symbols-outlined text-lg">sync</span>
+</button>
+<!-- Direct WhatsApp Message Action -->
+<button class="h-9 px-3.5 bg-surface-container-lowest border border-outline-variant hover:border-primary text-on-surface hover:text-primary font-title-sm text-title-sm rounded-xl flex items-center gap-1.5 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-base text-primary">chat_bubble</span>
+<span>+ Enviar mensaje directo</span>
+</button>
+<!-- Notification Bell -->
+<button class="relative w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-lg">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-tertiary rounded-full"></span>
+</button>
+</div>
+</header>
+<!-- Canvas Scrollable Body: WhatsApp Queue Operational Canvas -->
+<main class="flex-1 overflow-y-auto px-8 py-6 space-y-6 bg-surface-bright">
+<!-- Section Header -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+<div>
+<div class="flex items-center gap-2.5">
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Recordatorios WhatsApp</h1>
+<span class="px-2 py-0.5 rounded-full text-label-compact font-label-compact bg-amber-100 text-amber-800 font-semibold border border-amber-200">
+              12 envíos requeridos
+            </span>
+</div>
+<p class="text-body-default font-body-default text-outline mt-0.5">
+            Cola de envíos manuales y confirmación de turnos próximos (próximas 24 a 48 hs).
+          </p>
+</div>
+<!-- Top Right Operational Mode Toggle -->
+<div class="flex items-center gap-3 bg-surface-container-lowest px-3 py-1.5 rounded-xl border border-outline-variant shadow-sm self-start md:self-auto">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+<span class="text-body-compact font-body-compact text-on-surface select-none">
+            Modo envío rápido (abrir WhatsApp Web al copiar)
+          </span>
+</div>
+</div>
+<!-- Quick Metrics Bento Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Metric 1: Pendientes Hoy -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-amber-200 shadow-sm relative overflow-hidden">
+<div class="absolute right-3 top-3 text-amber-200">
+<span class="material-symbols-outlined text-4xl">pending_actions</span>
+</div>
+<span class="text-label-compact font-label-compact text-outline uppercase tracking-wider block">Pendientes Hoy</span>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="text-headline-xl font-headline-xl text-on-surface font-num">12</span>
+<span class="text-label-default font-label-default text-amber-700 font-medium">turnos sin enviar</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-label-compact font-label-compact text-amber-800">
+<span class="material-symbols-outlined text-xs">schedule</span>
+<span>Próximo turno: mañana 09:00 hs</span>
+</div>
+</div>
+<!-- Metric 2: Enviados Hoy -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm relative overflow-hidden">
+<div class="absolute right-3 top-3 text-emerald-100">
+<span class="material-symbols-outlined text-4xl">mark_chat_read</span>
+</div>
+<span class="text-label-compact font-label-compact text-outline uppercase tracking-wider block">Enviados Hoy</span>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="text-headline-xl font-headline-xl text-on-surface font-num">38</span>
+<span class="text-label-default font-label-default text-emerald-700 font-medium">confirmados</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-label-compact font-label-compact text-outline">
+<span class="material-symbols-outlined text-xs text-emerald-600">done_all</span>
+<span>31 leídos y respondidos</span>
+</div>
+</div>
+<!-- Metric 3: Fallidos / Sin número -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm relative overflow-hidden">
+<div class="absolute right-3 top-3 text-rose-100">
+<span class="material-symbols-outlined text-4xl">report_problem</span>
+</div>
+<span class="text-label-compact font-label-compact text-outline uppercase tracking-wider block">Fallidos / Sin número</span>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="text-headline-xl font-headline-xl text-on-surface font-num">2</span>
+<span class="text-label-default font-label-default text-rose-700 font-medium">para auditar</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-label-compact font-label-compact text-rose-700">
+<span class="material-symbols-outlined text-xs">phone_disabled</span>
+<span>Requieren llamado manual</span>
+</div>
+</div>
+<!-- Metric 4: Tasa de respuesta -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm relative overflow-hidden">
+<div class="absolute right-3 top-3 text-primary-fixed">
+<span class="material-symbols-outlined text-4xl">query_stats</span>
+</div>
+<span class="text-label-compact font-label-compact text-outline uppercase tracking-wider block">Tasa de Confirmación</span>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="text-headline-xl font-headline-xl text-primary font-num">94%</span>
+<span class="text-label-default font-label-default text-primary font-medium">estimada</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-label-compact font-label-compact text-outline">
+<span class="material-symbols-outlined text-xs text-primary">arrow_upward</span>
+<span>+3.2% que la semana anterior</span>
+</div>
+</div>
+</div>
+<!-- Filters & Sorting Bar -->
+<div class="bg-surface-container-lowest p-3.5 rounded-xl border border-outline-variant shadow-sm space-y-3">
+<div class="flex flex-wrap items-center justify-between gap-3">
+<!-- Segmented State Navigation Tabs -->
+<div class="flex items-center bg-surface-container-low p-1 rounded-xl border border-outline-variant">
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest text-primary font-title-sm text-title-sm shadow-sm flex items-center gap-2">
+<span>Pendientes</span>
+<span class="px-1.5 py-0.2 rounded-full bg-primary text-on-primary text-xs font-bold font-num">12</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-lg text-outline hover:text-on-surface font-body-medium text-body-medium transition-colors flex items-center gap-2">
+<span>Enviados</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-xs font-bold font-num">38</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-lg text-outline hover:text-on-surface font-body-medium text-body-medium transition-colors flex items-center gap-2">
+<span>Fallidos / Sin WhatsApp</span>
+<span class="px-1.5 py-0.2 rounded-full bg-rose-100 text-rose-800 text-xs font-bold font-num">2</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-lg text-outline hover:text-on-surface font-body-medium text-body-medium transition-colors flex items-center gap-2">
+<span>Todos</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-xs font-bold font-num">52</span>
+</button>
+</div>
+<!-- Secondary Filters (Professional & Date) -->
+<div class="flex items-center gap-2.5">
+<!-- Filter by Professional -->
+<div class="relative">
+<select class="h-9 pl-3 pr-8 text-body-compact font-body-compact bg-surface-container-lowest border border-outline-variant rounded-xl text-on-surface focus:border-primary focus:ring-1 focus:ring-primary appearance-none cursor-pointer">
+<option selected="">Todos los profesionales</option>
+<option>Dra. Martina Rossi (Odontopediatría)</option>
+<option>Dr. Leandro Pérez (Endodoncia/Cirugía)</option>
+<option>Dra. Lucía Gómez (Ortodoncia)</option>
+</select>
+<span class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-base">expand_more</span>
+</span>
+</div>
+<!-- Date Selector -->
+<div class="flex items-center bg-surface-container-lowest border border-outline-variant rounded-xl px-2.5 h-9 gap-1.5 text-body-compact font-body-compact text-on-surface">
+<span class="material-symbols-outlined text-outline text-base">event</span>
+<span class="font-medium">Turnos de mañana (Jueves 27 Mar)</span>
+<button class="ml-1 text-outline hover:text-on-surface">
+<span class="material-symbols-outlined text-base">calendar_today</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- REMINDER QUEUE LIST (Structured Dental Context Cards)                      -->
+<!-- ========================================================================= -->
+<div class="space-y-4">
+<!-- ROW 1: PENDIENTE - TURNO MAÑANA (Facundo Morales) -->
+<article class="bg-surface-container-lowest rounded-xl border border-outline-variant border-l-4 border-l-amber-500 shadow-sm p-5 hover:border-outline transition-all">
+<div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+<!-- Patient & Dental Info -->
+<div class="space-y-2 flex-1">
+<div class="flex flex-wrap items-center gap-2.5">
+<h3 class="text-headline-md font-headline-md text-on-surface font-bold">Facundo Morales</h3>
+<span class="px-2.5 py-0.5 rounded-full text-label-compact font-label-compact bg-amber-50 text-amber-800 border border-amber-300 font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                  Pendiente de envío
+                </span>
+<span class="px-2 py-0.5 rounded-md text-label-compact font-label-compact bg-surface-container-low text-on-surface-variant font-medium">
+                  OSDE 210
+                </span>
+<span class="text-code-time font-code-time text-outline font-num text-xs">
+                  DNI 36.812.904
+                </span>
+</div>
+<!-- Treatment, Practitioner & Chair Details -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-body-compact font-body-compact text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-base">medical_services</span>
+<span><strong>Dra. Martina Rossi</strong> (Sillón 1 • Limpieza y profilaxis)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-outline text-base">schedule</span>
+<span class="text-on-surface font-medium font-num">Mañana Jueves 27 Mar • 09:30 hs (45 min)</span>
+</div>
+</div>
+<!-- Contact Phone with WhatsApp pill -->
+<div class="flex items-center gap-2 pt-0.5">
+<span class="material-symbols-outlined text-emerald-600 text-sm">phone_iphone</span>
+<span class="text-code-time font-code-time font-bold text-on-surface text-sm font-num">+54 9 11 5824-9912</span>
+<span class="text-label-compact font-label-compact text-outline">(Móvil validado)</span>
+</div>
+</div>
+<!-- Quick Action Triggers right aligned -->
+<div class="flex items-center gap-2 shrink-0 self-end lg:self-start">
+<button class="h-9 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low text-on-surface text-body-compact font-body-compact flex items-center gap-1.5 transition-colors shadow-sm" onclick="navigator.clipboard.writeText(document.getElementById('msg-1').innerText); alert('¡Mensaje copiado al portapapeles!');" title="Copiar texto del mensaje">
+<span class="material-symbols-outlined text-base text-outline">content_copy</span>
+<span>Copiar texto</span>
+</button>
+<a class="h-9 px-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-title-sm text-title-sm rounded-lg flex items-center gap-1.5 shadow-sm transition-colors" href="https://web.whatsapp.com/send?phone=5491158249912&amp;text=Hola%20Facundo!%20Te%20recordamos%20tu%20turno%20en%20OdontoGrid%20para%20mañana%20Jueves%2027/03%20a%20las%2009:30%20hs%20con%20la%20Dra.%20Martina%20Rossi%20(Limpieza%20y%20profilaxis)%20en%20Sede%20Belgrano%20(Av.%20Belgrano%201420,%20Piso%203).%20Por%20favor%20respondé%20'CONFIRMO'%20para%20asegurar%20tu%20lugar%20o%20avisanos%20si%20necesitás%20reprogramar.%20¡Gracias!" target="_blank">
+<span class="material-symbols-outlined text-base">open_in_new</span>
+<span>Abrir en WhatsApp Web</span>
+</a>
+</div>
+</div>
+<!-- Structured Message Container (Rioplatense Copy) -->
+<div class="mt-3.5 p-3 rounded-xl bg-surface-container-low border border-outline-variant relative">
+<span class="text-label-compact font-label-compact uppercase tracking-wider text-outline block mb-1">
+              Vista previa del mensaje predeterminado
+            </span>
+<p class="text-body-default font-body-default text-on-surface leading-relaxed" id="msg-1">
+              Hola Facundo! Te recordamos tu turno en OdontoGrid para mañana Jueves 27/03 a las 09:30 hs con la Dra. Martina Rossi (Limpieza y profilaxis) en Sede Belgrano (Av. Belgrano 1420, Piso 3). Por favor respondé 'CONFIRMO' para asegurar tu lugar o avisanos si necesitás reprogramar. ¡Gracias!
+            </p>
+</div>
+<!-- Receptionist Status Confirmation Actions Bar -->
+<div class="mt-3 pt-3 border-t border-outline-variant flex items-center justify-between flex-wrap gap-2">
+<div class="flex items-center gap-1.5 text-label-compact font-label-compact text-outline">
+<span class="material-symbols-outlined text-sm">schedule_send</span>
+<span>Tiempo sugerido de envío: Ahora (ventana de 24 hs previas)</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="h-8 px-3 rounded-lg border border-outline-variant hover:border-error hover:bg-error-container hover:text-on-error-container text-body-compact font-body-compact text-outline transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">cancel</span>
+<span>Marcar fallido</span>
+</button>
+<button class="h-8 px-3.5 bg-primary hover:bg-primary-container text-on-primary font-title-sm text-title-sm rounded-lg flex items-center gap-1.5 shadow-sm transition-colors">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span>Marcar enviado</span>
+</button>
+</div>
+</div>
+</article>
+<!-- ROW 2: PENDIENTE - TURNO TARDE CON RADIOGRAFÍA (Julieta Benítez) -->
+<article class="bg-surface-container-lowest rounded-xl border border-outline-variant border-l-4 border-l-amber-500 shadow-sm p-5 hover:border-outline transition-all">
+<div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+<div class="space-y-2 flex-1">
+<div class="flex flex-wrap items-center gap-2.5">
+<h3 class="text-headline-md font-headline-md text-on-surface font-bold">Julieta Benítez</h3>
+<span class="px-2.5 py-0.5 rounded-full text-label-compact font-label-compact bg-amber-50 text-amber-800 border border-amber-300 font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                  Pendiente de envío
+                </span>
+<span class="px-2 py-0.5 rounded-md text-label-compact font-label-compact bg-surface-container-high text-on-surface font-medium">
+                  Particular
+                </span>
+<span class="text-code-time font-code-time text-outline font-num text-xs">
+                  DNI 41.205.882
+                </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-body-compact font-body-compact text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-base">medical_services</span>
+<span><strong>Dr. Leandro Pérez</strong> (Sillón 2 • Endodoncia conducto pieza 14)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-outline text-base">schedule</span>
+<span class="text-on-surface font-medium font-num">Mañana Jueves 27 Mar • 15:00 hs (60 min)</span>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-0.5">
+<span class="material-symbols-outlined text-emerald-600 text-sm">phone_iphone</span>
+<span class="text-code-time font-code-time font-bold text-on-surface text-sm font-num">+54 9 11 3290-1478</span>
+<span class="px-1.5 py-0.2 rounded text-label-compact font-label-compact bg-tertiary-fixed text-on-tertiary-fixed font-semibold">
+                  Indicación previa especial
+                </span>
+</div>
+</div>
+<!-- Quick Action Triggers -->
+<div class="flex items-center gap-2 shrink-0 self-end lg:self-start">
+<button class="h-9 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low text-on-surface text-body-compact font-body-compact flex items-center gap-1.5 transition-colors shadow-sm" onclick="navigator.clipboard.writeText(document.getElementById('msg-2').innerText); alert('¡Mensaje copiado!');">
+<span class="material-symbols-outlined text-base text-outline">content_copy</span>
+<span>Copiar texto</span>
+</button>
+<a class="h-9 px-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-title-sm text-title-sm rounded-lg flex items-center gap-1.5 shadow-sm transition-colors" href="https://web.whatsapp.com/send?phone=5491132901478" target="_blank">
+<span class="material-symbols-outlined text-base">open_in_new</span>
+<span>Abrir en WhatsApp Web</span>
+</a>
+</div>
+</div>
+<!-- Structured Message Preview with medical instructions -->
+<div class="mt-3.5 p-3 rounded-xl bg-surface-container-low border border-outline-variant relative">
+<span class="text-label-compact font-label-compact uppercase tracking-wider text-outline block mb-1">
+              Vista previa del mensaje predeterminado (con advertencia de radiografía)
+            </span>
+<p class="text-body-default font-body-default text-on-surface leading-relaxed" id="msg-2">
+              Hola Julieta! Te recordamos tu turno en OdontoGrid para mañana Jueves 27/03 a las 15:00 hs con el Dr. Leandro Pérez para tratamiento de conducto. Recordá asistir con la radiografía panorámica solicitada previamente y 10 minutos antes para la ficha clínica. Respondé 'CONFIRMO' para ratificar tu turno. ¡Te esperamos!
+            </p>
+</div>
+<!-- Receptionist Confirmation Bar -->
+<div class="mt-3 pt-3 border-t border-outline-variant flex items-center justify-between flex-wrap gap-2">
+<div class="flex items-center gap-1.5 text-label-compact font-label-compact text-outline">
+<span class="material-symbols-outlined text-sm">info</span>
+<span>Paciente solicitó confirmación de presupuesto conducto en recepción</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="h-8 px-3 rounded-lg border border-outline-variant hover:border-error hover:bg-error-container hover:text-on-error-container text-body-compact font-body-compact text-outline transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">cancel</span>
+<span>Marcar fallido</span>
+</button>
+<button class="h-8 px-3.5 bg-primary hover:bg-primary-container text-on-primary font-title-sm text-title-sm rounded-lg flex items-center gap-1.5 shadow-sm transition-colors">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span>Marcar enviado</span>
+</button>
+</div>
+</div>
+</article>
+<!-- ROW 3: YA ENVIADO Y CONFIRMADO (Gonzalo Rivas - Auditoría de Recepcionista) -->
+<article class="bg-surface-container-lowest rounded-xl border border-outline-variant border-l-4 border-l-emerald-600 shadow-sm p-4 bg-opacity-80">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div class="space-y-1.5 flex-1">
+<div class="flex flex-wrap items-center gap-2.5">
+<h3 class="text-headline-md font-headline-md text-on-surface font-semibold">Gonzalo Rivas</h3>
+<span class="px-2.5 py-0.5 rounded-full text-label-compact font-label-compact bg-emerald-50 text-emerald-800 border border-emerald-300 font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs fill-icon">done_all</span>
+                  Enviado • Confirmado por paciente
+                </span>
+<span class="px-2 py-0.5 rounded-md text-label-compact font-label-compact bg-surface-container-low text-on-surface-variant font-medium">
+                  Swiss Medical
+                </span>
+</div>
+<div class="flex flex-wrap items-center gap-4 text-body-compact font-body-compact text-on-surface-variant">
+<span><strong>Dr. Leandro Pérez</strong> • Hoy Miércoles 26 Mar • 16:30 hs</span>
+<span class="font-num text-outline">+54 9 11 4455-8910</span>
+</div>
+<!-- Audit Metadata Line -->
+<div class="flex items-center gap-1.5 text-label-compact font-label-compact text-emerald-800 font-medium">
+<span class="material-symbols-outlined text-xs">verified_user</span>
+<span>Enviado por Recepcionista Mariana G. a las 08:45 hs vía WhatsApp Web</span>
+</div>
+</div>
+<!-- Action: Open chat or re-send -->
+<div class="flex items-center gap-2 shrink-0">
+<button class="h-8 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low text-on-surface text-body-compact font-body-compact flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm text-outline">history</span>
+<span>Ver historial</span>
+</button>
+<button class="h-8 px-3 rounded-lg border border-outline-variant hover:border-primary text-primary text-body-compact font-body-compact flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm">forward</span>
+<span>Reenviar recordatorio</span>
+</button>
+</div>
+</div>
+</article>
+<!-- ROW 4: FALLIDO / TELÉFONO ERRÓNEO (Esteban Carrizo) -->
+<article class="bg-surface-container-lowest rounded-xl border border-outline-variant border-l-4 border-l-error shadow-sm p-4 bg-rose-50/20">
+<div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+<div class="space-y-1.5 flex-1">
+<div class="flex flex-wrap items-center gap-2.5">
+<h3 class="text-headline-md font-headline-md text-on-surface font-semibold">Esteban Carrizo</h3>
+<span class="px-2.5 py-0.5 rounded-full text-label-compact font-label-compact bg-rose-100 text-rose-800 border border-rose-300 font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">error</span>
+                  Fallido • Número inválido o sin WhatsApp
+                </span>
+<span class="px-2 py-0.5 rounded-md text-label-compact font-label-compact bg-surface-container-low text-on-surface-variant font-medium">
+                  Medifé
+                </span>
+</div>
+<div class="flex flex-wrap items-center gap-4 text-body-compact font-body-compact text-on-surface-variant">
+<span><strong>Dra. Lucía Gómez</strong> (Ortodoncia) • Mañana Jueves 27 Mar • 11:15 hs</span>
+<span class="font-num text-rose-700 line-through font-semibold">+54 9 11 0000-0000</span>
+</div>
+<!-- Incident note -->
+<div class="p-2 rounded-lg bg-rose-50 border border-rose-200 text-body-compact font-body-compact text-rose-900 flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-rose-600">contact_support</span>
+<span><strong>Nota de guardia:</strong> Marcado fallido por Belén F. - Número erróneo en padrón. Requiere llamado telefónico al número de contacto de emergencia de la ficha médica.</span>
+</div>
+</div>
+<!-- Resolution actions for receptionist -->
+<div class="flex items-center gap-2 shrink-0 self-end lg:self-start">
+<button class="h-8 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low text-on-surface text-body-compact font-body-compact flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-sm text-outline">edit</span>
+<span>Editar teléfono</span>
+</button>
+<button class="h-8 px-3.5 bg-rose-700 hover:bg-rose-800 text-white font-title-sm text-title-sm rounded-lg flex items-center gap-1.5 shadow-sm transition-colors">
+<span class="material-symbols-outlined text-sm">call</span>
+<span>Llamar por teléfono</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- ========================================================================= -->
+<!-- EMPTY STATE PREVIEW (Clinical Serenity Assurance)                         -->
+<!-- ========================================================================= -->
+<div class="mt-8 bg-surface-container-lowest border border-dashed border-outline-variant rounded-2xl p-8 text-center max-w-xl mx-auto">
+<div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 mx-auto flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-2xl fill-icon">task_alt</span>
+</div>
+<h4 class="text-headline-md font-headline-md text-on-surface font-semibold">
+          ¡Genial! No hay recordatorios pendientes para esta fecha.
+        </h4>
+<p class="text-body-default font-body-default text-outline mt-1 leading-relaxed">
+          Todos los pacientes citados para las próximas 24 hs ya fueron notificados o confirmaron su asistencia mediante WhatsApp.
+        </p>
+<div class="mt-4 flex items-center justify-center gap-3">
+<button class="px-3.5 py-1.5 rounded-lg border border-outline-variant hover:border-primary text-body-compact font-body-compact text-on-surface transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-outline">calendar_month</span>
+<span>Ver turnos de pasado mañana (Viernes 28)</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

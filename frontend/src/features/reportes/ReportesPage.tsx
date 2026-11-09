@@ -169,10 +169,10 @@ export function ReportesPage({ intervaloPollMs = 2000 }: Props): React.JSX.Eleme
     recordatorios.length === 0;
 
   return (
-    <main>
+    <main className="reportes">
       <h1>Reportes</h1>
 
-      <section aria-label="Filtros">
+      <section className="reportes__filtros" aria-label="Filtros">
         <label>
           Desde
           <input type="date" value={desde} onChange={(e) => setDesde(e.target.value)} />
@@ -280,7 +280,7 @@ export function ReportesPage({ intervaloPollMs = 2000 }: Props): React.JSX.Eleme
 
       <section aria-labelledby="titulo-export">
         <h2 id="titulo-export">Exportar datos</h2>
-        <button type="button" onClick={() => exportar("turnos")}>
+        <button type="button" className="boton-primario" onClick={() => exportar("turnos")}>
           Exportar turnos
         </button>
         <button type="button" onClick={() => exportar("pacientes")}>
@@ -299,7 +299,7 @@ export function ReportesPage({ intervaloPollMs = 2000 }: Props): React.JSX.Eleme
               </p>
             ) : null}
             {job.estado === "listo" ? (
-              <button type="button" onClick={descargar}>
+              <button type="button" className="boton-primario" onClick={descargar}>
                 Descargar
               </button>
             ) : null}

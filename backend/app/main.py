@@ -60,6 +60,9 @@ def create_app() -> FastAPI:
 
     app = FastAPI(title="Turnos Odontología API", version="0.1.0", lifespan=lifespan)
     register_handlers(app)
+    app.add_middleware(AuthMiddleware)
+    app.add_middleware(TenantContextMiddleware)
+    # CORS debe ser el middleware más externo: así también cubre los 401 de auth.
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[settings.frontend_origin],
@@ -67,8 +70,6 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    app.add_middleware(AuthMiddleware)
-    app.add_middleware(TenantContextMiddleware)
     app.include_router(auth_router)
     app.include_router(prestaciones_router)
     app.include_router(profesionales_router)

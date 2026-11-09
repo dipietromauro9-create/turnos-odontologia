@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import { AppRoutes } from "./routes";
 import "./shared/styles/panel.css";
+import "./shared/styles/publico.css";
 
 const rootElement = document.getElementById("root");
 if (rootElement === null) {

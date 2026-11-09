@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mis Turnos • Consultorio Demo (OdontoGrid)</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration matching Design System & Brand Anchors -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            outline: "#6d7a77",
+            "outline-variant": "#bcc9c6",
+            "on-primary": "#ffffff",
+            error: "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "on-error": "#ffffff",
+            "inverse-on-surface": "#eef0ff",
+            surface: "#faf8ff",
+            "surface-bright": "#faf8ff",
+            "surface-dim": "#d2d9f4",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f2f3ff",
+            "surface-container": "#eaedff",
+            "surface-container-high": "#e2e7ff",
+            "surface-container-highest": "#dae2fd",
+            "on-surface": "#131b2e",
+            "on-surface-variant": "#3d4947",
+            primary: "#00685f",
+            "primary-container": "#008378",
+            "on-primary-container": "#f4fffc",
+            "primary-fixed": "#89f5e7",
+            "primary-fixed-dim": "#6bd8cb",
+            secondary: "#006a63",
+            "secondary-container": "#99efe5",
+            "on-secondary-container": "#006f67",
+            "secondary-fixed": "#9cf2e8",
+            "on-secondary-fixed": "#00201d",
+            "secondary-fixed-dim": "#80d5cb",
+            tertiary: "#712ae2",
+            "tertiary-container": "#8a4cfc",
+            "on-tertiary-container": "#fffbff",
+            "tertiary-fixed": "#eaddff",
+            "inverse-surface": "#283044",
+            "inverse-primary": "#6bd8cb",
+            background: "#faf8ff",
+            "on-background": "#131b2e"
+          },
+          borderRadius: {
+            DEFAULT: "0.125rem",
+            lg: "0.25rem",
+            xl: "0.5rem",
+            full: "0.75rem"
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "0.75rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem",
+            "space-2xl": "2rem",
+            gutter: "1rem",
+            "gutter-compact": "0.5rem",
+            margin: "1.5rem",
+            "margin-compact": "1rem"
+          },
+          fontFamily: {
+            "headline-xl": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "title-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "body-default": ["Inter", "sans-serif"],
+            "body-medium": ["Inter", "sans-serif"],
+            "body-compact": ["Inter", "sans-serif"],
+            "label-default": ["Inter", "sans-serif"],
+            "label-compact": ["Inter", "sans-serif"],
+            "code-time": ["Inter", "monospace"]
+          },
+          fontSize: {
+            "headline-xl": ["1.75rem", { lineHeight: "2.25rem", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-lg": ["1.25rem", { lineHeight: "1.75rem", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "headline-md": ["1.125rem", { lineHeight: "1.5rem", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "title-sm": ["0.9375rem", { lineHeight: "1.375rem", letterSpacing: "-0.005em", fontWeight: "600" }],
+            "body-default": ["0.875rem", { lineHeight: "1.25rem", letterSpacing: "0em", fontWeight: "400" }],
+            "body-medium": ["0.875rem", { lineHeight: "1.25rem", letterSpacing: "0em", fontWeight: "500" }],
+            "body-compact": ["0.8125rem", { lineHeight: "1.125rem", letterSpacing: "0em", fontWeight: "400" }],
+            "label-default": ["0.75rem", { lineHeight: "1rem", letterSpacing: "0.02em", fontWeight: "600" }],
+            "label-compact": ["0.6875rem", { lineHeight: "0.875rem", letterSpacing: "0.04em", fontWeight: "700" }],
+            "code-time": ["0.8125rem", { lineHeight: "1rem", letterSpacing: "-0.01em", fontWeight: "600" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="h-full bg-surface text-on-surface antialiased flex flex-col font-body-default text-body-default">
+<!-- ========================================== -->
+<!-- 1. TOP APP BAR (Shared Component Anchor)  -->
+<!-- ========================================== -->
+<header class="bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-30">
+<div class="w-full px-margin max-w-7xl mx-auto flex items-center justify-between h-14">
+<!-- Brand & Practice Context -->
+<div class="flex items-center gap-3">
+<a class="flex items-center gap-2 group" href="#">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-lg" data-icon="dentistry">dentistry</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-md text-headline-md text-primary tracking-tight font-bold">Consultorio Demo</span>
+<span class="px-1.5 py-0.5 rounded-full text-label-compact font-label-compact bg-secondary-container text-on-secondary-container font-semibold">Turnos Web</span>
+</div>
+<span class="text-[10px] leading-tight text-outline font-label-default">Powered by OdontoGrid</span>
+</div>
+</a>
+</div>
+<!-- Navigation Links (Desktop) -->
+<nav class="hidden md:flex items-center space-x-6">
+<a class="text-primary font-body-medium text-body-medium border-b-2 border-primary pb-1 flex items-center gap-1" href="#buscar-turno">
+<span class="material-symbols-outlined text-sm" data-icon="event">event</span>
+          Mis Turnos
+        </a>
+<a class="text-on-surface-variant font-body-default text-body-default hover:text-primary transition-colors duration-150 ease-in-out" href="#nuevo-turno">
+          Reservar turno nuevo
+        </a>
+<a class="text-on-surface-variant font-body-default text-body-default hover:text-primary transition-colors duration-150 ease-in-out" href="#especialidades">
+          Especialidades
+        </a>
+<a class="text-on-surface-variant font-body-default text-body-default hover:text-primary transition-colors duration-150 ease-in-out" href="#ubicacion">
+          Ubicación
+        </a>
+</nav>
+<!-- Trailing Action Cluster -->
+<div class="flex items-center gap-2">
+<a class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-outline-variant text-on-surface font-label-default text-label-default hover:bg-surface-container transition-colors duration-150" href="https://wa.me/" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-base text-primary" data-icon="chat">chat</span>
+<span>Ayuda / WhatsApp</span>
+</a>
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary text-on-primary font-label-default text-label-default hover:bg-primary-container shadow-sm transition-colors duration-150" href="#nuevo-turno">
+<span class="material-symbols-outlined text-base" data-icon="add">add</span>
+<span>Nuevo Turno</span>
+</a>
+</div>
+</div>
+</header>
+<!-- ========================================== -->
+<!-- MAIN CANVASES: Centered Clinical Shell    -->
+<!-- ========================================== -->
+<main class="flex-1 max-w-5xl w-full mx-auto px-margin py-space-xl space-y-space-xl">
+<!-- View Mode Preview Tabs (Demonstrating all requested states in a live scenario) -->
+<div class="bg-surface-container-low p-1.5 rounded-xl border border-outline-variant flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-1 text-label-compact font-label-compact text-outline uppercase tracking-wider px-2">
+<span class="material-symbols-outlined text-sm" data-icon="tune">tune</span>
+        Vistas de demostración:
+      </div>
+<div class="flex items-center gap-1.5" role="tablist">
+<button class="px-2.5 py-1 rounded-lg text-label-default font-label-default bg-surface-container-lowest text-primary shadow-xs font-semibold border border-outline-variant/60 flex items-center gap-1" id="btn-state-found" onclick="switchState('found')">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+          Turno Confirmado
+        </button>
+<button class="px-2.5 py-1 rounded-lg text-label-default font-label-default text-on-surface-variant hover:text-primary hover:bg-surface-container-lowest flex items-center gap-1" id="btn-state-reschedule" onclick="switchState('reschedule')">
+<span class="material-symbols-outlined text-xs" data-icon="edit_calendar">edit_calendar</span>
+          Reprogramar
+        </button>
+<button class="px-2.5 py-1 rounded-lg text-label-default font-label-default text-on-surface-variant hover:text-error hover:bg-surface-container-lowest flex items-center gap-1" id="btn-state-cancel" onclick="switchState('cancel')">
+<span class="material-symbols-outlined text-xs" data-icon="cancel">cancel</span>
+          Confirmar Cancelación
+        </button>
+<button class="px-2.5 py-1 rounded-lg text-label-default font-label-default text-on-surface-variant hover:text-error hover:bg-surface-container-lowest flex items-center gap-1" id="btn-state-error" onclick="switchState('error')">
+<span class="material-symbols-outlined text-xs" data-icon="error">error</span>
+          Código no encontrado
+        </button>
+<button class="px-2.5 py-1 rounded-lg text-label-default font-label-default text-on-surface-variant hover:text-primary hover:bg-surface-container-lowest flex items-center gap-1" id="btn-state-empty" onclick="switchState('empty')">
+<span class="material-symbols-outlined text-xs" data-icon="inbox">inbox</span>
+          Estado inicial vacío
+        </button>
+</div>
+</div>
+<!-- 2. Hero & Quick Code Search Card -->
+<section class="space-y-space-md" id="buscar-turno">
+<div>
+<div class="inline-flex items-center gap-1.5 text-primary text-label-default font-label-default mb-1">
+<span class="material-symbols-outlined text-sm" data-icon="lock_open">lock_open</span>
+          Autogestión rápida • Sin usuario ni contraseña
+        </div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Mis turnos</h1>
+<p class="font-body-default text-body-default text-on-surface-variant mt-1 max-w-2xl">
+          Consultá, reprogramá o cancelá tu turno con el código que te enviamos al momento de la reserva.
+        </p>
+</div>
+<!-- Prominent Search Container -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg shadow-sm">
+<form class="space-y-3" onsubmit="event.preventDefault(); switchState('found');">
+<label class="block font-label-default text-label-default text-on-surface font-semibold" for="codigo-input">
+            Código de turno
+          </label>
+<div class="flex flex-col sm:flex-row items-stretch gap-2.5">
+<div class="relative flex-1">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-lg" data-icon="confirmation_number">confirmation_number</span>
+</div>
+<input class="w-full pl-10 pr-10 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-xl text-on-surface font-code-time text-code-time tracking-wider focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all uppercase placeholder:normal-case placeholder:tracking-normal placeholder:font-body-default placeholder:text-outline" id="codigo-input" placeholder="Ej. ODN-8429-KR71" type="text" value="ODN-8429-KR71"/>
+<button class="absolute inset-y-0 right-0 pr-3 flex items-center text-outline hover:text-on-surface transition-colors" onclick="document.getElementById('codigo-input').value=''; document.getElementById('codigo-input').focus();" title="Borrar código" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="close">close</span>
+</button>
+</div>
+<button class="px-5 py-2.5 bg-primary hover:bg-primary-container text-on-primary font-headline-md text-body-medium rounded-xl flex items-center justify-center gap-2 transition-colors duration-150 shadow-sm shrink-0" type="submit">
+<span class="material-symbols-outlined text-lg" data-icon="search">search</span>
+<span>Buscar turno</span>
+</button>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between text-label-default font-label-default text-outline gap-1 pt-1">
+<p class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="info">info</span>
+              El código te lo dimos al reservar (también lo tenés en tu WhatsApp y correo de confirmación).
+            </p>
+<a class="text-primary hover:underline font-semibold shrink-0" href="https://wa.me/" rel="noopener noreferrer" target="_blank">
+              ¿No encontrás tu código?
+            </a>
+</div>
+</form>
+</div>
+</section>
+<!-- ============================================================ -->
+<!-- 6A. ESTADO: ERROR (ODN-0000-XX / Código no encontrado)      -->
+<!-- ============================================================ -->
+<div class="hidden space-y-space-md" id="state-error">
+<div class="bg-error-container/40 border border-error/30 rounded-xl p-space-lg flex items-start gap-3.5">
+<div class="w-9 h-9 rounded-lg bg-error/10 text-error flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</div>
+<div class="space-y-1.5 flex-1">
+<h3 class="font-title-sm text-title-sm text-error font-semibold flex items-center justify-between">
+<span>No encontramos ningún turno activo con el código <span class="font-code-time font-bold">ODN-0000-XX</span></span>
+<span class="text-label-compact font-label-compact bg-error/15 text-error px-2 py-0.5 rounded-full font-mono">ERR_TURNO_NOT_FOUND_404</span>
+</h3>
+<p class="font-body-default text-body-default text-on-surface-variant leading-relaxed">
+            Por favor verificá que esté bien escrito o comunicate por WhatsApp con recepción para que revisemos tu cita en el sistema de consultorio.
+          </p>
+<div class="pt-2 flex items-center gap-3">
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-lowest border border-outline-variant text-on-surface text-label-default font-label-default rounded-lg hover:bg-surface-container transition-colors" href="https://wa.me/">
+<span class="material-symbols-outlined text-base text-primary" data-icon="support_agent">support_agent</span>
+              Consultar con Recepción
+            </a>
+<button class="text-primary hover:underline text-label-default font-label-default font-semibold" onclick="document.getElementById('codigo-input').value='ODN-8429-KR71'; switchState('found');">
+              Cargar código de prueba de nuevo
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- ============================================================ -->
+<!-- 6B. ESTADO: VACÍO (Sin código cargado)                      -->
+<!-- ============================================================ -->
+<div class="hidden" id="state-empty">
+<div class="bg-surface-container-lowest border border-dashed border-outline-variant rounded-xl p-space-2xl text-center space-y-3">
+<div class="w-14 h-14 mx-auto rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl" data-icon="calendar_month">calendar_month</span>
+</div>
+<div class="max-w-md mx-auto space-y-1">
+<h3 class="font-headline-md text-headline-md text-on-surface">Ingresá tu código arriba para ver tu cita programada</h3>
+<p class="font-body-default text-body-default text-outline">
+            Podés gestionar tus turnos de odontología general, ortodoncia, limpiezas y cirugías en cualquier momento.
+          </p>
+</div>
+<div class="pt-2">
+<button class="px-4 py-2 bg-surface-container-low hover:bg-surface-container text-primary font-label-default text-label-default rounded-xl border border-outline-variant transition-colors" onclick="document.getElementById('codigo-input').value='ODN-8429-KR71'; switchState('found');">
+            Probar con código de ejemplo (ODN-8429-KR71)
+          </button>
+</div>
+</div>
+</div>
+<!-- ============================================================ -->
+<!-- 3. TURNO ENCONTRADO (Tarjeta Principal de Gestión)          -->
+<!-- ============================================================ -->
+<section class="space-y-space-lg" id="state-found">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-xs overflow-hidden">
+<!-- Header / Status Banner -->
+<div class="bg-surface-container-low/70 border-b border-outline-variant px-space-lg py-3.5 flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-2.5">
+<span class="px-2.5 py-0.5 rounded-full text-label-default font-label-default bg-emerald-100 text-emerald-800 font-semibold border border-emerald-300 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+              Confirmado
+            </span>
+<span class="text-label-default font-label-default text-outline">
+              Código: <strong class="text-on-surface font-code-time">ODN-8429-KR71</strong>
+</span>
+</div>
+<div class="text-label-compact font-label-compact text-outline flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="verified_user">verified_user</span>
+            Reserva registrada vía Turnos Web
+          </div>
+</div>
+<div class="p-space-lg space-y-space-lg">
+<!-- Big Highlighted Date & Time -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-space-md border-b border-outline-variant/60">
+<div>
+<span class="font-label-default text-label-default text-outline uppercase tracking-wider">Fecha y hora de la cita</span>
+<h2 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">
+                Miércoles 26 de Marzo de 2025 • 10:15 hs
+              </h2>
+</div>
+<div class="text-right sm:self-end">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container text-primary font-code-time text-code-time font-semibold">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+                Duración: 45 min
+              </span>
+</div>
+</div>
+<!-- Structured Clinical Details Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+<!-- Left Column: Prestación & Profesional -->
+<div class="space-y-4">
+<!-- Prestación & Cobertura -->
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+</div>
+<div>
+<span class="font-label-default text-label-default text-outline">Prestación / Tratamiento</span>
+<p class="font-title-sm text-title-sm text-on-surface font-semibold">Limpieza dental y profilaxis ultrasónica</p>
+<p class="text-label-default font-label-default text-primary font-medium mt-0.5">Cobertura: OSDE (Plan 210) • Copago $0</p>
+</div>
+</div>
+<!-- Profesional -->
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container text-on-secondary-container font-bold flex items-center justify-center shrink-0 border border-outline-variant text-label-default">
+                  MR
+                </div>
+<div>
+<span class="font-label-default text-label-default text-outline">Profesional asignado</span>
+<p class="font-title-sm text-title-sm text-on-surface font-semibold">Dra. Martina Rossi</p>
+<p class="text-label-default font-label-default text-outline">Odontopediatría / Operatoria • Sillón 1</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Paciente, Ubicación & Notas -->
+<div class="space-y-4">
+<!-- Paciente -->
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<span class="font-label-default text-label-default text-outline">Paciente titular</span>
+<p class="font-title-sm text-title-sm text-on-surface font-semibold">Mariana Solís</p>
+<p class="text-label-default font-label-default text-outline">DNI **.***.129 • Tel: +54 9 11 4455-****</p>
+</div>
+</div>
+<!-- Lugar / Sede -->
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="pin_drop">pin_drop</span>
+</div>
+<div>
+<span class="font-label-default text-label-default text-outline">Lugar de atención</span>
+<p class="font-title-sm text-title-sm text-on-surface font-semibold">Sede Belgrano</p>
+<p class="text-label-default font-label-default text-outline">Av. Belgrano 1420, Piso 3, Consultorio B</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Important Patient Instructions Notice -->
+<div class="bg-surface-container-low border border-outline-variant/80 rounded-xl p-3 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-base shrink-0 mt-0.5" data-icon="assignment_turned_in">assignment_turned_in</span>
+<div class="text-label-default font-label-default text-on-surface-variant">
+<strong class="text-on-surface">Indicaciones para tu visita:</strong> Presentarse 10 minutos antes en la recepción del 3er piso. Traer DNI físico o credencial digital de OSDE.
+            </div>
+</div>
+<!-- Immediate Action Toolbar -->
+<div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-outline-variant/60">
+<!-- Primary Operations -->
+<div class="flex flex-wrap items-center gap-2">
+<button class="px-4 py-2 rounded-xl border border-primary text-primary font-label-default text-label-default hover:bg-primary hover:text-on-primary transition-all duration-150 flex items-center justify-center gap-1.5 shadow-xs" onclick="switchState('reschedule')">
+<span class="material-symbols-outlined text-base" data-icon="calendar_month">calendar_month</span>
+<span>Reprogramar turno</span>
+</button>
+<button class="px-4 py-2 rounded-xl border border-error/40 text-error hover:bg-error-container/40 font-label-default text-label-default transition-all duration-150 flex items-center justify-center gap-1.5" onclick="switchState('cancel')">
+<span class="material-symbols-outlined text-base" data-icon="event_busy">event_busy</span>
+<span>Cancelar turno</span>
+</button>
+</div>
+<!-- Utility Actions -->
+<div class="flex items-center gap-1.5 justify-end">
+<button class="p-2 rounded-lg border border-outline-variant text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors" title="Descargar comprobante en PDF">
+<span class="material-symbols-outlined text-base" data-icon="picture_as_pdf">picture_as_pdf</span>
+</button>
+<a class="p-2 rounded-lg border border-outline-variant text-outline hover:text-primary hover:bg-surface-container-low transition-colors" href="https://wa.me/" rel="noopener noreferrer" target="_blank" title="Enviar datos a mi WhatsApp">
+<span class="material-symbols-outlined text-base" data-icon="send">send</span>
+</a>
+<a class="p-2 rounded-lg border border-outline-variant text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors" href="#ubicacion" title="Ver indicaciones en mapa">
+<span class="material-symbols-outlined text-base" data-icon="map">map</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ============================================================ -->
+<!-- 4. SECCIÓN DESPLEGABLE: REPROGRAMAR TU CITA                  -->
+<!-- ============================================================ -->
+<section class="hidden space-y-space-md" id="state-reschedule">
+<div class="bg-surface-container-lowest border-2 border-primary/40 rounded-xl shadow-md p-space-lg space-y-space-lg">
+<div class="flex items-start justify-between gap-3 pb-3 border-b border-outline-variant">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="update">update</span>
+</div>
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Elegí un nuevo día y horario para tu consulta</h2>
+<p class="font-body-compact text-body-compact text-outline">Mantendrás la misma profesional (Dra. Martina Rossi) y cobertura médica (OSDE 210).</p>
+</div>
+</div>
+<button class="text-outline hover:text-on-surface p-1" onclick="switchState('found')">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Interactive Week Days Selector -->
+<div>
+<label class="block font-label-default text-label-default text-on-surface font-semibold mb-2">1. Seleccioná el día:</label>
+<div class="grid grid-cols-3 sm:grid-cols-3 gap-2.5">
+<!-- Day 1: Jueves 27 -->
+<button class="day-pill p-3 rounded-xl border-2 border-primary bg-primary/5 text-left transition-all relative" type="button">
+<span class="block font-label-compact text-label-compact uppercase text-primary font-bold">Mañana</span>
+<span class="block font-title-sm text-title-sm text-on-surface font-bold">Jue 27 Mar</span>
+<span class="block text-label-compact font-label-compact text-outline">3 horarios disponibles</span>
+<div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary"></div>
+</button>
+<!-- Day 2: Viernes 28 -->
+<button class="day-pill p-3 rounded-xl border border-outline-variant bg-surface-container-lowest hover:border-outline text-left transition-all" type="button">
+<span class="block font-label-compact text-label-compact uppercase text-outline">Esta semana</span>
+<span class="block font-title-sm text-title-sm text-on-surface font-bold">Vie 28 Mar</span>
+<span class="block text-label-compact font-label-compact text-outline">2 horarios disponibles</span>
+</button>
+<!-- Day 3: Lunes 31 -->
+<button class="day-pill p-3 rounded-xl border border-outline-variant bg-surface-container-lowest hover:border-outline text-left transition-all" type="button">
+<span class="block font-label-compact text-label-compact uppercase text-outline">Próxima semana</span>
+<span class="block font-title-sm text-title-sm text-on-surface font-bold">Lun 31 Mar</span>
+<span class="block text-label-compact font-label-compact text-outline">4 horarios disponibles</span>
+</button>
+</div>
+</div>
+<!-- Available Time Slots -->
+<div class="space-y-3">
+<label class="block font-label-default text-label-default text-on-surface font-semibold">2. Seleccioná el horario disponible para Jueves 27 de Marzo:</label>
+<div>
+<span class="text-label-compact font-label-compact uppercase tracking-wider text-outline block mb-1.5">Turno Mañana</span>
+<div class="flex flex-wrap gap-2">
+<button class="slot-pill px-4 py-2 rounded-lg border border-outline-variant hover:border-primary text-body-medium font-code-time text-on-surface focus:bg-primary focus:text-on-primary transition-colors" type="button">
+                09:30 hs
+              </button>
+<button class="slot-pill px-4 py-2 rounded-lg border-2 border-primary bg-primary text-on-primary text-body-medium font-code-time font-bold shadow-xs" type="button">
+                11:00 hs
+              </button>
+</div>
+</div>
+<div>
+<span class="text-label-compact font-label-compact uppercase tracking-wider text-outline block mb-1.5">Turno Tarde</span>
+<div class="flex flex-wrap gap-2">
+<button class="slot-pill px-4 py-2 rounded-lg border border-outline-variant hover:border-primary text-body-medium font-code-time text-on-surface focus:bg-primary focus:text-on-primary transition-colors" type="button">
+                15:15 hs
+              </button>
+<button class="slot-pill px-4 py-2 rounded-lg border border-outline-variant hover:border-primary text-body-medium font-code-time text-on-surface focus:bg-primary focus:text-on-primary transition-colors" type="button">
+                16:45 hs
+              </button>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="pt-3 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-3">
+<button class="w-full sm:w-auto px-6 py-2.5 bg-primary hover:bg-primary-container text-on-primary font-title-sm text-title-sm rounded-xl font-semibold shadow-sm transition-colors flex items-center justify-center gap-2" onclick="alert('¡Turno reprogramado con éxito para el Jueves 27 de Marzo a las 11:00 hs! Te enviamos los detalles a tu WhatsApp.'); switchState('found');" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
+<span>Confirmar cambio de turno</span>
+</button>
+<button class="w-full sm:w-auto px-4 py-2.5 text-on-surface-variant hover:text-on-surface font-label-default text-label-default transition-colors" onclick="switchState('found')" type="button">
+            Mantener turno original
+          </button>
+</div>
+</div>
+</section>
+<!-- ============================================================ -->
+<!-- 5. MODAL / BANNER DE CONFIRMACIÓN DE CANCELACIÓN             -->
+<!-- ============================================================ -->
+<section class="hidden space-y-space-md" id="state-cancel">
+<div class="bg-surface-container-lowest border border-error/40 rounded-xl shadow-lg p-space-lg space-y-space-md">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-error-container text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl" data-icon="cancel">cancel</span>
+</div>
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">¿Estás seguro de que querés cancelar tu turno?</h2>
+<p class="font-body-default text-body-default text-outline mt-0.5">
+              Cita: <strong class="text-on-surface">Miércoles 26 de Marzo a las 10:15 hs</strong> con Dra. Martina Rossi.
+            </p>
+</div>
+</div>
+<!-- Reason dropdown -->
+<div class="space-y-1.5 max-w-lg">
+<label class="block font-label-default text-label-default text-on-surface" for="cancel-reason">
+            Motivo de cancelación (opcional):
+          </label>
+<select class="w-full py-2 px-3 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-default font-body-default text-on-surface focus:outline-none focus:border-error" id="cancel-reason">
+<option value="imprevisto">Imprevisto laboral o personal</option>
+<option value="salud">Problemas de salud</option>
+<option value="profesional">Deseo cambiar de profesional</option>
+<option value="otro">Otro motivo</option>
+</select>
+</div>
+<!-- Clinical Cancellation Notice -->
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2.5 text-amber-900">
+<span class="material-symbols-outlined text-amber-700 text-base shrink-0 mt-0.5" data-icon="info">info</span>
+<p class="font-body-compact text-body-compact">
+<strong>Recordá:</strong> La cancelación sin cargo se realiza con hasta 24 hs de anticipación para que otro paciente en lista de espera pueda ocupar el sillón.
+          </p>
+</div>
+<!-- Confirmation Actions -->
+<div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+<button class="w-full sm:w-auto px-5 py-2.5 bg-error hover:bg-error/90 text-on-error font-title-sm text-title-sm rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 shadow-xs" onclick="alert('El turno ODN-8429-KR71 fue cancelado correctamente. Podés solicitar un nuevo turno cuando lo desees.'); switchState('empty');" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="delete_forever">delete_forever</span>
+<span>Sí, cancelar turno definitivamente</span>
+</button>
+<button class="w-full sm:w-auto px-4 py-2.5 border border-outline-variant text-on-surface hover:bg-surface-container rounded-xl font-label-default text-label-default transition-colors" onclick="switchState('found')" type="button">
+            Volver
+          </button>
+</div>
+</div>
+</section>
+<!-- Additional Informative Section: Ubicación & Contacto Rioplatense -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-space-lg pt-space-lg border-t border-outline-variant/60" id="ubicacion">
+<!-- Card: Sede -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-md space-y-2">
+<div class="flex items-center gap-2 text-primary font-title-sm text-title-sm">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+<span>¿Cómo llegar a la sede?</span>
+</div>
+<p class="font-body-compact text-body-compact text-outline">
+          Av. Belgrano 1420, Piso 3, Consultorio B (CABA). Estacionamiento con convenio en Belgrano 1450.
+        </p>
+<a class="inline-flex items-center gap-1 text-primary text-label-default font-label-default hover:underline pt-1" href="https://maps.google.com" rel="noopener noreferrer" target="_blank">
+          Abrir en Google Maps
+          <span class="material-symbols-outlined text-xs" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+<!-- Card: Dudas Frecuentes -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-md space-y-2">
+<div class="flex items-center gap-2 text-primary font-title-sm text-title-sm">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span>¿Necesitás reprogramar urgente?</span>
+</div>
+<p class="font-body-compact text-body-compact text-outline">
+          Si tenés una urgencia por dolor o fractura dental, no esperes tu turno programado: escribinos por WhatsApp de guardia.
+        </p>
+<a class="inline-flex items-center gap-1 text-primary text-label-default font-label-default hover:underline pt-1" href="https://wa.me/" rel="noopener noreferrer" target="_blank">
+          WhatsApp de Guardia 24hs
+          <span class="material-symbols-outlined text-xs" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<!-- Card: Obras Sociales -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-md space-y-2">
+<div class="flex items-center gap-2 text-primary font-title-sm text-title-sm">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+<span>Coberturas y Prepagas</span>
+</div>
+<p class="font-body-compact text-body-compact text-outline">
+          Atendemos OSDE, Swiss Medical, Galeno, Medicus y particulares con reintegros en el acto.
+        </p>
+<span class="inline-block text-label-compact font-label-compact bg-surface-container text-outline px-2 py-0.5 rounded">
+          Copagos según plan vigente
+        </span>
+</div>
+</section>
+</main>
+<!-- ========================================== -->
+<!-- FOOTER INSTITUCIONAL                       -->
+<!-- ========================================== -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant mt-auto">
+<div class="max-w-7xl mx-auto px-margin py-space-lg flex flex-col sm:flex-row items-center justify-between gap-4 text-label-default font-label-default text-outline">
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 rounded bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-sm" data-icon="dentistry">dentistry</span>
+</div>
+<span><strong>Consultorio Demo</strong> • Odontología Integral &amp; Ortodoncia Digital</span>
+</div>
+<div class="flex items-center gap-4">
+<span>Buenos Aires, Argentina</span>
+<span>•</span>
+<span class="text-on-surface-variant font-medium">Plataforma clínica OdontoGrid</span>
+</div>
+</div>
+</footer>
+<!-- State Toggle Script for Live Demonstration -->
+<script>
+    function switchState(stateName) {
+      // Hide all dynamic states
+      document.getElementById('state-found').classList.add('hidden');
+      document.getElementById('state-reschedule').classList.add('hidden');
+      document.getElementById('state-cancel').classList.add('hidden');
+      document.getElementById('state-error').classList.add('hidden');
+      document.getElementById('state-empty').classList.add('hidden');
+
+      // Reset button styles in preview toolbar
+      const tabs = ['found', 'reschedule', 'cancel', 'error', 'empty'];
+      tabs.forEach(tab => {
+        const btn = document.getElementById('btn-state-' + tab);
+        if (btn) {
+          btn.className = "px-2.5 py-1 rounded-lg text-label-default font-label-default text-on-surface-variant hover:text-primary hover:bg-surface-container-lowest flex items-center gap-1";
+        }
+      });
+
+      // Highlight active button
+      const activeBtn = document.getElementById('btn-state-' + stateName);
+      if (activeBtn) {
+        activeBtn.className = "px-2.5 py-1 rounded-lg text-label-default font-label-default bg-surface-container-lowest text-primary shadow-xs font-semibold border border-outline-variant/60 flex items-center gap-1";
+      }
+
+      // Show selected state
+      if (stateName === 'found') {
+        document.getElementById('state-found').classList.remove('hidden');
+      } else if (stateName === 'reschedule') {
+        document.getElementById('state-found').classList.remove('hidden');
+        document.getElementById('state-reschedule').classList.remove('hidden');
+        document.getElementById('state-reschedule').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (stateName === 'cancel') {
+        document.getElementById('state-cancel').classList.remove('hidden');
+        document.getElementById('state-cancel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (stateName === 'error') {
+        document.getElementById('state-error').classList.remove('hidden');
+      } else if (stateName === 'empty') {
+        document.getElementById('state-empty').classList.remove('hidden');
+      }
+    }
+  </script>
+</body></html>

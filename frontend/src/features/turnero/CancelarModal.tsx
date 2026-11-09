@@ -17,8 +17,14 @@ export function CancelarModal({
   const [motivo, setMotivo] = useState("");
 
   return (
-    <div role="dialog" aria-modal="true" aria-labelledby="titulo-cancelar">
-      <h2 id="titulo-cancelar">Cancelar turno</h2>
+    <div
+      className="turnero-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="titulo-cancelar"
+    >
+      <div className="turnero-modal__caja">
+        <h2 id="titulo-cancelar">Cancelar turno</h2>
       <form
         onSubmit={(evento) => {
           evento.preventDefault();
@@ -45,6 +51,7 @@ export function CancelarModal({
           </button>
         </div>
       </form>
+      </div>
     </div>
   );
 }
