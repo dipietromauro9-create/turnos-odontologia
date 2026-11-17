@@ -1,9 +1,0 @@
-# Override local: el puerto 8000 del host está ocupado por otro proceso ajeno.
-# La API se expone en 8001 y el frontend apunta ahí. No modifica el compose versionado.
-services:
-  api:
-    ports: !override
-      - "8001:8000"
-  web:
-    environment:
-      VITE_API_URL: http://localhost:8001

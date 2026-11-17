@@ -3,6 +3,9 @@
 .env.local
 .env.*.local
 
+# Overrides locales de Compose (puertos/entorno de cada máquina)
+docker-compose.override.yml
+
 # Python
 __pycache__/
 *.py[cod]
